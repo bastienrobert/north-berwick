@@ -1,4 +1,4 @@
-package com.bastienrobert.NorthBerwick;
+package dev.bastienrobert.NorthBerwick;
 import android.content.res.Configuration;
 import android.content.Intent;
 
