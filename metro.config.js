@@ -3,7 +3,7 @@ const { getDefaultConfig } = require('metro-config')
 
 module.exports = (async () => {
   const {
-    resolver: { assetExts },
+    resolver: { assetExts, sourceExts },
   } = await getDefaultConfig()
 
   return {
@@ -18,6 +18,7 @@ module.exports = (async () => {
     },
     resolver: {
       assetExts: [...assetExts, 'obj', 'mtl', 'gltf', 'glb'],
+      sourceExts: [...sourceExts, 'frag', 'vert', 'glsl'],
     },
   }
 })()

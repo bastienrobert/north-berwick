@@ -1,6 +1,9 @@
 import React, { useMemo } from 'react'
 import { GroupProps, useUpdate } from 'react-three-fiber'
-import { Vector3, FontLoader } from 'three'
+import { Vector3, FontLoader, Uniform, Color } from 'three'
+
+import vertex from '@/shaders/basic/shader.vert'
+import fragment from '@/shaders/basic/shader.frag'
 
 interface TextProps extends GroupProps {
   children: string
@@ -48,7 +51,11 @@ export default function Text({
     <group {...props} scale={[0.1 * size, 0.1 * size, 0.1]}>
       <mesh ref={mesh}>
         <textBufferGeometry args={[children, config]} />
-        <meshNormalMaterial />
+        <shaderMaterial
+          vertexShader={vertex}
+          fragmentShader={fragment}
+          uniforms={{ uColor: new Uniform(new Color('#FF0')) }}
+        />
       </mesh>
     </group>
   )
