@@ -16,14 +16,14 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "dev.bastienrobert.NorthBerwick"
+      "bundleIdentifier": "fr.bastienrobert.northberwick"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "dev.bastienrobert.NorthBerwick"
+      "package": "fr.bastienrobert.northberwick"
     },
     "web": {
       "favicon": "./src/assets/favicon.png"

@@ -132,7 +132,7 @@ android {
     }
 
     defaultConfig {
-        applicationId 'dev.bastienrobert.NorthBerwick'
+        applicationId 'fr.bastienrobert.northberwick'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
