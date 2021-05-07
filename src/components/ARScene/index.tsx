@@ -8,9 +8,7 @@ export interface ARSceneProps {}
 export default function ARScene() {
   return (
     <ViroARSceneNavigator
-      viroAppProps={{
-        hello: 'world',
-      }}
+      autofocus={true}
       initialScene={{
         scene: MainScene,
       }}

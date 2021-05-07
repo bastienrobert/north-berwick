@@ -29,6 +29,8 @@ export default function ThreeDScene() {
     require('@/assets/birds/stork.glb'),
   ])
 
+  console.log(assets)
+
   if (!assets) return <View />
   return (
     <View style={{ flex: 1, backgroundColor: 'black' }}>
@@ -39,9 +41,9 @@ export default function ThreeDScene() {
 
         <Suspense fallback="loading...">
           <Jumbo />
-          <Birds url={assets[0].localUri} />
-          <Birds url={assets[1].localUri} />
-          <Birds url={assets[2].localUri} />
+          <Birds url={assets[0].uri} />
+          <Birds url={assets[1].uri} />
+          <Birds url={assets[2].uri} />
         </Suspense>
       </Canvas>
     </View>

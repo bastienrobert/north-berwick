@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 import HomeScreen, { HomeProps } from './components/HomeScreen'
 import ARScene, { ARSceneProps } from './components/ARScene'
@@ -12,16 +12,28 @@ export type RootStackParamList = {
   ThreeDScene: ThreeDSceneProps
 }
 
-const Stack = createStackNavigator<RootStackParamList>()
+const Tab = createBottomTabNavigator<RootStackParamList>()
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="ARScene" component={ARScene} />
-        <Stack.Screen name="ThreeDScene" component={ThreeDScene} />
-      </Stack.Navigator>
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ unmountOnBlur: true }}
+        />
+        <Tab.Screen
+          name="ARScene"
+          component={ARScene}
+          options={{ unmountOnBlur: true }}
+        />
+        <Tab.Screen
+          name="ThreeDScene"
+          component={ThreeDScene}
+          options={{ unmountOnBlur: true }}
+        />
+      </Tab.Navigator>
     </NavigationContainer>
   )
 }
