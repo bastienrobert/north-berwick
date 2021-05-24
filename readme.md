@@ -3,7 +3,7 @@
 <h4 align="center">Mobile-app game</h4>
 
 <blockquote align="center">
-  <em>North Berwick is a mobile interactive story about witch-hunt.</em>
+  <em>North Berwick is a mobile interactive story about witch-hunting.</em>
 </blockquote>
 
 ## 🎃 Requirements
@@ -53,4 +53,4 @@ Open `ios/NorthBerwick.xcworkspace` with XCode, select your device and run the a
 
 ### Android
 
-// TODO
+Run `yarn android`.

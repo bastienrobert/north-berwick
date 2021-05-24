@@ -10,12 +10,16 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@react-navigation/bottom-tabs": "^5.11.10",
     "@react-navigation/native": "^5.9.4",
+    "@react-three/cannon": "https://github.com/bastienrobert/use-cannon/tarball/7cd80a064d8000d63e1673c4f79ca97007fc7c8d",
+    "@types/react-native-video": "^5.0.5",
     "@viro-community/react-viro": "^2.20.2",
+    "cannon-es": "^0.17.1",
     "expo": "^40.0.0",
     "expo-asset": "^8.3.2",
+    "expo-av": "^9.1.2",
     "expo-gl": "^10.2.0",
+    "expo-sensors": "^10.1.2",
     "expo-splash-screen": "^0.10.2",
     "expo-status-bar": "^1.0.4",
     "expo-three": "^5.7.0",
@@ -28,6 +32,7 @@
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.0.0",
     "react-native-unimodules": "^0.12.0",
+    "react-native-video": "^5.1.1",
     "react-native-web": "^0.13.12",
     "react-three-fiber": "^5.3.19",
     "three": "^0.124.0"
