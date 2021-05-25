@@ -6,7 +6,8 @@ import { RootNavigationParamList } from '@/App/Router'
 import RoundedButton from '@/components/shared/RoundedButton'
 import DeckIcon from '@/components/icons/DeckIcon'
 import LargeButton from '@/components/shared/LargeButton'
-import ScanButton from '@/components/shared/ScanButton'
+import ScanButton from '@/components/ScanButton'
+import VideoSubtitleBox from '@/components/VideoSubtitleBox'
 
 export interface HomeScreenProps {}
 type HomePropsWithNavigation = HomeScreenProps & {
@@ -22,6 +23,9 @@ export default function HomeScreen() {
       </RoundedButton>
       <LargeButton onPress={() => null}>Hello</LargeButton>
       <ScanButton />
+      <VideoSubtitleBox name="???">
+        Bienvenue dans le château d’Holyrood....
+      </VideoSubtitleBox>
     </SafeAreaView>
   )
 }

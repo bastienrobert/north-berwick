@@ -5,7 +5,7 @@ import Svg, { G, Circle, Path } from 'react-native-svg'
 
 import TouchableOpacityOrView, {
   TouchableOpacityOrViewProps,
-} from './TouchableOpacityOrView'
+} from './shared/TouchableOpacityOrView'
 
 type ScanButtonProps = TouchableOpacityOrViewProps
 
