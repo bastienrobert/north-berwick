@@ -4,17 +4,19 @@ import { Button, View } from 'react-native'
 import { createBasicNavigator } from '@/lib/CustomNavigator'
 
 import HomeScreen, { HomeProps } from './HomeScreen'
-import ARScene, { ARSceneProps } from './ARScene'
-import ThreeDScene, { ThreeDSceneProps } from './3DScene'
+import ARScene from './ARScene'
+import ThreeDScene from './3DScene'
 import FlipCard from './FlipCard'
-import ScrollVideoScreen, { ScrollVideoScreenProps } from './ScrollVideoScreen'
+import DragZone from './DragZone'
+import ScrollVideoScreen from './ScrollVideoScreen'
 
 export type ExampleNavigationParamList = {
   Home: HomeProps
   FlipCard: {}
-  ScrollVideoScreen: ScrollVideoScreenProps
-  ARScene: ARSceneProps
-  ThreeDScene: ThreeDSceneProps
+  ScrollVideoScreen: {}
+  ARScene: {}
+  DragZone: {}
+  ThreeDScene: {}
 }
 
 const BasicNav = createBasicNavigator<ExampleNavigationParamList>()
@@ -33,6 +35,7 @@ export default function Examples({ navigation }: any) {
         <BasicNav.Screen name="ARScene" component={ARScene} />
         <BasicNav.Screen name="ThreeDScene" component={ThreeDScene} />
         <BasicNav.Screen name="FlipCard" component={FlipCard} />
+        <BasicNav.Screen name="DragZone" component={DragZone} />
         <BasicNav.Screen
           name="ScrollVideoScreen"
           component={ScrollVideoScreen}

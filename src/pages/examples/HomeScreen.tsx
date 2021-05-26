@@ -29,6 +29,10 @@ export default function HomeScreen({ navigation }: HomePropsWithNavigation) {
         onPress={() => navigation.navigate('FlipCard', {})}
       />
       <Button
+        title="Go to DragZone"
+        onPress={() => navigation.navigate('DragZone', {})}
+      />
+      <Button
         title="Go to ScrollVideoScreen"
         onPress={() => navigation.navigate('ScrollVideoScreen', {})}
       />

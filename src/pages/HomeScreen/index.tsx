@@ -8,6 +8,7 @@ import DeckIcon from '@/components/icons/DeckIcon'
 import LargeButton from '@/components/shared/LargeButton'
 import ScanButton from '@/components/ScanButton'
 import VideoSubtitleBox from '@/components/VideoSubtitleBox'
+import CardBase from '@/components/icons/CardBase.svg'
 
 export interface HomeScreenProps {}
 type HomePropsWithNavigation = HomeScreenProps & {
@@ -26,6 +27,7 @@ export default function HomeScreen() {
       <VideoSubtitleBox name="???">
         Bienvenue dans le château d’Holyrood....
       </VideoSubtitleBox>
+      <CardBase />
     </SafeAreaView>
   )
 }
