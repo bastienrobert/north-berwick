@@ -87,6 +87,7 @@ interface ViroSceneProps {
 	onPlatformUpdate?:Function
 	onCameraTransformUpdate?:Function
 	ignoreEventHandling?:boolean
+	style?:any
 	dragType?:"FixedDistance" | "FixedDistanceOrigin" | "FixedToWorld" | "FixedToPlane"
 	dragPlane?:{ planePoint?:number[], planeNormal?:number[], maxDistance?:number }
 	/* Describes the acoustic properties of the room around the user */
@@ -1551,6 +1552,7 @@ interface ViroARSceneNavigatorProps {
 	/* iOS only props! Note: these props may change as the underlying platforms coalesce in features. */
 	worldAlignment?:'Gravity' | 'GravityAndHeading' | 'Camera'
 	videoQuality?:'High' | 'Low'
+	vrModeEnabled?:boolean
 	numberOfTrackedImages?:number
 	/* Renderer settings that can be used to enable or disable various
 	renderer capabilities and algorithms. */

@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@react-navigation/native": "^5.9.4",
-    "@react-three/cannon": "https://github.com/bastienrobert/use-cannon/tarball/7cd80a064d8000d63e1673c4f79ca97007fc7c8d",
     "@types/react-native-video": "^5.0.5",
     "@viro-community/react-viro": "^2.20.2",
     "cannon-es": "^0.17.1",

@@ -6,12 +6,12 @@ import { createBasicNavigator } from '@/lib/CustomNavigator'
 import HomeScreen, { HomeProps } from './HomeScreen'
 import ARScene, { ARSceneProps } from './ARScene'
 import ThreeDScene, { ThreeDSceneProps } from './3DScene'
-import PanVideoScreen, { PanVideoScreenProps } from './PanVideoScreen'
+import FlipCard from './FlipCard'
 import ScrollVideoScreen, { ScrollVideoScreenProps } from './ScrollVideoScreen'
 
 export type ExampleNavigationParamList = {
   Home: HomeProps
-  PanVideoScreen: PanVideoScreenProps
+  FlipCard: {}
   ScrollVideoScreen: ScrollVideoScreenProps
   ARScene: ARSceneProps
   ThreeDScene: ThreeDSceneProps
@@ -32,7 +32,7 @@ export default function Examples({ navigation }: any) {
         <BasicNav.Screen name="Home" component={HomeScreen} />
         <BasicNav.Screen name="ARScene" component={ARScene} />
         <BasicNav.Screen name="ThreeDScene" component={ThreeDScene} />
-        <BasicNav.Screen name="PanVideoScreen" component={PanVideoScreen} />
+        <BasicNav.Screen name="FlipCard" component={FlipCard} />
         <BasicNav.Screen
           name="ScrollVideoScreen"
           component={ScrollVideoScreen}

@@ -25,8 +25,8 @@ export default function HomeScreen({ navigation }: HomePropsWithNavigation) {
         onPress={() => navigation.navigate('ThreeDScene', {})}
       />
       <Button
-        title="Go to PanVideoScreen"
-        onPress={() => navigation.navigate('PanVideoScreen', {})}
+        title="Go to FlipCard"
+        onPress={() => navigation.navigate('FlipCard', {})}
       />
       <Button
         title="Go to ScrollVideoScreen"

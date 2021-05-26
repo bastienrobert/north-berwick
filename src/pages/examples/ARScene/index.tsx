@@ -1,8 +1,12 @@
 import React from 'react'
-import { ViroARSceneNavigator } from '@viro-community/react-viro'
+import { View } from 'react-native'
+import {
+  ViroARSceneNavigator,
+  ViroVRSceneNavigator,
+} from '@viro-community/react-viro'
 
 import MainScene from './MainScene'
-import { View } from 'react-native'
+import HDRScene from './HDRScene'
 
 export interface ARSceneProps {}
 
@@ -10,7 +14,7 @@ export default function ARScene() {
   // style={{ backgroundColor: 'rgba(255, 87, 51, .2)' }}
   return (
     <View style={{ flex: 1 }}>
-      <View
+      {/* <View
         style={{
           flex: 1,
           backgroundColor: '#3336ff',
@@ -20,13 +24,19 @@ export default function ARScene() {
           zIndex: 2,
           opacity: 0.2,
         }}
-      />
-      <ViroARSceneNavigator
-        autofocus={true}
+      /> */}
+      {/* <ViroVRSceneNavigator
+        vrModeEnabled={false}
+        hdrEnabled={true}
         initialScene={{
-          scene: MainScene,
+          scene: HDRScene,
         }}
-        style={{ flex: 1 }}
+      /> */}
+      <ViroARSceneNavigator
+        initialScene={{
+          scene: HDRScene,
+          // scene: MainScene,
+        }}
       />
     </View>
   )
