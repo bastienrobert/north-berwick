@@ -1,7 +1,8 @@
-import { BasicNavigationProp } from '@/lib/CustomNavigator'
-import { ExampleNavigationParamList } from '@/pages/examples'
 import React from 'react'
 import { Button, Text, View } from 'react-native'
+
+import { ExampleNavigationParamList } from '@/pages/examples'
+import { BasicNavigationProp } from '@/lib/CustomNavigator'
 
 export interface HomeProps {}
 interface HomePropsWithNavigation extends HomeProps {
@@ -35,6 +36,10 @@ export default function HomeScreen({ navigation }: HomePropsWithNavigation) {
       <Button
         title="Go to ScrollVideoScreen"
         onPress={() => navigation.navigate('ScrollVideoScreen', {})}
+      />
+      <Button
+        title="Go to CarouselDemo"
+        onPress={() => navigation.navigate('CarouselDemo', {})}
       />
     </View>
   )

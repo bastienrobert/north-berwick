@@ -9,6 +9,7 @@ import ThreeDScene from './3DScene'
 import FlipCard from './FlipCard'
 import DragZone from './DragZone'
 import ScrollVideoScreen from './ScrollVideoScreen'
+import CarouselDemo from './CarouselDemo'
 
 export type ExampleNavigationParamList = {
   Home: HomeProps
@@ -16,6 +17,7 @@ export type ExampleNavigationParamList = {
   ScrollVideoScreen: {}
   ARScene: {}
   DragZone: {}
+  CarouselDemo: {}
   ThreeDScene: {}
 }
 
@@ -36,6 +38,7 @@ export default function Examples({ navigation }: any) {
         <BasicNav.Screen name="ThreeDScene" component={ThreeDScene} />
         <BasicNav.Screen name="FlipCard" component={FlipCard} />
         <BasicNav.Screen name="DragZone" component={DragZone} />
+        <BasicNav.Screen name="CarouselDemo" component={CarouselDemo} />
         <BasicNav.Screen
           name="ScrollVideoScreen"
           component={ScrollVideoScreen}
