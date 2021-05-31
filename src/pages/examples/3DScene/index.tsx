@@ -12,9 +12,9 @@ export interface ThreeDSceneProps {}
 
 export default function ThreeDScene() {
   const [assets] = useAssets([
-    require('@/assets/birds/flamingo.glb'),
-    require('@/assets/birds/parrot.glb'),
-    require('@/assets/birds/stork.glb'),
+    require('@/assets/tmp/birds/flamingo.glb'),
+    require('@/assets/tmp/birds/parrot.glb'),
+    require('@/assets/tmp/birds/stork.glb'),
   ])
 
   if (!assets) return <View />

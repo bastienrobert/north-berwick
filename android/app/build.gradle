@@ -123,6 +123,11 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  */
 def enableHermes = project.ext.react.get("enableHermes", false);
 
+/**
+ * Glide media library
+ */
+def glideVersion = '4.9.0';
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -196,6 +201,9 @@ dependencies {
     implementation project(path: ':viro_renderer')
     implementation 'com.google.android.exoplayer:exoplayer:2.7.1'
     implementation 'com.google.protobuf.nano:protobuf-javanano:3.0.0-alpha-7'
+
+    //support for animated WEBP 
+    implementation "com.zlc.glide:webpdecoder:1.5.${glideVersion}"
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'

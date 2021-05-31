@@ -23,7 +23,7 @@ export default function Text({
 }: TextProps) {
   const config = useMemo(
     () => ({
-      font: new FontLoader().parse(require('@/assets/bold.json')),
+      font: new FontLoader().parse(require('@/assets/tmp/bold.json')),
       size: 40,
       height: 30,
       curveSegments: 32,

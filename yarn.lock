@@ -4530,6 +4530,11 @@ joi@^17.2.1:
     "@sideway/formula" "^3.0.0"
     "@sideway/pinpoint" "^2.0.0"
 
+jotai@^0.16.7:
+  version "0.16.7"
+  resolved "https://registry.yarnpkg.com/jotai/-/jotai-0.16.7.tgz#31bc67b5d1b5dde2bac63e0604818c06059750af"
+  integrity sha512-eD8rQffsuQanLnXWxn/7lWXsDlBw4Mw4qmb/craISnjxD1a7jZy5BLSvYFkP+CGLEflZTwd9s2UN+U1qcQPUqA==
+
 jpeg-js@^0.4.0:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/jpeg-js/-/jpeg-js-0.4.3.tgz#6158e09f1983ad773813704be80680550eff977b"
@@ -5996,6 +6001,11 @@ react-native-codegen@^0.0.6:
     flow-parser "^0.121.0"
     jscodeshift "^0.11.0"
     nullthrows "^1.1.1"
+
+react-native-fast-image@^8.3.4:
+  version "8.3.4"
+  resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.3.4.tgz#79edca177e30311b19d59ff335625bcbe22650d7"
+  integrity sha512-LpzAdjUphihUpVEBn5fEv5AILe55rHav0YiZroPZ1rumKDhAl4u2cG01ku2Pb7l8sayjTsNu7FuURAlXUUDsow==
 
 react-native-gesture-handler@^1.10.3:
   version "1.10.3"

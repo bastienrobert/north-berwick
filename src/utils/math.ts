@@ -46,3 +46,7 @@ export function clamp(value: number, min: number, max: number) {
 export function normalize(value: number, min: number, max: number) {
   return (value - min) / (max - min)
 }
+
+export function multipleOf(num: number, mul: number) {
+  return num && mul ? Math.round(num / mul) * mul : num
+}

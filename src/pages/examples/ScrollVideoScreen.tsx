@@ -102,7 +102,7 @@ export default function ScrollVideoScreen() {
           width: '100%',
           height: '100%',
         }}
-        source={require('@/assets/storm.mp4')}
+        source={require('@/assets/tmp/storm.mp4')}
       />
     </View>
   )

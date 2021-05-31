@@ -7,7 +7,7 @@ export interface HDRSceneProps {}
 export default function HDRScene() {
   return (
     <ViroARScene>
-      <Viro360Video source={require('@/assets/hdr.mp4')} />
+      <Viro360Video source={require('@/assets/tmp/hdr.mp4')} />
     </ViroARScene>
   )
 }

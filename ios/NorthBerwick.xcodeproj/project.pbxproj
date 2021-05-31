@@ -14,6 +14,10 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		B01F95020D274E289005BC92 /* Avara-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 98DE6A235F8C4A91A6BEAC31 /* Avara-Bold.otf */; };
+		24D020F322D94FCEAA8CE6B7 /* iAWriterQuattroS-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = F5EAA84308FC48D8848C2DCC /* iAWriterQuattroS-Italic.otf */; };
+		79C94FD25D8347E29E962CDC /* iAWriterQuattroS-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D5F68EDE5DED4D56A0773AEA /* iAWriterQuattroS-Regular.otf */; };
+		7CF314EBD49C465AB840430D /* NewYork.otf in Resources */ = {isa = PBXBuildFile; fileRef = C7580F7069214A1FBF244477 /* NewYork.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +37,10 @@
 		EC68BFE3759A8AEB6052DFAE /* libPods-NorthBerwick.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NorthBerwick.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		98DE6A235F8C4A91A6BEAC31 /* Avara-Bold.otf */ = {isa = PBXFileReference; name = "Avara-Bold.otf"; path = "../src/assets/fonts/Avara-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F5EAA84308FC48D8848C2DCC /* iAWriterQuattroS-Italic.otf */ = {isa = PBXFileReference; name = "iAWriterQuattroS-Italic.otf"; path = "../src/assets/fonts/iAWriterQuattroS-Italic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D5F68EDE5DED4D56A0773AEA /* iAWriterQuattroS-Regular.otf */ = {isa = PBXFileReference; name = "iAWriterQuattroS-Regular.otf"; path = "../src/assets/fonts/iAWriterQuattroS-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C7580F7069214A1FBF244477 /* NewYork.otf */ = {isa = PBXFileReference; name = "NewYork.otf"; path = "../src/assets/fonts/NewYork.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +97,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				D65327D7A22EEC0BE12398D9 /* Pods */,
+				2D50DE775CC84ED0B5A10ABC /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -120,6 +129,18 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		2D50DE775CC84ED0B5A10ABC /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				98DE6A235F8C4A91A6BEAC31 /* Avara-Bold.otf */,
+				F5EAA84308FC48D8848C2DCC /* iAWriterQuattroS-Italic.otf */,
+				D5F68EDE5DED4D56A0773AEA /* iAWriterQuattroS-Regular.otf */,
+				C7580F7069214A1FBF244477 /* NewYork.otf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -187,6 +208,10 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
+				B01F95020D274E289005BC92 /* Avara-Bold.otf in Resources */,
+				24D020F322D94FCEAA8CE6B7 /* iAWriterQuattroS-Italic.otf in Resources */,
+				79C94FD25D8347E29E962CDC /* iAWriterQuattroS-Regular.otf in Resources */,
+				7CF314EBD49C465AB840430D /* NewYork.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

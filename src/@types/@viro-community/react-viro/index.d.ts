@@ -1547,7 +1547,7 @@ export class ViroVRSceneNavigator extends Component<ViroVRSceneNavigatorProps> {
 interface ViroARSceneNavigatorProps {
 	/* ViroARSceneNavigator uses "scene" objects like the following to
 	describe a scene. */
-	initialScene:{ scene:Function }
+	initialScene:{ scene:Function, passProps?: Record<string, any> }
 	autofocus?:boolean
 	/* iOS only props! Note: these props may change as the underlying platforms coalesce in features. */
 	worldAlignment?:'Gravity' | 'GravityAndHeading' | 'Camera'

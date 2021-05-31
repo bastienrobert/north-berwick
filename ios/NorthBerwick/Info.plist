@@ -47,7 +47,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UILaunchStoryboardName</key>
 	<string>SplashScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -69,5 +69,12 @@
 	<string>Used for AR/VR</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Allow $(PRODUCT_NAME) to access your microphone</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Avara-Bold.otf</string>
+		<string>iAWriterQuattroS-Italic.otf</string>
+		<string>iAWriterQuattroS-Regular.otf</string>
+		<string>NewYork.otf</string>
+	</array>
 </dict>
 </plist>

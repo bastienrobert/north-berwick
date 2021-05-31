@@ -1,11 +1,9 @@
 import React from 'react'
 import { View } from 'react-native'
-import {
-  ViroARSceneNavigator,
-  ViroVRSceneNavigator,
-} from '@viro-community/react-viro'
+import { ViroARSceneNavigator } from '@viro-community/react-viro'
 
 import MainScene from './MainScene'
+import BookScene from './BookScene'
 import HDRScene from './HDRScene'
 
 export interface ARSceneProps {}
@@ -25,16 +23,10 @@ export default function ARScene() {
           opacity: 0.2,
         }}
       /> */}
-      {/* <ViroVRSceneNavigator
-        vrModeEnabled={false}
-        hdrEnabled={true}
-        initialScene={{
-          scene: HDRScene,
-        }}
-      /> */}
       <ViroARSceneNavigator
         initialScene={{
           scene: HDRScene,
+          // scene: BookScene,
           // scene: MainScene,
         }}
       />

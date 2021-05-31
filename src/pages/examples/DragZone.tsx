@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Animated, PanResponder, View } from 'react-native'
 
-import PlaceHolder from '@/assets/fragment_placeholder.svg'
-import Fragment from '@/assets/fragment.svg'
+import PlaceHolder from '@/assets/tmp/fragment_placeholder.svg'
+import Fragment from '@/assets/tmp/fragment.svg'
 
 const DEFAULT_POSITION = { x: 40, y: 200 }
 const PLACEHOLDER_POSITION = { x: 200, y: 400 }
