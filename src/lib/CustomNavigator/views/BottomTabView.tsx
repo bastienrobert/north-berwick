@@ -11,15 +11,15 @@ import { ScreenContainer, screensEnabled } from 'react-native-screens'
 
 import ResourceSavingScene from './ResourceSavingScene'
 import type {
-  BottomTabNavigationConfig,
-  BottomTabDescriptorMap,
-  BottomTabNavigationHelpers,
+  BasicNavigationConfig,
+  BasicNavigationHelpers,
+  BasicDescriptorMap,
 } from '../types'
 
-type CustomViewProps = BottomTabNavigationConfig & {
+type CustomViewProps = BasicNavigationConfig & {
   state: TabNavigationState<ParamListBase>
-  navigation: BottomTabNavigationHelpers
-  descriptors: BottomTabDescriptorMap
+  navigation: BasicNavigationHelpers
+  descriptors: BasicDescriptorMap
 }
 
 function SceneContent({

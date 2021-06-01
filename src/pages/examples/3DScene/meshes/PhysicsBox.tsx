@@ -80,11 +80,23 @@ function InnerPhysics() {
     body.addShape(new CANNONBox(new CANNONVec3(1, 1, 1)))
     body.angularFactor.set(0, 1, 0)
   })
-  const [staticRef] = useBody({ mass: 0 }, (body) => {
+  const [staticRef, staticBody] = useBody({ mass: 0 }, (body) => {
     body.addShape(new CANNONBox(new CANNONVec3(1, 1, 1)))
     body.type = CANNONBody.STATIC
     body.position.set(2, 0, -9)
   })
+
+  useEffect(() => {
+    const cb = (e: any) => {
+      if (e.body === staticBody) console.log('COLLIDING W/ STATIC')
+    }
+
+    body.addEventListener('collide', cb)
+
+    return () => {
+      body.removeEventListener('collide', cb)
+    }
+  }, [body])
 
   const [_, jointBody] = useBody({ mass: 0 }, (body) => {
     body.addShape(new CANNONSphere(0.1))
@@ -194,7 +206,7 @@ function InnerPhysics() {
   return (
     <group
       onPointerOut={() => setCurrent((c) => ({ ...c, object: undefined }))}>
-      <Plane position={new Vector3(0, 0, -10)} />
+      <Plane position={[0, 0, -10]} />
       <ClickMarker ref={clickMarkerRef} />
       <MovementPlane
         ref={movementPlaneRef}

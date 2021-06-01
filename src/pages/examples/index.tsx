@@ -10,6 +10,7 @@ import FlipCard from './FlipCard'
 import DragZone from './DragZone'
 import ScrollVideoScreen from './ScrollVideoScreen'
 import CarouselDemo from './CarouselDemo'
+import TouchableAreaWebP from './TouchableAreaWebP'
 
 export type ExampleNavigationParamList = {
   Home: HomeProps
@@ -19,6 +20,7 @@ export type ExampleNavigationParamList = {
   DragZone: {}
   CarouselDemo: {}
   ThreeDScene: {}
+  TouchableAreaWebP: {}
 }
 
 const BasicNav = createBasicNavigator<ExampleNavigationParamList>()
@@ -26,7 +28,7 @@ const BasicNav = createBasicNavigator<ExampleNavigationParamList>()
 export default function Examples({ navigation }: any) {
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ position: 'absolute', top: 30, left: 30, zIndex: 2 }}>
+      <View style={{ position: 'absolute', top: 30, right: 30, zIndex: 2 }}>
         <Button
           title="DEV"
           onPress={() => navigation.navigate('Development', {})}
@@ -39,6 +41,10 @@ export default function Examples({ navigation }: any) {
         <BasicNav.Screen name="FlipCard" component={FlipCard} />
         <BasicNav.Screen name="DragZone" component={DragZone} />
         <BasicNav.Screen name="CarouselDemo" component={CarouselDemo} />
+        <BasicNav.Screen
+          name="TouchableAreaWebP"
+          component={TouchableAreaWebP}
+        />
         <BasicNav.Screen
           name="ScrollVideoScreen"
           component={ScrollVideoScreen}

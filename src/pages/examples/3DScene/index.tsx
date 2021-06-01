@@ -7,6 +7,7 @@ import Jumbo from './meshes/Jumbo'
 import Birds from './meshes/Birds'
 import PhysicsBox from './meshes/PhysicsBox'
 import DodecahedronMouse from './meshes/DodecahedronMouse'
+import Sprite from './meshes/Sprite'
 
 export interface ThreeDSceneProps {}
 
@@ -28,6 +29,7 @@ export default function ThreeDScene() {
         <PhysicsBox />
         {/* <DodecahedronMouse /> */}
 
+        {/* <Sprite src={require('@/assets/tmp/homer_sprite.png')} size={[5, 5]} /> */}
         {/* <Suspense fallback="loading...">
           <Jumbo />
           <Birds url={assets[0].uri} />

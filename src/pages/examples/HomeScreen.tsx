@@ -38,6 +38,10 @@ export default function HomeScreen({ navigation }: HomePropsWithNavigation) {
         onPress={() => navigation.navigate('ScrollVideoScreen', {})}
       />
       <Button
+        title="Go to TouchableAreaWebP"
+        onPress={() => navigation.navigate('TouchableAreaWebP', {})}
+      />
+      <Button
         title="Go to CarouselDemo"
         onPress={() => navigation.navigate('CarouselDemo', {})}
       />

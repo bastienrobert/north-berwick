@@ -36,13 +36,12 @@ export default function ScrollVideoScreen() {
   }
 
   const handleProgress = ({ currentTime }: any) => {
-    if (!isPanning) {
-      videoPositionRef.panning = currentTime
-
-      if (currentTime >= LOOP_END) {
-        videoRef.current?.seek(LOOP_START)
-      }
-    }
+    // if (!isPanning) {
+    //   videoPositionRef.panning = currentTime
+    //   if (currentTime >= LOOP_END) {
+    //     videoRef.current?.seek(LOOP_START)
+    //   }
+    // }
   }
 
   const handleLoad = ({ duration }: OnLoadData) => {
@@ -88,7 +87,8 @@ export default function ScrollVideoScreen() {
   return (
     <View style={{ flex: 1 }} {...panResponder.panHandlers}>
       <Video
-        paused={isPanning}
+        // paused={isPanning}
+        paused
         ref={handleVideoRef}
         onLoad={handleLoad}
         onProgress={handleProgress}

@@ -1,92 +1,36 @@
+import React, { useCallback, useState } from 'react'
 import {
   Viro3DObject,
+  ViroAmbientLight,
   ViroARImageMarker,
   ViroARScene,
   ViroARTrackingTargets,
-  ViroBox,
   ViroSpotLight,
 } from '@viro-community/react-viro'
-import React, { useCallback, useState } from 'react'
 import { Alert } from 'react-native'
 
 ViroARTrackingTargets.createTargets({
-  logo: {
-    source: require('@/assets/targets/tmp/logo.png'),
+  portrait_agnes_sampson: {
+    source: require('@/assets/book/portraits/portrait_agnes-sampson.jpg'),
     orientation: 'Up',
-    physicalWidth: 0.025,
-  },
-  chap_1_1: {
-    source: require('@/assets/book/chap_1_1.jpg'),
-    orientation: 'Up',
-    physicalWidth: 0.2,
+    physicalWidth: 0.045,
   },
 })
 
 export default function MainScene() {
-  const [current, setCurrent] = useState<number>()
-
-  const onLogoAnchorUpdated = useCallback((marker) => {
-    if (marker.anchorId === current) return
-
-    setCurrent(marker.anchorId)
-    Alert.alert('LOGO FOUND', '', [
-      {
-        text: 'CANCEL',
-        onPress: () => setCurrent(undefined),
-        style: 'cancel',
-      },
-      {
-        text: 'OK',
-        onPress: () => console.log('VALIDATE LOGO'),
-      },
-    ])
-  }, [])
-
-  const onCarAnchorUpdated = useCallback((marker) => {
-    if (marker.anchorId === current) return
-
-    setCurrent(marker.anchorId)
-    Alert.alert('CAR FOUND', '', [
-      {
-        text: 'CANCEL',
-        onPress: () => setCurrent(undefined),
-        style: 'cancel',
-      },
-      {
-        text: 'OK',
-        onPress: () => console.log('VALIDATE CAR'),
-      },
-    ])
-  }, [])
-
   return (
     <ViroARScene>
-      {/* <ViroARImageMarker target="logo" onAnchorUpdated={onLogoAnchorUpdated} />
-      <ViroARImageMarker target="car" onAnchorUpdated={onCarAnchorUpdated} /> */}
-      <ViroARImageMarker target="logo">
+      <ViroARImageMarker
+        target="portrait_agnes_sampson"
+        onAnchorFound={() => console.log('FOUND')}>
+        <ViroAmbientLight color="#FFFFFF" />
         <Viro3DObject
-          source={require('@/assets/tmp/box.glb')}
+          source={require('@/assets/tmp/cube.glb')}
+          scale={[0.001, 0.001, 0.001]}
           type="GLB"
-          scale={[0.03, 0.03, 0.03]}
+          animation={{ name: 'animation_0', run: true, loop: true }}
         />
       </ViroARImageMarker>
-      <ViroARImageMarker
-        target="chap_1_1"
-        onHover={(isHovering: boolean) =>
-          console.log('CAR', isHovering)
-        }></ViroARImageMarker>
-      <ViroSpotLight
-        innerAngle={5}
-        outerAngle={25}
-        direction={[0, -1, 0]}
-        position={[0, 5, 1]}
-        color="#ffffff"
-        castsShadow={true}
-        shadowMapSize={2048}
-        shadowNearZ={2}
-        shadowFarZ={7}
-        shadowOpacity={0.7}
-      />
     </ViroARScene>
   )
 }
