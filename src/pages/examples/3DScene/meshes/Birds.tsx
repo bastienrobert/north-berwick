@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { PrimitiveProps, useFrame } from 'react-three-fiber'
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { AnimationMixer } from 'three'
+import { AnimationMixer, Mesh } from 'three'
 
 const COUNT = 40
 
@@ -48,6 +48,7 @@ export function Bird({ speed = 1, factor = 20, url, ...props }: BirdProps) {
   useEffect(() => {
     new GLTFLoader().load(url, (r) => {
       setModel(r)
+      r.scene.traverse((e) => console.log((e as Mesh).geometry.attributes))
     })
   }, [])
 

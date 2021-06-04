@@ -25,9 +25,9 @@ export default function ARScene() {
       /> */}
       <ViroARSceneNavigator
         initialScene={{
-          scene: HDRScene,
+          // scene: HDRScene,
+          scene: MainScene,
           // scene: BookScene,
-          // scene: MainScene,
         }}
       />
     </View>

@@ -14,7 +14,7 @@ type HomeSplashPropsWithNavigation = HomeSplashProps & {
 export default function HomeSplash({
   navigation,
 }: HomeSplashPropsWithNavigation) {
-  const { set, reset } = useScan()
+  const { set, hide } = useScan()
 
   return (
     <SafeAreaView>
@@ -25,7 +25,7 @@ export default function HomeSplash({
             default: () => null,
             map_castle: () => {
               navigation.navigate('Chapter:Castle', {})
-              reset()
+              hide()
             },
           })
         }

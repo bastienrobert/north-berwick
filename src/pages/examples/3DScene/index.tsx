@@ -30,12 +30,12 @@ export default function ThreeDScene() {
         {/* <DodecahedronMouse /> */}
 
         {/* <Sprite src={require('@/assets/tmp/homer_sprite.png')} size={[5, 5]} /> */}
-        {/* <Suspense fallback="loading...">
-          <Jumbo />
+        <Suspense fallback="loading...">
+          {/* <Jumbo /> */}
           <Birds url={assets[0].uri} />
-          <Birds url={assets[1].uri} />
-          <Birds url={assets[2].uri} />
-        </Suspense> */}
+          {/* <Birds url={assets[1].uri} />
+          <Birds url={assets[2].uri} /> */}
+        </Suspense>
       </Canvas>
     </View>
   )

@@ -11,14 +11,14 @@ import { ScanCallbacks } from './ScanView'
 interface ScanContext {
   callbacks: ScanCallbacks | null
   set: (callbacks: ScanCallbacks) => void
-  reset: () => void
+  hide: () => void
 }
 const Context = createContext<ScanContext>({} as ScanContext)
 
 export default function ScanProvider({ children }: PropsWithChildren<unknown>) {
   const [callbacks, setCallbacks] = useState<ScanCallbacks | null>(null)
 
-  const reset = useCallback(() => {
+  const hide = useCallback(() => {
     setCallbacks(null)
   }, [])
 
@@ -28,7 +28,7 @@ export default function ScanProvider({ children }: PropsWithChildren<unknown>) {
       value={{
         callbacks,
         set: setCallbacks,
-        reset,
+        hide,
       }}
     />
   )
