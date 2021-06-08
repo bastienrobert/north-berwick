@@ -47,9 +47,7 @@ export default function RoundedButton({
   const handlePressOut = useCallback(
     (event: GestureResponderEvent) => {
       setIsPress(false)
-      if (onPressOut) {
-        onPressOut(event)
-      }
+      onPressOut?.(event)
     },
     [onPressOut],
   )

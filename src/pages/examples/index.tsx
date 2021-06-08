@@ -11,6 +11,7 @@ import DragZone from './DragZone'
 import ScrollVideoScreen from './ScrollVideoScreen'
 import CarouselDemo from './CarouselDemo'
 import TouchableAreaWebP from './TouchableAreaWebP'
+import MiscScreen from './MiscScreen'
 
 export type ExampleNavigationParamList = {
   Home: HomeProps
@@ -21,6 +22,7 @@ export type ExampleNavigationParamList = {
   CarouselDemo: {}
   ThreeDScene: {}
   TouchableAreaWebP: {}
+  MiscScreen: {}
 }
 
 const BasicNav = createBasicNavigator<ExampleNavigationParamList>()
@@ -49,6 +51,7 @@ export default function Examples({ navigation }: any) {
           name="ScrollVideoScreen"
           component={ScrollVideoScreen}
         />
+        <BasicNav.Screen name="MiscScreen" component={MiscScreen} />
       </BasicNav.Navigator>
     </View>
   )

@@ -5,7 +5,7 @@ import theme from '@/styles/theme'
 
 export default function DeckIcon() {
   return (
-    <Svg width="29px" height="29px" viewBox="0 0 29 29">
+    <Svg viewBox="0 0 29 29">
       <G fill="none" fillRule="nonzero">
         <Path
           fill={theme.colors.mineShaft}

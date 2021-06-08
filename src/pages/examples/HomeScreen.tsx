@@ -45,6 +45,10 @@ export default function HomeScreen({ navigation }: HomePropsWithNavigation) {
         title="Go to CarouselDemo"
         onPress={() => navigation.navigate('CarouselDemo', {})}
       />
+      <Button
+        title="Go to MiscScreen"
+        onPress={() => navigation.navigate('MiscScreen', {})}
+      />
     </View>
   )
 }
