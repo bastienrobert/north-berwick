@@ -50,3 +50,7 @@ export function normalize(value: number, min: number, max: number) {
 export function multipleOf(num: number, mul: number) {
   return num && mul ? Math.round(num / mul) * mul : num
 }
+
+export function range(size: number, startAt = 0) {
+  return [...Array(size).keys()].map((i) => i + startAt)
+}

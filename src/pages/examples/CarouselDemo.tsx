@@ -9,18 +9,12 @@ export default function CarouselDemo() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Button title="L" onPress={() => setIndex(clamp(index - 1, 0, 2))} />
-      <View
-        style={{
-          borderColor: 'red',
-          borderStyle: 'solid',
-          borderWidth: 1,
-        }}>
+      <View>
         <View style={{ width: 160 }}>
           <Carousel
             axis="x"
             length={3}
             margins={{ left: 24, right: 0, top: 0, bottom: 0 }}
-            // disable
             targetIndex={index}>
             <View style={styles.box}>
               <View style={styles.inner}>

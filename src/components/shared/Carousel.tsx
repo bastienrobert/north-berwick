@@ -1,29 +1,19 @@
-import React, { useRef, useEffect, useCallback, ReactNode } from 'react'
-import { Animated, PanResponder, StyleSheet, View } from 'react-native'
+import React, {
+  PropsWithChildren,
+  useRef,
+  useMemo,
+  useEffect,
+  useCallback,
+} from 'react'
+import {
+  Animated,
+  GestureResponderEvent,
+  PanResponder,
+  View,
+} from 'react-native'
 
 import { clamp, multipleOf } from '@/utils/math'
-
-function rubberband(distance: number, dimension: number, constant: number) {
-  if (dimension === 0 || Math.abs(dimension) === Infinity) {
-    return Math.pow(distance, constant * 5)
-  }
-  return (distance * dimension * constant) / (dimension + constant * distance)
-}
-
-function rubberbandIfOutOfBounds(
-  position: number,
-  min: number,
-  max: number,
-  constant = 0.55,
-) {
-  if (position < min) {
-    return -rubberband(min - position, max - min, constant) + min
-  }
-  if (position > max) {
-    return +rubberband(position - max, max - min, constant) + max
-  }
-  return position
-}
+import { rubberbandIfOutOfBounds } from '@/utils/rubberband'
 
 function getSlideIndexFromDragOffset(
   offset: number,
@@ -32,39 +22,52 @@ function getSlideIndexFromDragOffset(
 ) {
   const preComputedIndex = Math.round((-offset / size) * length)
 
-  const index = clamp(preComputedIndex, 0, length - 1)
+  const index = clamp(0, length - 1, preComputedIndex)
 
   return size ? index : 0
 }
 
-function snapOffset(position: any, size: any, axis: 'x' | 'y') {
+function snapOffset(
+  position: { x: number; y: number },
+  size: { width: number; height: number },
+  axis: 'x' | 'y',
+) {
   return {
     x: axis === 'x' ? multipleOf(position.x, size.width) : position.x,
     y: axis === 'y' ? multipleOf(position.y, size.height) : position.y,
   }
 }
 
+export interface CarouselMargins {
+  top: number
+  right: number
+  bottom: number
+  left: number
+}
+
 export interface CarouselProps {
   axis?: 'x' | 'y'
-  disable?: boolean
+  disabled?: boolean
   targetIndex?: number
+  forceSnap?: boolean
   onSlideIndexChange?: (index: number) => void
-  margins?: {
-    top: number
-    right: number
-    bottom: number
-    left: number
-  }
-  children: ReactNode
+  onResponderStart?: (event: GestureResponderEvent) => void
+  onResponderRelease?: (event: GestureResponderEvent) => void
+  margins?: CarouselMargins
   length: number
 }
 
+/**
+ * what is lagging?
+ */
 export default function Carousel({
   children,
   axis = 'x',
-  targetIndex = 1,
+  targetIndex = 0,
   onSlideIndexChange,
-  disable,
+  onResponderStart,
+  onResponderRelease,
+  disabled,
   margins = {
     top: 0,
     right: 0,
@@ -72,20 +75,23 @@ export default function Carousel({
     left: 0,
   },
   length,
-}: CarouselProps) {
+}: PropsWithChildren<CarouselProps>) {
   const isPanning = useRef(false)
+  const slideIndex = useRef(targetIndex)
   const offset = useRef({ x: -margins.left, y: -margins.top }).current
   const pan = useRef(new Animated.ValueXY(offset)).current
   const positions = useRef(new Animated.ValueXY(offset)).current
+  const animation = useRef<Animated.CompositeAnimation>()
 
   const containerDimensions = useRef({ width: 0, height: 0 }).current
   const wrapperDimensions = useRef({ width: 0, height: 0 }).current
 
   const animateToPosition = (v: typeof offset) => {
-    Animated.spring(positions, {
+    if (animation.current) animation.current.stop()
+    animation.current = Animated.spring(positions, {
       useNativeDriver: false,
-      tension: 3,
-      friction: 10,
+      tension: 40,
+      friction: 15,
       toValue: {
         x: clamp(
           v.x,
@@ -106,7 +112,8 @@ export default function Carousel({
           -margins.top,
         ),
       },
-    }).start()
+    })
+    animation.current.start()
   }
 
   const computeIndex = (index: number, animate = false) => {
@@ -115,7 +122,6 @@ export default function Carousel({
     } else {
       offset.y = -((wrapperDimensions.height / length) * index) - margins.top
     }
-    onSlideIndexChange?.(index)
 
     if (animate) {
       animateToPosition(offset)
@@ -129,20 +135,29 @@ export default function Carousel({
   }
 
   useEffect(() => {
-    computeIndex(targetIndex, true)
-  }, [targetIndex])
+    if (!isPanning.current) {
+      computeIndex(targetIndex, true)
+      slideIndex.current = targetIndex
+    }
+  }, [isPanning, targetIndex])
 
-  const onContainerLayout = useCallback((e) => {
-    containerDimensions.width = e.nativeEvent.layout.width
-    containerDimensions.height = e.nativeEvent.layout.height
-    computeIndex(targetIndex)
-  }, [])
+  const onContainerLayout = useCallback(
+    (e) => {
+      containerDimensions.width = e.nativeEvent.layout.width
+      containerDimensions.height = e.nativeEvent.layout.height
+      computeIndex(targetIndex)
+    },
+    [computeIndex],
+  )
 
-  const onWrapperLayout = useCallback((e) => {
-    wrapperDimensions.width = e.nativeEvent.layout.width
-    wrapperDimensions.height = e.nativeEvent.layout.height
-    computeIndex(targetIndex)
-  }, [])
+  const onWrapperLayout = useCallback(
+    (e) => {
+      wrapperDimensions.width = e.nativeEvent.layout.width
+      wrapperDimensions.height = e.nativeEvent.layout.height
+      computeIndex(targetIndex)
+    },
+    [computeIndex],
+  )
 
   const getSlideIndex = useCallback(
     (v) => {
@@ -150,7 +165,11 @@ export default function Carousel({
       const d =
         axis === 'x' ? wrapperDimensions.width : wrapperDimensions.height
 
-      onSlideIndexChange?.(getSlideIndexFromDragOffset(o, d, length))
+      const currentSlideIndex = getSlideIndexFromDragOffset(o, d, length)
+      if (currentSlideIndex !== slideIndex.current) {
+        slideIndex.current = currentSlideIndex
+        if (onSlideIndexChange) onSlideIndexChange(currentSlideIndex)
+      }
     },
     [axis, margins, wrapperDimensions, length, onSlideIndexChange],
   )
@@ -159,6 +178,7 @@ export default function Carousel({
     if (isPanning.current) {
       offset.x = x
       offset.y = y
+
       getSlideIndex(offset)
 
       positions.setValue({
@@ -181,52 +201,74 @@ export default function Carousel({
   })
 
   positions.addListener((v) => {
-    if (!isPanning.current && !disable) {
+    if (!isPanning.current && !disabled) {
       offset.x = v.x
       offset.y = v.y
-      getSlideIndex(offset)
 
       pan.setValue(v)
     }
   })
 
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderGrant: () => {
-      isPanning.current = true
-      pan.setOffset(offset)
-      positions.stopAnimation()
-    },
-    onMoveShouldSetPanResponder: () => true,
-    onPanResponderMove: (_, gesture) => {
-      pan.setValue({
-        x: axis === 'x' ? gesture.dx : 0,
-        y: axis === 'y' ? gesture.dy : 0,
-      })
-    },
-    onPanResponderTerminationRequest: () => true,
-    onPanResponderRelease: () => {
-      isPanning.current = false
-      const next = snapOffset(
-        offset,
-        {
-          width: wrapperDimensions.width / length + margins.left,
-          height: wrapperDimensions.height / length + margins.top,
-        },
-        axis,
-      )
+  const panResponder = useMemo(() => {
+    return PanResponder.create({
+      // onStartShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        isPanning.current = true
+        pan.setOffset(offset)
 
-      animateToPosition(next)
-    },
-  })
+        positions.stopAnimation()
+        pan.stopAnimation()
+      },
+      onMoveShouldSetPanResponder: (e, gesture) => {
+        if (axis === 'x' && Math.abs(gesture?.dx) < Math.abs(gesture?.dy)) {
+          return false
+        } else if (
+          axis === 'y' &&
+          Math.abs(gesture?.dy) < Math.abs(gesture?.dx)
+        ) {
+          return false
+        }
+        onResponderStart?.(e)
+        return true
+      },
+      onPanResponderMove: (_, gesture) => {
+        pan.setValue({
+          x: axis === 'x' ? gesture.dx : 0,
+          y: axis === 'y' ? gesture.dy : 0,
+        })
+      },
+      onPanResponderTerminationRequest: () => true,
+      onPanResponderRelease: (e, { vx, vy }) => {
+        isPanning.current = false
+        offset.x += clamp(vx * 120, -180, 180)
+        offset.y += clamp(vy * 120, -180, 180)
+        const next = snapOffset(
+          offset,
+          {
+            width: wrapperDimensions.width / length + margins.left,
+            height: wrapperDimensions.height / length + margins.top,
+          },
+          axis,
+        )
+
+        animateToPosition(next)
+        onResponderRelease?.(e)
+      },
+    })
+  }, [axis, length, margins, offset, pan, positions, wrapperDimensions])
 
   return (
-    <View style={styles.container} onLayout={onContainerLayout}>
+    <View
+      style={{
+        flexDirection: axis === 'x' ? 'row' : 'column',
+        width: '100%',
+      }}
+      onLayout={onContainerLayout}>
       <Animated.View
-        {...(disable ? {} : panResponder.panHandlers)}
+        {...(disabled ? {} : panResponder.panHandlers)}
         style={[
+          { flexDirection: axis === 'x' ? 'row' : 'column' },
           { transform: positions.getTranslateTransform() },
-          styles.wrapper,
         ]}
         onLayout={onWrapperLayout}>
         {children}
@@ -234,12 +276,3 @@ export default function Carousel({
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-  },
-  wrapper: {
-    flexDirection: 'row',
-  },
-})

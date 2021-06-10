@@ -1,129 +1,94 @@
-import React, { useEffect, useRef, useCallback } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import {
   View,
   StyleSheet,
   Animated,
-  TouchableOpacity,
-  Text,
-  Dimensions,
+  TouchableWithoutFeedback,
+  useWindowDimensions,
+  ViewStyle,
+  StyleProp,
+  PanResponder,
 } from 'react-native'
 
-export default function App2() {
-  const animatedRotation = useRef(new Animated.Value(0)).current
-  const rotation = useRef(0)
+import Card from '@/components/Card'
+import BottomCollapsible from '@/components/shared/BottomCollapsible'
 
-  const flipCard = useCallback(() => {
-    if (rotation.current >= 90) {
-      Animated.spring(animatedRotation, {
-        useNativeDriver: false,
-        toValue: 0,
-        friction: 8,
-        tension: 10,
-      }).start()
-    } else {
-      Animated.spring(animatedRotation, {
-        useNativeDriver: false,
-        toValue: 180,
-        friction: 8,
-        tension: 10,
-      }).start()
-    }
-  }, [animatedRotation])
+import useFlippable from '@/hooks/useFlippable'
+import Carousel from '@/components/shared/Carousel'
 
-  useEffect(() => {
-    animatedRotation.addListener(({ value }) => {
-      rotation.current = value
-    })
-  }, [animatedRotation])
-
-  const frontInterpolate = animatedRotation.interpolate({
-    inputRange: [0, 180],
-    outputRange: ['0deg', '180deg'],
-  })
-
-  const backInterpolate = animatedRotation.interpolate({
-    inputRange: [0, 180],
-    outputRange: ['180deg', '360deg'],
-  })
-
-  const frontOpacity = animatedRotation.interpolate({
-    inputRange: [89, 90],
-    outputRange: [1, 0],
-  })
-
-  const backOpacity = animatedRotation.interpolate({
-    inputRange: [89, 90],
-    outputRange: [0, 1],
-  })
+function FlipCard({ style }: { style: StyleProp<ViewStyle> }) {
+  const { flip, frontFaceStyle, backFaceStyle } = useFlippable()
 
   return (
-    <View style={styles.container}>
-      <View>
-        <Animated.View
-          style={[
-            styles.flipCard,
-            styles.squareCard,
-            {
-              opacity: frontOpacity,
-              transform: [{ rotateY: frontInterpolate }],
-            },
-          ]}>
-          <TouchableOpacity
-            activeOpacity={1}
-            onPress={() => flipCard()}
-            style={styles.squareCard}>
-            <Text style={styles.text}>Front title</Text>
-          </TouchableOpacity>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        flip()
+      }}>
+      <View style={style}>
+        <Animated.View style={[frontFaceStyle, { alignItems: 'center' }]}>
+          <Card
+            number={1}
+            color="purple"
+            title={['Hello', 'World']}
+            bottom="Falcon of Leith"
+          />
         </Animated.View>
         <Animated.View
           style={[
-            styles.squareCard,
-            styles.flipCard,
-            styles.flipCardBack,
-            {
-              opacity: backOpacity,
-              transform: [{ rotateY: backInterpolate }],
-            },
+            backFaceStyle,
+            StyleSheet.absoluteFill,
+            { alignItems: 'center' },
           ]}>
-          <TouchableOpacity
-            activeOpacity={1}
-            onPress={() => flipCard()}
-            style={[styles.squareCard, { backgroundColor: 'red' }]}>
-            <View style={{ justifyContent: 'center', padding: 10 }}>
-              <Text style={styles.text}>Back title</Text>
-            </View>
-          </TouchableOpacity>
+          <Card
+            revert
+            number={2}
+            color="blue"
+            text="Tu n'as pas encore assez d'informations pour remplir cette carte"
+            bottom="Falcon of Leith"
+          />
         </Animated.View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   )
 }
 
-const width = Dimensions.get('window').width
-const containerWidth = (width - 30) / 2 - 7.5
+export default function FlipCardCarousel() {
+  const [axis, setAxis] = useState<'x' | 'y' | null>(null)
+  const { width } = useWindowDimensions()
+  const w = (width / 100) * 85
 
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 60,
-  },
-  squareCard: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'blue',
-    height: containerWidth,
-    width: containerWidth,
-  },
-  flipCard: {
-    backfaceVisibility: 'hidden',
-  },
-  flipCardBack: {
-    backgroundColor: 'red',
-    position: 'absolute',
-    top: 0,
-  },
-  text: {
-    color: 'white',
-  },
-})
+  return (
+    <View
+      style={{
+        flex: 1,
+        overflow: 'hidden',
+        alignItems: 'center',
+      }}>
+      <BottomCollapsible
+        disabled={axis === 'x'}
+        style={{
+          position: 'absolute',
+          width: w,
+          height: (w / Card.DIMENSIONS.width) * Card.DIMENSIONS.height,
+        }}
+        onResponderStart={() => setAxis('y')}
+        onResponderRelease={() => setAxis(null)}
+        startOffset={100}
+        endOffset={40}>
+        <View>
+          <Carousel
+            disabled={axis === 'y'}
+            onResponderStart={() => setAxis('x')}
+            onResponderRelease={() => setAxis(null)}
+            axis="x"
+            length={3}
+            margins={{ left: 15, right: 0, top: 0, bottom: 0 }}>
+            <FlipCard style={{ width: w, marginLeft: 15 }} />
+            <FlipCard style={{ width: w, marginLeft: 15 }} />
+            <FlipCard style={{ width: w, marginLeft: 15 }} />
+          </Carousel>
+        </View>
+      </BottomCollapsible>
+    </View>
+  )
+}
