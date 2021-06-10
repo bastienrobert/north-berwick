@@ -4,6 +4,7 @@ import React, {
   useMemo,
   useEffect,
   useCallback,
+  memo,
 } from 'react'
 import {
   Animated,
@@ -21,9 +22,7 @@ function getSlideIndexFromDragOffset(
   length: number,
 ) {
   const preComputedIndex = Math.round((-offset / size) * length)
-
-  const index = clamp(0, length - 1, preComputedIndex)
-
+  const index = clamp(preComputedIndex, 0, length - 1)
   return size ? index : 0
 }
 
@@ -57,9 +56,6 @@ export interface CarouselProps {
   length: number
 }
 
-/**
- * what is lagging?
- */
 export default function Carousel({
   children,
   axis = 'x',
@@ -135,7 +131,7 @@ export default function Carousel({
   }
 
   useEffect(() => {
-    if (!isPanning.current) {
+    if (!isPanning.current && slideIndex.current !== targetIndex) {
       computeIndex(targetIndex, true)
       slideIndex.current = targetIndex
     }
@@ -161,11 +157,11 @@ export default function Carousel({
 
   const getSlideIndex = useCallback(
     (v) => {
-      const o = axis === 'x' ? v.x + margins.left : v.y + margins.top
-      const d =
-        axis === 'x' ? wrapperDimensions.width : wrapperDimensions.height
-
-      const currentSlideIndex = getSlideIndexFromDragOffset(o, d, length)
+      const currentSlideIndex = getSlideIndexFromDragOffset(
+        axis === 'x' ? v.x + margins.left : v.y + margins.top,
+        axis === 'x' ? wrapperDimensions.width : wrapperDimensions.height,
+        length,
+      )
       if (currentSlideIndex !== slideIndex.current) {
         slideIndex.current = currentSlideIndex
         if (onSlideIndexChange) onSlideIndexChange(currentSlideIndex)
@@ -174,40 +170,54 @@ export default function Carousel({
     [axis, margins, wrapperDimensions, length, onSlideIndexChange],
   )
 
-  pan.addListener(({ x, y }) => {
-    if (isPanning.current) {
-      offset.x = x
-      offset.y = y
+  useEffect(() => {
+    const id = pan.addListener(({ x, y }) => {
+      if (isPanning.current) {
+        offset.x = x
+        offset.y = y
 
-      getSlideIndex(offset)
+        getSlideIndex(offset)
 
-      positions.setValue({
-        x: -rubberbandIfOutOfBounds(
-          -x,
-          margins.left,
-          wrapperDimensions.width - containerDimensions.width + margins.right,
-          0.25,
-        ),
-        y: -rubberbandIfOutOfBounds(
-          -y,
-          margins.top,
-          wrapperDimensions.height -
-            containerDimensions.height +
-            margins.bottom,
-          0.25,
-        ),
-      })
+        positions.setValue({
+          x: -rubberbandIfOutOfBounds(
+            -x,
+            margins.left,
+            wrapperDimensions.width - containerDimensions.width + margins.right,
+            0.25,
+          ),
+          y: -rubberbandIfOutOfBounds(
+            -y,
+            margins.top,
+            wrapperDimensions.height -
+              containerDimensions.height +
+              margins.bottom,
+            0.25,
+          ),
+        })
+      }
+    })
+
+    return () => {
+      pan.removeListener(id)
     }
-  })
+  }, [pan, isPanning, positions, wrapperDimensions, containerDimensions])
 
-  positions.addListener((v) => {
-    if (!isPanning.current && !disabled) {
-      offset.x = v.x
-      offset.y = v.y
+  useEffect(() => {
+    const id = positions.addListener((v) => {
+      if (!isPanning.current && !disabled) {
+        offset.x = v.x
+        offset.y = v.y
 
-      pan.setValue(v)
+        getSlideIndex(offset)
+
+        pan.setValue(v)
+      }
+    })
+
+    return () => {
+      positions.removeListener(id)
     }
-  })
+  }, [positions, isPanning, disabled, pan])
 
   const panResponder = useMemo(() => {
     return PanResponder.create({
@@ -255,7 +265,7 @@ export default function Carousel({
         onResponderRelease?.(e)
       },
     })
-  }, [axis, length, margins, offset, pan, positions, wrapperDimensions])
+  }, [axis, length, positions, pan, offset, wrapperDimensions])
 
   return (
     <View
@@ -267,7 +277,12 @@ export default function Carousel({
       <Animated.View
         {...(disabled ? {} : panResponder.panHandlers)}
         style={[
-          { flexDirection: axis === 'x' ? 'row' : 'column' },
+          {
+            flexDirection: axis === 'x' ? 'row' : 'column',
+            borderWidth: 1,
+            borderColor: 'red',
+            borderStyle: 'solid',
+          },
           { transform: positions.getTranslateTransform() },
         ]}
         onLayout={onWrapperLayout}>
@@ -276,3 +291,5 @@ export default function Carousel({
     </View>
   )
 }
+
+export const MemoizedCarousel = memo(Carousel)

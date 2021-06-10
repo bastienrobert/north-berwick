@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { memo, useCallback, useMemo, useState } from 'react'
 import {
   View,
   StyleSheet,
@@ -53,13 +53,34 @@ function FlipCard({ style }: { style: StyleProp<ViewStyle> }) {
   )
 }
 
+const MemoizedFlipCard = memo(FlipCard)
+
+const data = [1, 2, 3]
+const margins = { left: 15, right: 0, top: 0, bottom: 0 }
+
 export default function FlipCardCarousel() {
   const [index, setIndex] = useState<number>(0)
+  const [collapsedState, setCollapsedState] = useState(true)
   const [axis, setAxis] = useState<'x' | 'y' | null>(null)
   const { width } = useWindowDimensions()
   const w = (width / 100) * 85
 
-  console.log(index)
+  const onBottomCollapsibleResponderStart = useCallback(() => {
+    setAxis('y')
+  }, [])
+  const onBottomCollapsibleResponderRelease = useCallback(() => {
+    setAxis(null)
+  }, [])
+  const onCarouselResponderStart = useCallback(() => {
+    setAxis('x')
+  }, [])
+  const onCarouselResponderRelease = useCallback(() => {
+    setAxis(null)
+  }, [])
+
+  const s = useMemo(() => {
+    return { width: w, marginLeft: 15 }
+  }, [w])
 
   return (
     <View
@@ -74,16 +95,16 @@ export default function FlipCardCarousel() {
           cards={[
             {
               complete: true,
-              active: index === 0,
+              active: !collapsedState && index === 0,
             },
             {
               complete: 1,
-              active: index === 1,
+              active: !collapsedState && index === 1,
               half: true,
             },
             {
               complete: false,
-              active: index === 2,
+              active: !collapsedState && index === 2,
             },
           ]}
         />
@@ -95,23 +116,24 @@ export default function FlipCardCarousel() {
           width: w,
           height: (w / Card.DIMENSIONS.width) * Card.DIMENSIONS.height,
         }}
-        onResponderStart={() => setAxis('y')}
-        onResponderRelease={() => setAxis(null)}
+        onChange={setCollapsedState}
+        onResponderStart={onBottomCollapsibleResponderStart}
+        onResponderRelease={onBottomCollapsibleResponderRelease}
         startOffset={100}
         endOffset={40}>
         <View>
           <Carousel
             disabled={axis === 'y'}
-            onResponderStart={() => setAxis('x')}
-            onResponderRelease={() => setAxis(null)}
-            targetIndex={index}
+            onResponderStart={onCarouselResponderStart}
+            onResponderRelease={onCarouselResponderRelease}
+            // targetIndex={index}
             onSlideIndexChange={setIndex}
             axis="x"
-            length={3}
-            margins={{ left: 15, right: 0, top: 0, bottom: 0 }}>
-            <FlipCard style={{ width: w, marginLeft: 15 }} />
-            <FlipCard style={{ width: w, marginLeft: 15 }} />
-            <FlipCard style={{ width: w, marginLeft: 15 }} />
+            length={data.length}
+            margins={margins}>
+            {data.map((_, i) => (
+              <MemoizedFlipCard key={i} style={s} />
+            ))}
           </Carousel>
         </View>
       </BottomCollapsible>

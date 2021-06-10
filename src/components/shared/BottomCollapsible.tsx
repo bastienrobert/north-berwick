@@ -31,6 +31,7 @@ interface BottomCollapsibleProps {
   tolerance?: number
   spring?: Omit<Animated.SpringAnimationConfig, 'toValue' | 'useNativeDriver'>
   style?: StyleProp<ViewStyle>
+  onChange?: (collapsed: boolean) => void
   onResponderStart?: (event: GestureResponderEvent) => void
   onResponderRelease?: (event: GestureResponderEvent) => void
 }
@@ -41,6 +42,7 @@ export default function BottomCollapsible({
   disabled = false,
   startOffset = 0,
   endOffset = 0,
+  onChange,
   tolerance = 2,
   onResponderStart,
   onResponderRelease,
@@ -81,6 +83,7 @@ export default function BottomCollapsible({
               y: height - layout.height - endOffset,
             },
       }).start(() => (shouldListen.current = true))
+      onChange?.(payload)
     },
     [layout, width, height, endOffset],
   )

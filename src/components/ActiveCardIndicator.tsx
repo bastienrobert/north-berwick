@@ -1,5 +1,5 @@
-import React from 'react'
-import { StyleSheet, View, ViewProps } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { Animated, StyleSheet, View, ViewProps } from 'react-native'
 
 type SharedCardProps = {
   active?: boolean
@@ -26,8 +26,29 @@ function SmallCard({
   color,
   uncompleteOpacity = 1,
 }: SmallCardProps) {
+  const opacity = useRef(new Animated.Value(uncompleteOpacity)).current
+  const translation = useRef(new Animated.ValueXY()).current
+
+  useEffect(() => {
+    Animated.spring(translation, {
+      useNativeDriver: false,
+      toValue: {
+        x: 0,
+        y: active ? -10 : 0,
+      },
+    }).start()
+  }, [active])
+
+  useEffect(() => {
+    Animated.spring(opacity, {
+      useNativeDriver: false,
+      toValue: complete ? 1 : uncompleteOpacity,
+    }).start()
+  }, [complete])
+
   return half ? (
-    <View style={[styles.card, active ? styles.active : undefined]}>
+    <Animated.View
+      style={[styles.card, { transform: translation.getTranslateTransform() }]}>
       <View style={styles.inner}>
         <View
           style={[
@@ -49,9 +70,10 @@ function SmallCard({
         />
       </View>
       {active && <View style={styles.dot} />}
-    </View>
+    </Animated.View>
   ) : (
-    <View style={[styles.card, active ? styles.active : undefined]}>
+    <Animated.View
+      style={[styles.card, { transform: translation.getTranslateTransform() }]}>
       <View
         style={[
           styles.inner,
@@ -59,7 +81,7 @@ function SmallCard({
         ]}
       />
       {active && <View style={styles.dot} />}
-    </View>
+    </Animated.View>
   )
 }
 
@@ -77,7 +99,7 @@ export default function ActiveCardIndicator({
   return (
     <View style={[styles.container, style]} {...props}>
       {cards.map((c, i) => (
-        <SmallCard {...c} color={color} uncompleteOpacity={0.5} />
+        <SmallCard {...c} key={i} color={color} uncompleteOpacity={0.5} />
       ))}
     </View>
   )

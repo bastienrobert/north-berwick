@@ -5,6 +5,7 @@ import ArrowRightIcon from '@/components/icons/ArrowRightIcon'
 import BaseSubtitleBox, {
   BaseSubtitleBoxProps,
 } from '@/components/shared/BaseSubtitleBox'
+import RevealAnimatedText from '../shared/RevealAnimatedText'
 
 export type VideoDialogBoxProps = BaseSubtitleBoxProps & {
   content: string
@@ -20,7 +21,12 @@ export default function VideoDialogBox({
   return (
     <BaseSubtitleBox under={children} {...props}>
       <View style={styles.wrapper}>
-        <Text style={styles.text}>{content}</Text>
+        <RevealAnimatedText
+          reveal
+          style={styles.text}
+          textStyle={styles.innerText}
+          content={content}
+        />
         {arrow && (
           <View style={styles.icon}>
             <ArrowRightIcon />
@@ -37,7 +43,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   text: {
+    flex: 1,
+  },
+  innerText: {
     fontFamily: 'iAWriterQuattroS-Regular',
+    textAlign: 'left',
     fontSize: 16,
     letterSpacing: -0.21,
   },
