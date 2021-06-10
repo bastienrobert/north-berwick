@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import {
   View,
   StyleSheet,
@@ -7,7 +7,7 @@ import {
   useWindowDimensions,
   ViewStyle,
   StyleProp,
-  PanResponder,
+  SafeAreaView,
 } from 'react-native'
 
 import Card from '@/components/Card'
@@ -15,6 +15,7 @@ import BottomCollapsible from '@/components/shared/BottomCollapsible'
 
 import useFlippable from '@/hooks/useFlippable'
 import Carousel from '@/components/shared/Carousel'
+import ActiveCardIndicator from '@/components/ActiveCardIndicator'
 
 function FlipCard({ style }: { style: StyleProp<ViewStyle> }) {
   const { flip, frontFaceStyle, backFaceStyle } = useFlippable()
@@ -53,9 +54,12 @@ function FlipCard({ style }: { style: StyleProp<ViewStyle> }) {
 }
 
 export default function FlipCardCarousel() {
+  const [index, setIndex] = useState<number>(0)
   const [axis, setAxis] = useState<'x' | 'y' | null>(null)
   const { width } = useWindowDimensions()
   const w = (width / 100) * 85
+
+  console.log(index)
 
   return (
     <View
@@ -64,6 +68,26 @@ export default function FlipCardCarousel() {
         overflow: 'hidden',
         alignItems: 'center',
       }}>
+      <SafeAreaView style={{ position: 'absolute', top: 65, right: 30 }}>
+        <ActiveCardIndicator
+          color="white"
+          cards={[
+            {
+              complete: true,
+              active: index === 0,
+            },
+            {
+              complete: 1,
+              active: index === 1,
+              half: true,
+            },
+            {
+              complete: false,
+              active: index === 2,
+            },
+          ]}
+        />
+      </SafeAreaView>
       <BottomCollapsible
         disabled={axis === 'x'}
         style={{
@@ -80,6 +104,8 @@ export default function FlipCardCarousel() {
             disabled={axis === 'y'}
             onResponderStart={() => setAxis('x')}
             onResponderRelease={() => setAxis(null)}
+            targetIndex={index}
+            onSlideIndexChange={setIndex}
             axis="x"
             length={3}
             margins={{ left: 15, right: 0, top: 0, bottom: 0 }}>
