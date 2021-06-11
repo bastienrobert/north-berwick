@@ -277,12 +277,7 @@ export default function Carousel({
       <Animated.View
         {...(disabled ? {} : panResponder.panHandlers)}
         style={[
-          {
-            flexDirection: axis === 'x' ? 'row' : 'column',
-            borderWidth: 1,
-            borderColor: 'red',
-            borderStyle: 'solid',
-          },
+          { flexDirection: axis === 'x' ? 'row' : 'column' },
           { transform: positions.getTranslateTransform() },
         ]}
         onLayout={onWrapperLayout}>

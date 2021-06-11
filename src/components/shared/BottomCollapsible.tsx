@@ -28,6 +28,7 @@ interface BottomCollapsibleProps {
   startOffset?: number
   endOffset?: number
   velocity?: number
+  collapsed?: boolean
   tolerance?: number
   spring?: Omit<Animated.SpringAnimationConfig, 'toValue' | 'useNativeDriver'>
   style?: StyleProp<ViewStyle>
@@ -39,6 +40,7 @@ interface BottomCollapsibleProps {
 export default function BottomCollapsible({
   children,
   style,
+  collapsed,
   disabled = false,
   startOffset = 0,
   endOffset = 0,
@@ -52,7 +54,7 @@ export default function BottomCollapsible({
   },
   velocity = 2.5,
 }: PropsWithChildren<BottomCollapsibleProps>) {
-  const [collapsed, _setCollapsed] = useState(true)
+  const [isCollapsed, _setIsCollapsed] = useState(true)
   const containerRef = useRef()
   const shouldListen = useRef(true)
   const isDragging = useRef(false)
@@ -70,9 +72,9 @@ export default function BottomCollapsible({
   const translations = useRef(new Animated.ValueXY({ ...final })).current
   const listened = useRef({ x: 0, y: 0 }).current
 
-  const setCollapsed = useCallback(
+  const setIsCollapsed = useCallback(
     (payload) => {
-      _setCollapsed(payload)
+      _setIsCollapsed(payload)
       Animated.spring(values, {
         ...spring,
         useNativeDriver: false,
@@ -87,6 +89,12 @@ export default function BottomCollapsible({
     },
     [layout, width, height, endOffset],
   )
+
+  useEffect(() => {
+    if (!isDragging.current) {
+      setIsCollapsed(isCollapsed)
+    }
+  }, [isCollapsed])
 
   useEffect(() => {
     const id = values.addListener(({ x, y }) => {
@@ -126,19 +134,19 @@ export default function BottomCollapsible({
         if (shouldListen.current) {
           values.setValue({ x: 0, y: dy })
 
-          if (collapsed && vy < -velocity) {
+          if (isCollapsed && vy < -velocity) {
             values.flattenOffset()
             shouldListen.current = false
-            setCollapsed(false)
+            setIsCollapsed(false)
           }
           if (
-            !collapsed &&
+            !isCollapsed &&
             vy > velocity &&
             listened.y > height - layout.height - endOffset
           ) {
             values.flattenOffset()
             shouldListen.current = false
-            setCollapsed(true)
+            setIsCollapsed(true)
           }
         }
       },
@@ -147,7 +155,7 @@ export default function BottomCollapsible({
         isDragging.current = false
 
         if (shouldListen.current) {
-          setCollapsed(
+          setIsCollapsed(
             listened.y - (height - layout.height - endOffset) >=
               layout.height / 2,
           )
@@ -157,7 +165,7 @@ export default function BottomCollapsible({
         onResponderRelease?.(e)
       },
     })
-  }, [values, collapsed, velocity, endOffset, layout, width, height])
+  }, [values, isCollapsed, velocity, endOffset, layout, width, height])
 
   return (
     <Animated.View
@@ -174,7 +182,7 @@ export default function BottomCollapsible({
         <TouchableWithoutFeedback
           onPress={() => {
             if (Math.abs(final.y - Math.round(listened.y)) < tolerance) {
-              setCollapsed(false)
+              setIsCollapsed(false)
             }
           }}>
           <View
@@ -183,7 +191,7 @@ export default function BottomCollapsible({
               {
                 height: startOffset || '100%',
                 width: '100%',
-                zIndex: collapsed ? 2 : -1,
+                zIndex: isCollapsed ? 2 : -1,
               },
             ]}
           />

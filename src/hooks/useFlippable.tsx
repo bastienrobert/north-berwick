@@ -1,10 +1,10 @@
 import { useEffect, useRef, useCallback } from 'react'
-import { Animated, StyleProp, ViewStyle } from 'react-native'
+import { Animated, ViewStyle } from 'react-native'
 
 interface UseFlippableReturns {
   flip: (side?: 'front' | 'back') => void
-  frontFaceStyle: Animated.AnimatedProps<StyleProp<ViewStyle>>
-  backFaceStyle: Animated.AnimatedProps<StyleProp<ViewStyle>>
+  frontFaceStyle: Animated.AnimatedProps<ViewStyle>
+  backFaceStyle: Animated.AnimatedProps<ViewStyle>
 }
 
 export default function useFlippable({
