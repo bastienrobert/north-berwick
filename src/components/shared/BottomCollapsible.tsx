@@ -119,6 +119,7 @@ export default function BottomCollapsible({
   const panResponder = useMemo(() => {
     return PanResponder.create({
       onPanResponderGrant: () => {
+        values.stopAnimation()
         values.extractOffset()
         values.setValue({ x: 0, y: 0 })
         isDragging.current = true
