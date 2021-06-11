@@ -1,11 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import {
-  Animated,
-  Dimensions,
-  SafeAreaView,
-  StyleSheet,
-  View,
-} from 'react-native'
+import React, { ReactNode, useCallback, useState } from 'react'
+import { Animated, SafeAreaView, StyleSheet, View } from 'react-native'
 import { useTranslate } from 'react-polyglot'
 import {
   ViroARImageMarker,
@@ -16,10 +10,11 @@ import {
 
 import { useScan } from './ScanProvider'
 import LargeButton from '@/components/shared/LargeButton'
-import { capitalizeFirstLetter } from '@/utils/text'
 import RoundedButton from '@/components/shared/RoundedButton'
 import CrossIcon from '@/components/icons/CrossIcon'
 import NotificationBox from '@/components/shared/NotificationBox'
+
+import { capitalizeFirstLetter } from '@/utils/text'
 
 const targets = {
   map_castle: {
@@ -116,11 +111,15 @@ const targets = {
 
 ViroARTrackingTargets.createTargets(targets)
 
-const { width } = Dimensions.get('window')
-
 type TargetsName = keyof typeof targets
 export type ScanCallbacks = Partial<Record<TargetsName, () => void>> & {
-  default: (target?: TargetsName) => void | false
+  default: (target?: TargetsName) => void | null | false
+}
+export type ScanParams = {
+  wrongPlaceLabel?: string
+  goToLabel?: string
+  overlay?: ReactNode
+  callbacks: ScanCallbacks
 }
 
 interface CurrentScanState {
@@ -164,7 +163,7 @@ function ScanScene({ current, setCurrent }: ScanProps) {
 
 export default function ScanView() {
   const t = useTranslate()
-  const { callbacks, hide } = useScan()
+  const { params, hide } = useScan()
   const [current, setCurrent] = useState<CurrentScanState>({
     id: null,
     type: null,
@@ -174,19 +173,12 @@ export default function ScanView() {
 
   const setSafeCurrent = useCallback(
     (payload: CurrentScanState) => {
-      if (callbacks && payload.name && callbacks[payload.name]) {
+      if (params && payload.name && params.callbacks[payload.name]) {
         setCurrent(payload)
       }
     },
-    [callbacks],
+    [params],
   )
-
-  const submit = useCallback(() => {
-    if (!callbacks || !current.name) return
-    const cb = callbacks[current.name]
-    const res = cb ? cb() : callbacks.default(current.name)
-    res === false ? setIsWrong(t('not_good_place')) : reset()
-  }, [current.id, callbacks])
 
   const reset = useCallback(() => {
     setIsWrong(undefined)
@@ -197,16 +189,24 @@ export default function ScanView() {
     })
   }, [])
 
-  useEffect(() => {
-    if (current.name) {
-    }
-  }, [current.id, callbacks])
+  const onSubmit = useCallback(() => {
+    if (!params || !current.name) return
+    const cb = params.callbacks[current.name]
+    const res = cb ? cb() : params.callbacks.default(current.name)
+    res === false ? setIsWrong(params.wrongPlaceLabel) : reset()
+  }, [current.id, params, reset])
 
-  if (!callbacks) return null
+  const onClosePress = useCallback(() => {
+    hide()
+    reset()
+  }, [hide, reset])
+
+  if (!params) return null
   return (
-    <Animated.View style={styles.container}>
-      <SafeAreaView style={styles.safeView}>
-        <RoundedButton style={styles.close} onPress={hide}>
+    <Animated.View style={[StyleSheet.absoluteFill, styles.container]}>
+      <View style={[StyleSheet.absoluteFill, { backgroundColor: 'black' }]} />
+      <SafeAreaView style={[StyleSheet.absoluteFill, styles.safeView]}>
+        <RoundedButton style={styles.close} onPress={onClosePress}>
           <CrossIcon />
         </RoundedButton>
         {isWrong && (
@@ -215,10 +215,11 @@ export default function ScanView() {
           </NotificationBox>
         )}
         {current.name && !isWrong && (
-          <LargeButton theme="secondary" style={styles.button} onPress={submit}>
-            {capitalizeFirstLetter(t('go_to')) +
-              ' ' +
-              capitalizeFirstLetter(t(current.name))}
+          <LargeButton
+            theme="secondary"
+            style={styles.button}
+            onPress={onSubmit}>
+            {params.goToLabel + ' ' + capitalizeFirstLetter(t(current.name))}
           </LargeButton>
         )}
         {isWrong && (
@@ -227,6 +228,11 @@ export default function ScanView() {
           </LargeButton>
         )}
       </SafeAreaView>
+      {params.overlay && (
+        <View style={[StyleSheet.absoluteFill, styles.overlay]}>
+          {params.overlay}
+        </View>
+      )}
       <ViroARSceneNavigator
         numberOfTrackedImages={1}
         initialScene={{
@@ -240,23 +246,18 @@ export default function ScanView() {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
     zIndex: 900,
     width: '100%',
     height: '100%',
   },
   safeView: {
-    position: 'absolute',
-    borderWidth: 1,
-    borderColor: 'red',
-    borderStyle: 'solid',
-    bottom: 0,
     zIndex: 2,
     justifyContent: 'space-between',
-    height: '100%',
-    width: '100%',
+  },
+  overlay: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1,
   },
   notification: {
     width: '85%',

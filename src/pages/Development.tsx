@@ -12,7 +12,7 @@ interface HomePropsWithNavigation extends HomeProps {
 }
 
 export default function Development({ navigation }: HomePropsWithNavigation) {
-  const { set, reset } = useScan()
+  const { set, hide } = useScan()
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -29,8 +29,10 @@ export default function Development({ navigation }: HomePropsWithNavigation) {
         title="Open Viewer"
         onPress={() =>
           set({
-            map_castle: () => reset(),
-            default: () => console.log('NOPE'),
+            callbacks: {
+              map_castle: () => hide(),
+              default: () => null,
+            },
           })
         }
       />

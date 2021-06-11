@@ -60,10 +60,12 @@ export default function ChapterCastle({
       <ScanButton
         onPress={() =>
           set({
-            default: () => undefined,
-            map_port: () => {
-              navigation.navigate('Chapter:Port', {})
-              hide()
+            callbacks: {
+              default: () => undefined,
+              map_port: () => {
+                navigation.navigate('Chapter:Port', {})
+                hide()
+              },
             },
           })
         }

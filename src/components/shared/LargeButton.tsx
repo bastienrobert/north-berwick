@@ -1,12 +1,12 @@
 import theme from '@/styles/theme'
-import React, { PropsWithChildren, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { StyleSheet, Text } from 'react-native'
 
 import TouchableOpacityOrView, {
   TouchableOpacityOrViewProps,
 } from './TouchableOpacityOrView'
 
-type LargeButtonProps = TouchableOpacityOrViewProps & {
+export type LargeButtonProps = TouchableOpacityOrViewProps & {
   children: string
   theme?: keyof typeof themes
 }

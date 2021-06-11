@@ -1,3 +1,4 @@
+import { capitalizeFirstLetter } from '@/utils/text'
 import React, {
   useContext,
   createContext,
@@ -5,29 +6,44 @@ import React, {
   useCallback,
   PropsWithChildren,
 } from 'react'
+import { useTranslate } from 'react-polyglot'
 
-import { ScanCallbacks } from './ScanView'
+import { ScanParams } from './ScanView'
 
 interface ScanContext {
-  callbacks: ScanCallbacks | null
-  set: (callbacks: ScanCallbacks) => void
+  params: ScanParams | null
+  set: (params: ScanParams) => void
   hide: () => void
 }
 const Context = createContext<ScanContext>({} as ScanContext)
 
 export default function ScanProvider({ children }: PropsWithChildren<unknown>) {
-  const [callbacks, setCallbacks] = useState<ScanCallbacks | null>(null)
+  const t = useTranslate()
+  const [params, setParams] = useState<ScanParams | null>(null)
+
+  const setSafeParams = useCallback((payload) => {
+    setParams(
+      Object.assign(
+        {},
+        {
+          wrongPlaceLabel: capitalizeFirstLetter(t('not_good_place')),
+          goToLabel: capitalizeFirstLetter(t('go_to')),
+        },
+        payload,
+      ),
+    )
+  }, [])
 
   const hide = useCallback(() => {
-    setCallbacks(null)
+    setParams(null)
   }, [])
 
   return (
     <Context.Provider
       children={children}
       value={{
-        callbacks,
-        set: setCallbacks,
+        params,
+        set: setSafeParams,
         hide,
       }}
     />

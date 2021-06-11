@@ -33,7 +33,6 @@ export default class Animated3DSprite {
 
   update(): void {
     this.currentFrameDisplayTime += this.clock.getDelta() * 1000
-    console.log(this.clock.getDelta() * 1000)
 
     while (this.currentFrameDisplayTime > this.frameDisplayDuration) {
       this.currentFrameDisplayTime -= this.frameDisplayDuration

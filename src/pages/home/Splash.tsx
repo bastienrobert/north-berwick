@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavigationProp } from '@react-navigation/core'
-import { SafeAreaView, Text } from 'react-native'
+import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 
 import { RootNavigationParamList } from '@/App/Router'
 import ScanButton from '@/components/ScanButton'
@@ -22,17 +22,32 @@ export default function HomeSplash({
       <ScanButton
         onPress={() =>
           set({
-            default: () => null,
-            map_castle: () => {
-              navigation.navigate('Chapter:Castle', {})
-              hide()
+            callbacks: {
+              default: () => null,
+              map_castle: () => {
+                navigation.navigate('Chapter:Castle', {})
+                hide()
+              },
+              map_port: () => false,
+              map_geillis: () => false,
+              map_church: () => false,
             },
-            map_port: () => false,
-            map_geillis: () => false,
-            map_church: () => false,
+            // overlay: (
+            //   <Image
+            //     style={styles.scanOverlayImage}
+            //     source={require('@/assets/agnes_sampson-overlay.png')}
+            //   />
+            // ),
           })
         }
       />
     </SafeAreaView>
   )
 }
+
+const styles = StyleSheet.create({
+  scanOverlayImage: {
+    width: '80%',
+    maxWidth: 420,
+  },
+})

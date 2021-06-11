@@ -83,10 +83,12 @@ export default function ChapterPort({
       <ScanButton
         onPress={() =>
           set({
-            default: () => null,
-            portrait_agnes_sampson: () => {
-              navigation.navigate('Chapter:Castle', {})
-              hide()
+            callbacks: {
+              default: () => null,
+              portrait_agnes_sampson: () => {
+                navigation.navigate('Chapter:Castle', {})
+                hide()
+              },
             },
           })
         }
