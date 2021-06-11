@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { ReactNode, useCallback, useMemo, useState } from 'react'
 import {
   View,
   useWindowDimensions,
@@ -13,8 +13,61 @@ import BottomCollapsible from '@/components/shared/BottomCollapsible'
 import Carousel from '@/components/shared/Carousel'
 import ActiveCardIndicator from '@/components/ActiveCardIndicator'
 import FlipWrapper from '@/components/Card/FlipWrapper'
+import InnerCarousel from '@/components/Card/InnerCarousel'
 
-const data = [1, 2, 3]
+interface FlipCardData {
+  front: ReactNode | (() => ReactNode)
+  back?: ReactNode | (() => ReactNode)
+}
+
+const data: FlipCardData[] = [
+  {
+    front: () => {
+      const [title, setTitle] = useState<
+        undefined | [string] | [string, string]
+      >(undefined)
+
+      return (
+        <Card
+          number={1}
+          color="red"
+          forceBottom={false}
+          title={title}
+          // text="Tu n'as pas encore assez d'informations pour remplir cette carte"
+          bottom="Falcon of Leith"
+          inner={
+            <InnerCarousel
+              onSelectedChange={(i) =>
+                setTitle(
+                  typeof i === 'number' ? ['bride de', 'la mégère'] : undefined,
+                )
+              }
+            />
+          }
+        />
+      )
+    },
+  },
+  {
+    front: (
+      <Card
+        number={1}
+        color="purple"
+        title={['Hello', 'World']}
+        bottom="Falcon of Leith"
+      />
+    ),
+    back: (
+      <Card
+        revert
+        number={2}
+        color="blue"
+        text="Tu n'as pas encore assez d'informations pour remplir cette carte"
+        bottom="Falcon of Leith"
+      />
+    ),
+  },
+]
 
 const margins = { left: 15, right: 0, top: 0, bottom: 0 }
 
@@ -70,10 +123,6 @@ export default function FlipCardCarousel() {
               active: !isCollapsed && index === 1,
               half: true,
             },
-            {
-              complete: false,
-              active: !isCollapsed && index === 2,
-            },
           ]}
         />
       </SafeAreaView>
@@ -96,30 +145,20 @@ export default function FlipCardCarousel() {
             axis="x"
             length={data.length}
             margins={margins}>
-            {data.map((_, i) => (
-              <FlipWrapper
-                key={i}
-                style={cardStyle}
-                front={
-                  <Card
-                    number={1}
-                    color="purple"
-                    title={['Hello', 'World']}
-                    bottom="Falcon of Leith"
-                  />
-                }
-                back={
-                  <Card
-                    revert
-                    number={2}
-                    color="blue"
-                    text="Tu n'as pas encore assez d'informations pour remplir cette carte"
-                    bottom="Falcon of Leith"
-                  />
-                }
-              />
-              // <MemoizedFlipCard key={i} style={s} />
-            ))}
+            {data.map((d, i) =>
+              d.back ? (
+                <FlipWrapper
+                  key={i}
+                  style={cardStyle}
+                  front={d.front}
+                  back={d.back}
+                />
+              ) : (
+                <View key={i} style={cardStyle}>
+                  {typeof d.front === 'function' ? d.front() : d.front}
+                </View>
+              ),
+            )}
           </Carousel>
         </View>
       </BottomCollapsible>

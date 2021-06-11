@@ -15,6 +15,7 @@ import LinearGradient from '../shared/LinearGradient'
 
 interface SummaryProps {
   title: string
+  titleColor: string
   button: string
   content: SummaryParagraphProps[]
   onPress: LargeButtonProps['onPress']
@@ -24,6 +25,7 @@ interface SummaryProps {
 
 export default function Summary({
   title,
+  titleColor,
   button,
   content,
   onPress,
@@ -33,7 +35,6 @@ export default function Summary({
   const { width } = useWindowDimensions()
   const w = Math.min(width, 370)
 
-  // : linear-gradient(to bottom, #ffffff, #fff0ef 48%, #ffe5e3)
   return (
     <View style={[styles.container, style]}>
       <LinearGradient
@@ -48,7 +49,7 @@ export default function Summary({
         <View style={styles.main}>
           <SummaryTitle
             content={title}
-            color="#480D00"
+            color={titleColor}
             style={{
               width: w,
               height:

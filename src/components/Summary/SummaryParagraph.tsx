@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     fontFamily: 'iAWriterQuattroS-Regular',
     letterSpacing: -0.21,
     fontSize: 16,
+    color: '#2C2C2C',
   },
   label: {
     marginTop: 8,

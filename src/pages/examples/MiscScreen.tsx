@@ -26,6 +26,7 @@ export default function TouchableAreaWebP() {
 
       <Summary
         title="Récapitulatif"
+        titleColor="#480D00"
         button="Retourner au château"
         onPress={() => {}}
         content={[

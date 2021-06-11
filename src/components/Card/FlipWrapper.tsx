@@ -11,8 +11,8 @@ import {
 import useFlippable from '@/hooks/useFlippable'
 
 export interface FlipWrapperProps {
-  front: ReactNode
-  back: ReactNode
+  front: ReactNode | (() => ReactNode)
+  back: ReactNode | (() => ReactNode)
   style?: StyleProp<ViewStyle>
 }
 
@@ -26,7 +26,7 @@ function FlipWrapper({ front, back, style }: FlipWrapperProps) {
       }}>
       <View style={style}>
         <Animated.View style={[frontFaceStyle, { alignItems: 'center' }]}>
-          {front}
+          {typeof front === 'function' ? front() : front}
         </Animated.View>
         <Animated.View
           style={[
@@ -34,7 +34,7 @@ function FlipWrapper({ front, back, style }: FlipWrapperProps) {
             StyleSheet.absoluteFill,
             { alignItems: 'center' },
           ]}>
-          {back}
+          {typeof back === 'function' ? back() : back}
         </Animated.View>
       </View>
     </TouchableWithoutFeedback>

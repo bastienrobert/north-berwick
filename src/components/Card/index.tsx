@@ -1,4 +1,10 @@
-import React, { useRef, useMemo, ReactNode, memo } from 'react'
+import React, {
+  useRef,
+  useMemo,
+  ReactNode,
+  memo,
+  MemoExoticComponent,
+} from 'react'
 import { StyleSheet, View, Text, StyleProp, ViewStyle } from 'react-native'
 import Svg, { Path, Text as SvgText, TextPath, TSpan } from 'react-native-svg'
 
@@ -22,6 +28,8 @@ type CardBaseProps = {
   title?: [string] | [string, string]
   text?: string
   bottom?: string
+  inner?: ReactNode
+  forceBottom?: boolean
 } & (
   | {
       color: CardBaseRevertableColors
@@ -70,6 +78,8 @@ function Card({
   bottom,
   color,
   style,
+  inner,
+  forceBottom = true,
   revert = false,
 }: CardBaseProps) {
   const uuid = useRef(uuidv4()).current
@@ -83,18 +93,33 @@ function Card({
 
   return (
     <View style={[styles.container, style]}>
-      <Background style={{ flex: 1, width: '100%' }} />
+      <Background
+        style={[StyleSheet.absoluteFill, { flex: 1, width: '100%' }]}
+      />
       <Text style={[styles.number, { color: BackgroundColors.number }]}>
         {range(number).map(() => 'I')}
       </Text>
-      <Text style={[styles.text, { color: BackgroundColors.text }]}>
-        {text}
-      </Text>
-      <Text style={[styles.bottom, { color: BackgroundColors.bottom }]}>
+      {text && (
+        <Text style={[styles.text, { color: BackgroundColors.text }]}>
+          {text}
+        </Text>
+      )}
+      {inner}
+      <Text
+        style={[
+          styles.bottom,
+          {
+            color: BackgroundColors.bottom,
+            marginTop: forceBottom ? 'auto' : undefined,
+          },
+        ]}>
         {bottom}
       </Text>
       {title && (
-        <Svg viewBox="0 0 315 570" style={styles.circle} pointerEvents="none">
+        <Svg
+          viewBox="0 0 315 570"
+          style={StyleSheet.absoluteFill}
+          pointerEvents="none">
           <Path
             id={`${uuid}__g`}
             d="M0 160c39.6-41.908 95.5-68 157.5-68s117.9 26.092 157.5 68"
@@ -104,7 +129,7 @@ function Card({
             <TextPath
               textAnchor="middle"
               startOffset="50%"
-              xlinkHref={`#${uuid}__g`}>
+              href={`#${uuid}__g`}>
               <TSpan
                 fontFamily="Avara-Bold"
                 textAnchor="middle"
@@ -125,7 +150,7 @@ function Card({
               <TextPath
                 textAnchor="middle"
                 startOffset="50%"
-                xlinkHref={`#${uuid}__h`}>
+                href={`#${uuid}__h`}>
                 <TSpan
                   fontFamily="Avara-Bold"
                   textAnchor="middle"
@@ -143,7 +168,9 @@ function Card({
   )
 }
 
-const MemoizedCard = memo(Card) as any
+const MemoizedCard = memo(Card) as MemoExoticComponent<typeof Card> & {
+  DIMENSIONS: { width: number; height: number }
+}
 
 MemoizedCard.DIMENSIONS = {
   width: 317,
@@ -156,17 +183,12 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     width: '100%',
-  },
-  circle: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
+    // borderWidth: 1,
+    // borderStyle: 'solid',
+    // borderColor: 'red',
   },
   number: {
-    position: 'absolute',
-    top: `${(20 / 570) * 100}%`,
+    marginTop: `${(35 / 570) * 100}%`,
     width: '100%',
     textAlign: 'center',
     fontFamily: 'NewYork',
@@ -175,8 +197,8 @@ const styles = StyleSheet.create({
     fontSize: 26,
   },
   text: {
-    position: 'absolute',
-    top: `${(90 / 570) * 100}%`,
+    // position: 'absolute',
+    marginTop: `${(90 / 570) * 100}%`,
     paddingHorizontal: '12.5%',
     lineHeight: 20,
     textAlign: 'center',
@@ -187,14 +209,18 @@ const styles = StyleSheet.create({
     opacity: 0.8,
   },
   bottom: {
-    position: 'absolute',
-    bottom: `${(55 / 570) * 100}%`,
+    marginBottom: `${(100 / 570) * 100}%`,
     width: '100%',
     lineHeight: 20,
     textAlign: 'center',
     letterSpacing: -0.56,
     fontFamily: 'iAWriterQuattroS-Italic',
     color: '#480D00',
-    fontSize: 17,
+    fontSize: 19,
+  },
+  inner: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
