@@ -25,7 +25,7 @@ export default function LargeButton({
     <TouchableOpacityOrView
       activeOpacity={1}
       pressedStyle={t.pressed}
-      style={[style, styles.container, t.default]}
+      style={[styles.container, style, t.default]}
       {...rest}>
       <Text style={styles.text}>{children}</Text>
     </TouchableOpacityOrView>
@@ -38,13 +38,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,
-    height: 45,
     backgroundColor: theme.colors.white,
-    paddingLeft: 29,
-    paddingRight: 29,
   },
   text: {
     fontSize: 17,
+    fontFamily: 'Avara-Bold',
+    paddingBottom: 13,
+    paddingTop: 16,
+    paddingHorizontal: 30,
+    letterSpacing: 1.06,
   },
   primary: {
     shadowColor: theme.colors.romantic,

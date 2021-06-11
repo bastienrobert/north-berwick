@@ -1,6 +1,6 @@
 import theme from '@/styles/theme'
 import React, { PropsWithChildren, useState } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 import TouchableOpacityOrView, {
   TouchableOpacityOrViewProps,
@@ -22,7 +22,9 @@ export default function RoundedButton({
       pressedStyle={styles.pressed}
       style={[style, styles.container, large ? styles.large : styles.small]}
       {...rest}>
-      {children}
+      <View style={large ? styles.innerLarge : styles.innerSmall}>
+        {children}
+      </View>
     </TouchableOpacityOrView>
   )
 }
@@ -49,6 +51,14 @@ const styles = StyleSheet.create({
   small: {
     width: 45,
     height: 45,
+  },
+  innerLarge: {
+    width: 43,
+    height: 43,
+  },
+  innerSmall: {
+    width: 29,
+    height: 29,
   },
   pressed: {
     shadowColor: theme.colors.romantic,

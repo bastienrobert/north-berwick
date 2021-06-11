@@ -60,8 +60,8 @@ export default function ChapterCastle({
       <ScanButton
         onPress={() =>
           set({
-            default: () => null,
-            portrait_agnes_sampson: () => {
+            default: () => undefined,
+            map_port: () => {
               navigation.navigate('Chapter:Port', {})
               hide()
             },

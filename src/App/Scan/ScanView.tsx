@@ -1,5 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Animated, Dimensions, View } from 'react-native'
+import {
+  Animated,
+  Dimensions,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from 'react-native'
+import { useTranslate } from 'react-polyglot'
 import {
   ViroARImageMarker,
   ViroARScene,
@@ -8,6 +15,11 @@ import {
 } from '@viro-community/react-viro'
 
 import { useScan } from './ScanProvider'
+import LargeButton from '@/components/shared/LargeButton'
+import { capitalizeFirstLetter } from '@/utils/text'
+import RoundedButton from '@/components/shared/RoundedButton'
+import CrossIcon from '@/components/icons/CrossIcon'
+import NotificationBox from '@/components/shared/NotificationBox'
 
 const targets = {
   map_castle: {
@@ -108,11 +120,7 @@ const { width } = Dimensions.get('window')
 
 type TargetsName = keyof typeof targets
 export type ScanCallbacks = Partial<Record<TargetsName, () => void>> & {
-  default: (target?: TargetsName) => void
-}
-
-export interface ScanProps {
-  callbacks: ScanCallbacks
+  default: (target?: TargetsName) => void | false
 }
 
 interface CurrentScanState {
@@ -120,13 +128,12 @@ interface CurrentScanState {
   type: string | null
   name: TargetsName | null
 }
-function ScanScene({ callbacks }: ScanProps) {
-  const [current, setCurrent] = useState<CurrentScanState>({
-    id: null,
-    type: null,
-    name: null,
-  })
 
+export interface ScanProps {
+  current: CurrentScanState
+  setCurrent: (current: CurrentScanState) => void
+}
+function ScanScene({ current, setCurrent }: ScanProps) {
   const onAnchorUpdated = useCallback(
     ({ name, type }: Omit<CurrentScanState, 'id'>) => {
       return (marker: any) => {
@@ -136,13 +143,6 @@ function ScanScene({ callbacks }: ScanProps) {
     },
     [],
   )
-
-  useEffect(() => {
-    if (current.name) {
-      const cb = callbacks[current.name]
-      cb ? cb() : callbacks.default(current.name)
-    }
-  }, [current.id, callbacks])
 
   return (
     <ViroARScene>
@@ -163,23 +163,112 @@ function ScanScene({ callbacks }: ScanProps) {
 }
 
 export default function ScanView() {
-  const { callbacks } = useScan()
+  const t = useTranslate()
+  const { callbacks, hide } = useScan()
+  const [current, setCurrent] = useState<CurrentScanState>({
+    id: null,
+    type: null,
+    name: null,
+  })
+  const [isWrong, setIsWrong] = useState<string>()
+
+  const setSafeCurrent = useCallback(
+    (payload: CurrentScanState) => {
+      if (callbacks && payload.name && callbacks[payload.name]) {
+        setCurrent(payload)
+      }
+    },
+    [callbacks],
+  )
+
+  const submit = useCallback(() => {
+    if (!callbacks || !current.name) return
+    const cb = callbacks[current.name]
+    const res = cb ? cb() : callbacks.default(current.name)
+    res === false ? setIsWrong(t('not_good_place')) : reset()
+  }, [current.id, callbacks])
+
+  const reset = useCallback(() => {
+    setIsWrong(undefined)
+    setCurrent({
+      id: null,
+      type: null,
+      name: null,
+    })
+  }, [])
+
+  useEffect(() => {
+    if (current.name) {
+    }
+  }, [current.id, callbacks])
 
   if (!callbacks) return null
   return (
-    <Animated.View
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        zIndex: 900,
-        width: '100%',
-        height: '100%',
-      }}>
+    <Animated.View style={styles.container}>
+      <SafeAreaView style={styles.safeView}>
+        <RoundedButton style={styles.close} onPress={hide}>
+          <CrossIcon />
+        </RoundedButton>
+        {isWrong && (
+          <NotificationBox style={styles.notification}>
+            Mh, je crois que ce n’était pas ce lieu que je voulais voir
+          </NotificationBox>
+        )}
+        {current.name && !isWrong && (
+          <LargeButton theme="secondary" style={styles.button} onPress={submit}>
+            {capitalizeFirstLetter(t('go_to')) +
+              ' ' +
+              capitalizeFirstLetter(t(current.name))}
+          </LargeButton>
+        )}
+        {isWrong && (
+          <LargeButton theme="secondary" style={styles.button} onPress={reset}>
+            {capitalizeFirstLetter(t('scan_again'))}
+          </LargeButton>
+        )}
+      </SafeAreaView>
       <ViroARSceneNavigator
         numberOfTrackedImages={1}
-        initialScene={{ scene: ScanScene, passProps: { callbacks } }}
+        initialScene={{
+          scene: ScanScene,
+          passProps: { current, setCurrent: setSafeCurrent },
+        }}
       />
     </Animated.View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 900,
+    width: '100%',
+    height: '100%',
+  },
+  safeView: {
+    position: 'absolute',
+    borderWidth: 1,
+    borderColor: 'red',
+    borderStyle: 'solid',
+    bottom: 0,
+    zIndex: 2,
+    justifyContent: 'space-between',
+    height: '100%',
+    width: '100%',
+  },
+  notification: {
+    width: '85%',
+    maxWidth: 370,
+    alignSelf: 'center',
+  },
+  close: {
+    marginTop: 15,
+    marginLeft: 15,
+  },
+  button: {
+    marginBottom: 27,
+    alignSelf: 'center',
+  },
+})

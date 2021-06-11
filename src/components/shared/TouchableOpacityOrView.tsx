@@ -24,7 +24,7 @@ export type TouchableOpacityOrViewProps = {
     } & ViewProps)
 )
 
-export default function RoundedButton({
+export default function TouchableOpacityOrView({
   large = false,
   onPress,
   onPressOut,

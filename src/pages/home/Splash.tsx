@@ -27,6 +27,9 @@ export default function HomeSplash({
               navigation.navigate('Chapter:Castle', {})
               hide()
             },
+            map_port: () => false,
+            map_geillis: () => false,
+            map_church: () => false,
           })
         }
       />
