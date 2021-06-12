@@ -4,6 +4,8 @@ import { StyleSheet, View } from 'react-native'
 import SelectorItem from './common/SelectorItem'
 import PlusIcon from './common/PlusIcon'
 import EqualIcon from './common/EqualIcon'
+import { Portal } from '@/lib/Portal'
+import SelectorKeyboard from './common/SelectorKeyboard'
 
 export interface EquationSelectorProps {}
 
@@ -19,6 +21,9 @@ export default function EquationSelector({}: EquationSelectorProps) {
         <EqualIcon style={styles.equal} fill="#FFDAD7" />
         <SelectorItem theme="large" />
       </View>
+      <Portal>
+        <SelectorKeyboard isOpen />
+      </Portal>
     </View>
   )
 }
