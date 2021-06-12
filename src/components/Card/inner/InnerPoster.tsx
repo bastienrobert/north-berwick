@@ -1,25 +1,25 @@
-import React, { useState } from 'react'
-import {
-  Animated,
-  SafeAreaView,
-  StyleProp,
-  StyleSheet,
-  View,
-  ViewStyle,
-} from 'react-native'
+import React, { PropsWithChildren, useState } from 'react'
+import { SafeAreaView, StyleSheet, View } from 'react-native'
 
-import FullScreenIcon from '@/components/icons/FullScreenIcon'
 import RoundedButton from '@/components/shared/RoundedButton'
+import LinearGradient from '@/components/shared/LinearGradient'
+import FullScreenIcon from '@/components/icons/FullScreenIcon'
+import ArrowLeftIcon from '@/components/icons/ArrowLeftIcon'
+
 import { Portal } from '@/lib/Portal'
-import LinearGradient from '../shared/LinearGradient'
-import ArrowLeftIcon from '../icons/ArrowLeftIcon'
 
 interface InnerPosterProps {
   width: number | string
   aspectRatio: number
+  fullscreen?: boolean
 }
 
-export default function InnerPoster({ width, aspectRatio }: InnerPosterProps) {
+export default function InnerPoster({
+  children,
+  fullscreen = true,
+  width,
+  aspectRatio,
+}: PropsWithChildren<InnerPosterProps>) {
   const [isPosterVisible, setIsPosterVisible] = useState(false)
 
   return (
@@ -42,10 +42,13 @@ export default function InnerPoster({ width, aspectRatio }: InnerPosterProps) {
               onPress={() => setIsPosterVisible(false)}>
               <ArrowLeftIcon />
             </RoundedButton>
+            {children}
           </SafeAreaView>
         </Portal>
       )}
-      <RoundedButton onPress={() => setIsPosterVisible(true)}>
+      <RoundedButton
+        disabled={!fullscreen}
+        onPress={() => setIsPosterVisible(true)}>
         <FullScreenIcon />
       </RoundedButton>
     </View>

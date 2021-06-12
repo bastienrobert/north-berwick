@@ -1,22 +1,23 @@
-import useLayout from '@/hooks/useLayout'
-import { clamp } from '@/utils/math'
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import {
   LayoutRectangle,
   StyleProp,
   StyleSheet,
-  Text,
   View,
   ViewStyle,
 } from 'react-native'
-import FastImage from 'react-native-fast-image'
-import ArrowLeftIcon from '../icons/ArrowLeftIcon'
-import ArrowRightIcon from '../icons/ArrowRightIcon'
-import Carousel from '../shared/Carousel'
-import LargeButton from '../shared/LargeButton'
-import RoundedButton from '../shared/RoundedButton'
+
+import Carousel from '@/components/shared/Carousel'
+import LargeButton from '@/components/shared/LargeButton'
+import RoundedButton from '@/components/shared/RoundedButton'
+import ArrowLeftIcon from '@/components/icons/ArrowLeftIcon'
+import ArrowRightIcon from '@/components/icons/ArrowRightIcon'
+
+import useLayout from '@/hooks/useLayout'
 
 interface InnerCarouselProps {
+  editLabel: string
+  submitLabel: string
   style?: StyleProp<ViewStyle>
   onSelectedChange?: (index: number | null) => void
   children: (layout: LayoutRectangle) => ReactNode
@@ -24,6 +25,8 @@ interface InnerCarouselProps {
 
 export default function InnerCarousel({
   children,
+  editLabel,
+  submitLabel,
   style,
   onSelectedChange,
 }: InnerCarouselProps) {
@@ -60,7 +63,7 @@ export default function InnerCarousel({
       <View style={styles.controls}>
         {hasSelectedValue ? (
           <LargeButton theme="secondary" style={styles.button} onPress={onEdit}>
-            Modifier
+            {editLabel}
           </LargeButton>
         ) : (
           <>
@@ -74,7 +77,7 @@ export default function InnerCarousel({
               theme="secondary"
               style={styles.button}
               onPress={onSubmit}>
-              Sélectionner
+              {submitLabel}
             </LargeButton>
             <RoundedButton
               style={{ opacity: index >= 3 - 1 ? 0 : 1 }}

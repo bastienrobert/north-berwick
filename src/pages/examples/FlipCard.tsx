@@ -13,9 +13,11 @@ import BottomCollapsable from '@/components/shared/BottomCollapsable'
 import Carousel from '@/components/shared/Carousel'
 import ActiveCardIndicator from '@/components/ActiveCardIndicator'
 import FlipWrapper from '@/components/Card/FlipWrapper'
-import InnerCarousel from '@/components/Card/InnerCarousel'
+import InnerCarousel from '@/components/Card/inner/InnerCarousel'
 import FastImage from 'react-native-fast-image'
-import InnerPoster from '@/components/Card/InnerPoster'
+import InnerPoster from '@/components/Card/inner/InnerPoster'
+import InnerImage from '@/components/Card/inner/InnerImage'
+import InnerSelectors from '@/components/Card/inner/InnerSelectors'
 
 interface FlipCardData {
   front: ReactNode | (() => ReactNode)
@@ -44,17 +46,36 @@ const Box = ({ style }: any) => {
 }
 
 const data: FlipCardData[] = [
-  // {
-  //   front: (
-  //     <Card
-  //       number={1}
-  //       color="purple"
-  //       title={['La Condamnation']}
-  //       forceBottom={false}
-  //       bottom="Falcon of Leith"
-  //     />
-  //   ),
-  // },
+  {
+    front: (
+      <Card
+        number={1}
+        color="pink"
+        revert
+        title={['Agnes Sampson']}
+        forceBottom={false}
+        bottom="Falcon of Leith"
+        inner={<InnerSelectors type="equation" />}
+      />
+    ),
+  },
+  {
+    front: (
+      <Card
+        number={1}
+        color="purple"
+        title={['Agnes Sampson']}
+        forceBottom={false}
+        bottom="Falcon of Leith"
+        inner={
+          <InnerImage
+            editLabel="Modifier"
+            image={require('@/assets/tmp/agnes_sampson.png')}
+          />
+        }
+      />
+    ),
+  },
   {
     front: (
       <Card
@@ -82,6 +103,8 @@ const data: FlipCardData[] = [
           bottom="Falcon of Leith"
           inner={
             <InnerCarousel
+              editLabel="Editer"
+              submitLabel="Sélectionner"
               onSelectedChange={(i) =>
                 setTitle(
                   typeof i === 'number' ? ['bride de', 'la mégère'] : undefined,
