@@ -1,12 +1,13 @@
 import theme from '@/styles/theme'
-import React, { PropsWithChildren, useMemo } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { PropsWithChildren, useEffect, useMemo, useRef } from 'react'
+import { Animated, StyleSheet, Text, View } from 'react-native'
 
 import TouchableOpacityOrView, {
   TouchableOpacityOrViewProps,
 } from '@/components/shared/TouchableOpacityOrView'
 
 type SelectorItemProps = TouchableOpacityOrViewProps & {
+  selected?: boolean
   theme?: keyof typeof themes
   placeHolderText?: string
 }
@@ -16,28 +17,47 @@ export default function SelectorItem({
   theme = 'small',
   style,
   children,
+  selected,
   ...rest
 }: PropsWithChildren<SelectorItemProps>) {
+  const transform = useRef(new Animated.ValueXY()).current
+
   const t = useMemo(() => {
     return themes[theme]
   }, [theme])
 
+  useEffect(() => {
+    Animated.spring(transform, {
+      useNativeDriver: false,
+      toValue: {
+        x: 0,
+        y: selected ? -13 : 0,
+      },
+      friction: 8,
+      tension: 20,
+    }).start()
+  }, [selected])
+
   return (
-    <TouchableOpacityOrView
-      activeOpacity={1}
-      style={[
-        style,
-        styles.container,
-        rest.onPress ? styles.touchable : undefined,
-        t.container,
-      ]}
-      {...rest}>
-      <View style={[styles.inner, t.inner]}>
-        {children || (
-          <Text style={styles.placeHolderText}>{placeHolderText}</Text>
-        )}
-      </View>
-    </TouchableOpacityOrView>
+    <View style={style}>
+      <Animated.View style={{ transform: transform.getTranslateTransform() }}>
+        <TouchableOpacityOrView
+          activeOpacity={1}
+          style={[
+            styles.container,
+            rest.onPress ? styles.touchable : undefined,
+            t.container,
+          ]}
+          {...rest}>
+          <View style={[styles.inner, t.inner]}>
+            {children || (
+              <Text style={styles.placeHolderText}>{placeHolderText}</Text>
+            )}
+          </View>
+        </TouchableOpacityOrView>
+      </Animated.View>
+      <View style={styles.indicator} />
+    </View>
   )
 }
 
@@ -68,6 +88,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginLeft: 2.5,
     marginTop: 3,
+  },
+  indicator: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: 'white',
+    alignSelf: 'center',
+    marginTop: -7,
   },
   small: {
     width: 75,

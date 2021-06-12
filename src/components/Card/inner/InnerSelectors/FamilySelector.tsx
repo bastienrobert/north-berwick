@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     marginBottom: '30%',
-    overflow: 'hidden',
     alignItems: 'center',
   },
   topWrapper: {

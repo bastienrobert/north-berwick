@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     marginTop: 10,
-    overflow: 'hidden',
     alignItems: 'center',
   },
   selector: {
