@@ -23,7 +23,7 @@ import useLayout from '@/hooks/useLayout'
 
 import { rubberbandIfOutOfBounds } from '@/utils/rubberband'
 
-interface BottomCollapsibleProps {
+interface BottomCollapsableProps {
   disabled?: boolean
   startOffset?: number
   endOffset?: number
@@ -37,10 +37,10 @@ interface BottomCollapsibleProps {
   onResponderRelease?: (event: GestureResponderEvent) => void
 }
 
-export default function BottomCollapsible({
+export default function BottomCollapsable({
   children,
   style,
-  collapsed,
+  collapsed = true,
   disabled = false,
   startOffset = 0,
   endOffset = 0,
@@ -53,11 +53,12 @@ export default function BottomCollapsible({
     tension: 50,
   },
   velocity = 2.5,
-}: PropsWithChildren<BottomCollapsibleProps>) {
-  const [isCollapsed, _setIsCollapsed] = useState(true)
+}: PropsWithChildren<BottomCollapsableProps>) {
+  const [isCollapsed, _setIsCollapsed] = useState(collapsed)
   const containerRef = useRef()
   const shouldListen = useRef(true)
   const isDragging = useRef(false)
+  const isMountTrigger = useRef(false)
   const { width, height } = useWindowDimensions()
   const [layout, onLayout] = useLayout()
 
@@ -68,33 +69,45 @@ export default function BottomCollapsible({
     }
   }, [startOffset, width, height])
 
-  const values = useRef(new Animated.ValueXY({ ...final })).current
-  const translations = useRef(new Animated.ValueXY({ ...final })).current
-  const listened = useRef({ x: 0, y: 0 }).current
+  const initial = collapsed ? { ...final } : { x: 0, y: 0 }
+  const values = useRef(new Animated.ValueXY(initial)).current
+  const translations = useRef(new Animated.ValueXY(initial)).current
+  const listened = useRef(initial).current
 
   const setIsCollapsed = useCallback(
-    (payload) => {
+    (payload, animate = true) => {
       _setIsCollapsed(payload)
-      Animated.spring(values, {
-        ...spring,
-        useNativeDriver: false,
-        toValue: payload
-          ? final
-          : {
-              x: 0,
-              y: height - layout.height - endOffset,
-            },
-      }).start(() => (shouldListen.current = true))
+      const toValue = payload
+        ? final
+        : {
+            x: 0,
+            y: height - layout.height - endOffset,
+          }
+
+      if (animate) {
+        Animated.spring(values, {
+          ...spring,
+          useNativeDriver: false,
+          toValue,
+        }).start(() => (shouldListen.current = true))
+      } else {
+        values.setValue(toValue)
+        translations.setValue(toValue)
+        listened.x = toValue.x
+        listened.y = toValue.y
+        shouldListen.current = true
+      }
       onChange?.(payload)
     },
     [layout, width, height, endOffset],
   )
 
   useEffect(() => {
-    if (!isDragging.current) {
-      setIsCollapsed(isCollapsed)
+    if (!isDragging.current && layout.height) {
+      setIsCollapsed(collapsed, isMountTrigger.current)
+      isMountTrigger.current = true
     }
-  }, [isCollapsed])
+  }, [layout, collapsed])
 
   useEffect(() => {
     const id = values.addListener(({ x, y }) => {

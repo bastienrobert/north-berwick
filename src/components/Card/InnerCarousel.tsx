@@ -1,6 +1,14 @@
+import useLayout from '@/hooks/useLayout'
 import { clamp } from '@/utils/math'
-import React, { useCallback, useEffect, useState } from 'react'
-import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
+import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import {
+  LayoutRectangle,
+  StyleProp,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from 'react-native'
 import FastImage from 'react-native-fast-image'
 import ArrowLeftIcon from '../icons/ArrowLeftIcon'
 import ArrowRightIcon from '../icons/ArrowRightIcon'
@@ -8,28 +16,21 @@ import Carousel from '../shared/Carousel'
 import LargeButton from '../shared/LargeButton'
 import RoundedButton from '../shared/RoundedButton'
 
-const Box = () => {
-  return (
-    <View style={styles.box}>
-      <FastImage
-        source={require('@/assets/tortures/bride.webp')}
-        style={{ width: '100%', height: '100%' }}
-      />
-    </View>
-  )
-}
-
 interface InnerCarouselProps {
   style?: StyleProp<ViewStyle>
   onSelectedChange?: (index: number | null) => void
+  children: (layout: LayoutRectangle) => ReactNode
 }
 
 export default function InnerCarousel({
+  children,
   style,
   onSelectedChange,
 }: InnerCarouselProps) {
   const [index, setIndex] = useState(0)
   const [selected, setSelected] = useState<number | null>(null)
+  const [layout, onLayout] = useLayout()
+  const hasSelectedValue = typeof selected === 'number'
 
   const onSubmit = useCallback(() => {
     setSelected(index)
@@ -43,11 +44,9 @@ export default function InnerCarousel({
     onSelectedChange?.(selected)
   }, [selected])
 
-  const hasSelectedValue = typeof selected === 'number'
-
   return (
     <View style={[styles.container, style]}>
-      <View style={styles.wrapper}>
+      <View onLayout={onLayout} style={styles.wrapper}>
         <Carousel
           disabled
           axis="x"
@@ -55,9 +54,7 @@ export default function InnerCarousel({
           margins={{ left: 24, right: 0, top: 0, bottom: 0 }}
           targetIndex={index}
           onSlideIndexChange={setIndex}>
-          <Box />
-          <Box />
-          <Box />
+          {children(layout)}
         </Carousel>
       </View>
       <View style={styles.controls}>
@@ -101,7 +98,7 @@ const styles = StyleSheet.create({
   wrapper: {
     overflow: 'hidden',
     marginBottom: 70,
-    width: 180,
+    width: '80%',
   },
   controls: {
     flexDirection: 'row',
@@ -109,14 +106,5 @@ const styles = StyleSheet.create({
   button: {
     margin: 'auto',
     marginHorizontal: 8.5,
-  },
-  box: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: '#61dafb',
-    width: 180,
-    height: 272,
-    borderRadius: 4,
-    marginLeft: 24,
   },
 })

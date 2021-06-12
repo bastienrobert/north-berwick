@@ -8,19 +8,65 @@ import {
 } from 'react-native'
 
 import Card from '@/components/Card'
-import BottomCollapsible from '@/components/shared/BottomCollapsible'
+import BottomCollapsable from '@/components/shared/BottomCollapsable'
 
 import Carousel from '@/components/shared/Carousel'
 import ActiveCardIndicator from '@/components/ActiveCardIndicator'
 import FlipWrapper from '@/components/Card/FlipWrapper'
 import InnerCarousel from '@/components/Card/InnerCarousel'
+import FastImage from 'react-native-fast-image'
+import InnerPoster from '@/components/Card/InnerPoster'
 
 interface FlipCardData {
   front: ReactNode | (() => ReactNode)
   back?: ReactNode | (() => ReactNode)
 }
 
+const Box = ({ style }: any) => {
+  return (
+    <View
+      style={[
+        {
+          justifyContent: 'center',
+          alignItems: 'center',
+          aspectRatio: 1,
+          borderRadius: 4,
+          marginLeft: 24,
+        },
+        style,
+      ]}>
+      <FastImage
+        source={require('@/assets/tortures/bride.png')}
+        style={{ width: '100%', height: '100%' }}
+      />
+    </View>
+  )
+}
+
 const data: FlipCardData[] = [
+  // {
+  //   front: (
+  //     <Card
+  //       number={1}
+  //       color="purple"
+  //       title={['La Condamnation']}
+  //       forceBottom={false}
+  //       bottom="Falcon of Leith"
+  //     />
+  //   ),
+  // },
+  {
+    front: (
+      <Card
+        number={1}
+        color="purple"
+        title={['La Condamnation']}
+        forceBottom={false}
+        bottom="Falcon of Leith"
+        inner={<InnerPoster width="60%" aspectRatio={0.68} />}
+      />
+    ),
+  },
   {
     front: () => {
       const [title, setTitle] = useState<
@@ -33,7 +79,6 @@ const data: FlipCardData[] = [
           color="red"
           forceBottom={false}
           title={title}
-          // text="Tu n'as pas encore assez d'informations pour remplir cette carte"
           bottom="Falcon of Leith"
           inner={
             <InnerCarousel
@@ -41,8 +86,17 @@ const data: FlipCardData[] = [
                 setTitle(
                   typeof i === 'number' ? ['bride de', 'la mégère'] : undefined,
                 )
-              }
-            />
+              }>
+              {(layout) => {
+                return (
+                  <>
+                    <Box style={{ width: layout.width }} />
+                    <Box style={{ width: layout.width }} />
+                    <Box style={{ width: layout.width }} />
+                  </>
+                )
+              }}
+            </InnerCarousel>
           }
         />
       )
@@ -53,7 +107,8 @@ const data: FlipCardData[] = [
       <Card
         number={1}
         color="purple"
-        title={['Hello', 'World']}
+        title={['La Condamnation']}
+        forceBottom={false}
         bottom="Falcon of Leith"
       />
     ),
@@ -78,10 +133,10 @@ export default function FlipCardCarousel() {
 
   const { width } = useWindowDimensions()
 
-  const onBottomCollapsibleResponderStart = useCallback(() => {
+  const onBottomCollapsableResponderStart = useCallback(() => {
     setAxis('y')
   }, [])
-  const onBottomCollapsibleResponderRelease = useCallback(() => {
+  const onBottomCollapsableResponderRelease = useCallback(() => {
     setAxis(null)
   }, [])
   const onCarouselResponderStart = useCallback(() => {
@@ -94,7 +149,7 @@ export default function FlipCardCarousel() {
   const cardStyle = useMemo<StyleProp<ViewStyle>>(() => {
     return { width: (width / 100) * 85, marginLeft: 15 }
   }, [width])
-  const bottomCollapsibleStyle = useMemo<StyleProp<ViewStyle>>(() => {
+  const bottomCollapsableStyle = useMemo<StyleProp<ViewStyle>>(() => {
     return {
       position: 'absolute',
       width: (width / 100) * 85,
@@ -126,13 +181,13 @@ export default function FlipCardCarousel() {
           ]}
         />
       </SafeAreaView>
-      <BottomCollapsible
+      <BottomCollapsable
         disabled={axis === 'x'}
-        style={bottomCollapsibleStyle}
+        style={bottomCollapsableStyle}
         collapsed={isCollapsed}
         onChange={setIsCollapsed}
-        onResponderStart={onBottomCollapsibleResponderStart}
-        onResponderRelease={onBottomCollapsibleResponderRelease}
+        onResponderStart={onBottomCollapsableResponderStart}
+        onResponderRelease={onBottomCollapsableResponderRelease}
         startOffset={100}
         endOffset={40}>
         <View>
@@ -161,7 +216,7 @@ export default function FlipCardCarousel() {
             )}
           </Carousel>
         </View>
-      </BottomCollapsible>
+      </BottomCollapsable>
     </View>
   )
 }
