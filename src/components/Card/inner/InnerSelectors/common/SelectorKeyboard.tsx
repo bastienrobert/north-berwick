@@ -1,10 +1,11 @@
-import useLayout from '@/hooks/useLayout'
 import React, { useEffect, useRef } from 'react'
 import { Animated, StyleSheet, Text, View } from 'react-native'
 
-function SelectorKeyboardItem() {
-  return <View style={styles.item}></View>
-}
+import SelectorKeyboardItem from './SelectorKeyboardItem'
+
+import useLayout from '@/hooks/useLayout'
+
+import AlcoolIcon from '@/assets/pictograms/alcool.svg'
 
 interface SelectorKeyboardProps {
   isOpen: boolean
@@ -35,12 +36,16 @@ export default function SelectorKeyboard({ isOpen }: SelectorKeyboardProps) {
       onLayout={onLayout}>
       <Text style={styles.text}>Le Savoir</Text>
       <View style={styles.wrapper}>
-        <SelectorKeyboardItem />
-        <SelectorKeyboardItem />
-        <SelectorKeyboardItem />
-        <SelectorKeyboardItem />
-        <SelectorKeyboardItem />
-        <SelectorKeyboardItem />
+        <SelectorKeyboardItem text="Mary" />
+        <SelectorKeyboardItem text="Charles" />
+        <SelectorKeyboardItem text="Edmond" />
+        <SelectorKeyboardItem text="Hughes" />
+        {/* <SelectorKeyboardItem icon={<AlcoolIcon />} />
+        <SelectorKeyboardItem icon={<AlcoolIcon />} />
+        <SelectorKeyboardItem icon={<AlcoolIcon />} />
+        <SelectorKeyboardItem icon={<AlcoolIcon />} />
+        <SelectorKeyboardItem icon={<AlcoolIcon />} />
+        <SelectorKeyboardItem icon={<AlcoolIcon />} /> */}
       </View>
     </Animated.View>
   )
@@ -74,20 +79,5 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'center',
     width: '80%',
-  },
-  item: {
-    width: 54,
-    height: 54,
-    justifyContent: 'center',
-    margin: 4,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: 'black',
-    borderRadius: 27,
-  },
-  itemInner: {
-    width: 46,
-    height: 46,
   },
 })
