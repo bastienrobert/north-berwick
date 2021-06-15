@@ -233,13 +233,7 @@ export default function Poster({ onComplete }: PosterProps) {
           { offset: '1', stopColor: '#fff' },
         ]}
       />
-      {showCompleted ? (
-        <Image
-          style={styles.completed}
-          resizeMode="contain"
-          source={require('@/assets/poster/completed.png')}
-        />
-      ) : (
+      {showCompleted ? null : (
         <>
           <Svg
             viewBox="0 0 318 470"
@@ -273,15 +267,15 @@ export default function Poster({ onComplete }: PosterProps) {
             onLayout={(e) => setControls(e.nativeEvent.layout)}
             style={styles.controls}>
             {[
-              require('@/assets/poster/1.png'),
-              require('@/assets/poster/2.png'),
-              require('@/assets/poster/3.png'),
-              require('@/assets/poster/4.png'),
-              require('@/assets/poster/5.png'),
-              require('@/assets/poster/6.png'),
-              require('@/assets/poster/7.png'),
-              require('@/assets/poster/8.png'),
-              require('@/assets/poster/9.png'),
+              require('@/assets/images/poster/1.png'),
+              require('@/assets/images/poster/2.png'),
+              require('@/assets/images/poster/3.png'),
+              require('@/assets/images/poster/4.png'),
+              require('@/assets/images/poster/5.png'),
+              require('@/assets/images/poster/6.png'),
+              require('@/assets/images/poster/7.png'),
+              require('@/assets/images/poster/8.png'),
+              require('@/assets/images/poster/9.png'),
             ].map((source, i) => (
               <DragImage
                 key={i}

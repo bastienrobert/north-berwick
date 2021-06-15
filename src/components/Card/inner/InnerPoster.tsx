@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from 'react'
+import React, { PropsWithChildren, ReactNode, useEffect, useState } from 'react'
 import { SafeAreaView, StyleSheet, View } from 'react-native'
 
 import RoundedButton from '@/components/shared/RoundedButton'
@@ -11,20 +11,32 @@ import { Portal } from '@/lib/Portal'
 interface InnerPosterProps {
   width: number | string
   aspectRatio: number
+  placeholder: ReactNode
+  onBack?: () => void
+  visible?: boolean
   fullscreen?: boolean
 }
 
 export default function InnerPoster({
   children,
+  placeholder,
   fullscreen = true,
+  onBack,
   width,
+  visible,
   aspectRatio,
 }: PropsWithChildren<InnerPosterProps>) {
-  const [isPosterVisible, setIsPosterVisible] = useState(false)
+  const [isPosterVisible, setIsPosterVisible] = useState(visible)
+
+  useEffect(() => {
+    if (!isPosterVisible) onBack?.()
+  }, [isPosterVisible])
 
   return (
     <View style={styles.container}>
-      <View style={[styles.wrapper, { width, aspectRatio }]} />
+      <View style={[styles.wrapper, { width, aspectRatio }]}>
+        {placeholder}
+      </View>
       {isPosterVisible && (
         <Portal>
           <LinearGradient
@@ -35,15 +47,12 @@ export default function InnerPoster({
               { offset: '1', stopColor: '#fff' },
             ]}
           />
-          <SafeAreaView>
-            <RoundedButton
-              large
-              style={styles.backButton}
-              onPress={() => setIsPosterVisible(false)}>
+          <SafeAreaView style={styles.backButton}>
+            <RoundedButton large onPress={() => setIsPosterVisible(false)}>
               <ArrowLeftIcon />
             </RoundedButton>
-            {children}
           </SafeAreaView>
+          <View style={{ flex: 1 }}>{children}</View>
         </Portal>
       )}
       <RoundedButton
@@ -62,21 +71,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   wrapper: {
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: 'red',
     marginBottom: 15,
     borderRadius: 6,
     overflow: 'hidden',
   },
   backButton: {
-    marginTop: 15,
-    marginLeft: 15,
+    position: 'absolute',
+    top: 15,
+    left: 15,
+    zIndex: 2,
   },
   content: {
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: 'green',
     top: 0,
     left: 0,
     width: '100%',

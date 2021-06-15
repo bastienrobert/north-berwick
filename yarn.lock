@@ -1214,6 +1214,11 @@
     "@babel/helper-validator-identifier" "^7.14.0"
     to-fast-properties "^2.0.0"
 
+"@bastienrobert/react-native-fast-image@^8.3.4-upgrade":
+  version "8.3.4-upgrade"
+  resolved "https://npm.pkg.github.com/download/@bastienrobert/react-native-fast-image/8.3.4-upgrade/a5b9298fb5bcf4696cb575b3ae997c559f1a190ca8ef5fb06f5f1a1db729444e#03a2804163035967d56a534eb995a5a11468f62b"
+  integrity sha512-unlvuBj7d0p3J3qXLD8OgQR0LpRvEtI3P1A02LqREs75DonxNvs45634XAxVExK6L3dzxiWbJyAJih2+YK/Ysg==
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.4.tgz#f864ae85004d0fcab6f50be9141c4da368d1656a"
@@ -2058,6 +2063,11 @@
   integrity sha512-nwKNbvnwJ2/mndE9ItP/zc2TCzw6uuodnF4EHYWD+gCQDVBuRQL5UzbZD0/ezy1iKsFU2ZQiDqg4M9dN4+wZgA==
   dependencies:
     "@types/istanbul-lib-report" "*"
+
+"@types/node-polyglot@^2.4.1":
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/@types/node-polyglot/-/node-polyglot-2.4.1.tgz#406b9d3fc12b53f8009aa3aa3021613228d63e46"
+  integrity sha512-TmMOqSuxyo71Snxa9SSwkMB1e/UvrTLsKPOYMizkDX2JSDZXeiQXgUBwNwfNtLP879Btq+GwkdsE9ojk7EKITA==
 
 "@types/node@*":
   version "15.0.2"
@@ -6058,11 +6068,6 @@ react-native-codegen@^0.0.6:
     flow-parser "^0.121.0"
     jscodeshift "^0.11.0"
     nullthrows "^1.1.1"
-
-react-native-fast-image@^8.3.4:
-  version "8.3.4"
-  resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.3.4.tgz#79edca177e30311b19d59ff335625bcbe22650d7"
-  integrity sha512-LpzAdjUphihUpVEBn5fEv5AILe55rHav0YiZroPZ1rumKDhAl4u2cG01ku2Pb7l8sayjTsNu7FuURAlXUUDsow==
 
 react-native-gesture-handler@^1.10.3:
   version "1.10.3"

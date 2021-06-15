@@ -1,17 +1,25 @@
 import React, { useEffect, useRef } from 'react'
 import { Animated, StyleSheet, Text, View } from 'react-native'
 
-import SelectorKeyboardItem from './SelectorKeyboardItem'
+import SelectorKeyboardItem, {
+  SelectorKeyboardItemParams,
+} from './SelectorKeyboardItem'
 
 import useLayout from '@/hooks/useLayout'
 
-import AlcoolIcon from '@/assets/pictograms/alcool.svg'
+export type SelectorKeyboardItems = Record<string, SelectorKeyboardItemParams>
 
-interface SelectorKeyboardProps {
+export interface SelectorKeyboardProps {
+  items: SelectorKeyboardItems
   isOpen: boolean
+  onChoose: (name: string) => void
 }
 
-export default function SelectorKeyboard({ isOpen }: SelectorKeyboardProps) {
+export default function SelectorKeyboard({
+  onChoose,
+  items,
+  isOpen,
+}: SelectorKeyboardProps) {
   const transform = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current
   const [layout, onLayout] = useLayout()
 
@@ -36,16 +44,14 @@ export default function SelectorKeyboard({ isOpen }: SelectorKeyboardProps) {
       onLayout={onLayout}>
       <Text style={styles.text}>Le Savoir</Text>
       <View style={styles.wrapper}>
-        <SelectorKeyboardItem text="Mary" />
-        <SelectorKeyboardItem text="Charles" />
-        <SelectorKeyboardItem text="Edmond" />
-        <SelectorKeyboardItem text="Hughes" />
-        {/* <SelectorKeyboardItem icon={<AlcoolIcon />} />
-        <SelectorKeyboardItem icon={<AlcoolIcon />} />
-        <SelectorKeyboardItem icon={<AlcoolIcon />} />
-        <SelectorKeyboardItem icon={<AlcoolIcon />} />
-        <SelectorKeyboardItem icon={<AlcoolIcon />} />
-        <SelectorKeyboardItem icon={<AlcoolIcon />} /> */}
+        {Object.entries(items).map(([name, item], i) => (
+          <SelectorKeyboardItem
+            key={i}
+            name={name}
+            onPress={onChoose}
+            {...item}
+          />
+        ))}
       </View>
     </Animated.View>
   )

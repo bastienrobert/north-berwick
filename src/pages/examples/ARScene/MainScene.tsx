@@ -11,7 +11,7 @@ import { Alert } from 'react-native'
 
 ViroARTrackingTargets.createTargets({
   portrait_agnes_sampson: {
-    source: require('@/assets/book/portraits/portrait_agnes-sampson.jpg'),
+    source: require('@/assets/targets/portrait_john_cunningham.jpg'),
     orientation: 'Up',
     physicalWidth: 0.035,
   },

@@ -26,20 +26,25 @@ export default function CardTitle({ content, color }: CardTitleProps) {
         }).start(resolve)
       })
     },
-    [opacity],
+    [opacity, content],
   )
+
+  const isSameContent = content
+    ? content[0] === innerContent[0] && content[1] === innerContent[1]
+    : false
 
   useEffect(() => {
     ;(async () => {
+      if (isSameContent) return
+      await animate(0)
       if (content && content[0].length > 0) {
-        await animate(0)
         setInnerContent(content)
         animate(1)
       } else {
         animate(0)
       }
     })()
-  }, [content])
+  }, [content, isSameContent])
 
   return (
     <Animated.View
@@ -68,7 +73,7 @@ export default function CardTitle({ content, color }: CardTitleProps) {
           d="M0 211c31.48-54.2 90.143-91 157.4-91 67.357 0 126.12 36.6 157.6 91"
           fill="none"
         />
-        {innerContent[1] && (
+        {innerContent[1] ? (
           <SvgText>
             <TextPath
               textAnchor="middle"
@@ -84,7 +89,7 @@ export default function CardTitle({ content, color }: CardTitleProps) {
               </TSpan>
             </TextPath>
           </SvgText>
-        )}
+        ) : null}
       </Svg>
     </Animated.View>
   )

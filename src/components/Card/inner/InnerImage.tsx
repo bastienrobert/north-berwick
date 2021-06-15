@@ -17,7 +17,12 @@ export default function InnerImage({
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <Image style={styles.image} source={image} resizeMode="contain" />
+        <Image
+          style={styles.image}
+          source={image}
+          resizeMode="contain"
+          height={undefined}
+        />
         <LargeButton style={styles.button} onPress={onEditClick}>
           {editLabel}
         </LargeButton>
@@ -28,18 +33,23 @@ export default function InnerImage({
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     marginTop: 'auto',
     marginBottom: 20,
-    alignItems: 'center',
+    alignItems: 'stretch',
   },
   wrapper: {
     overflow: 'hidden',
+    flex: 1,
+    alignItems: 'stretch',
   },
   image: {
     width: '80%',
     maxWidth: 370,
     aspectRatio: 1,
     marginBottom: 5,
+    marginTop: 'auto',
+    alignSelf: 'center',
   },
   button: {
     alignSelf: 'center',

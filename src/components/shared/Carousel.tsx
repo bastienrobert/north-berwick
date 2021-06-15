@@ -221,7 +221,6 @@ export default function Carousel({
 
   const panResponder = useMemo(() => {
     return PanResponder.create({
-      // onStartShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
         isPanning.current = true
         pan.setOffset(offset)
@@ -255,13 +254,16 @@ export default function Carousel({
         const next = snapOffset(
           offset,
           {
-            width: wrapperDimensions.width / length + margins.left,
-            height: wrapperDimensions.height / length + margins.top,
+            width: wrapperDimensions.width / length,
+            height: wrapperDimensions.height / length,
           },
           axis,
         )
 
-        animateToPosition(next)
+        animateToPosition({
+          x: next.x - margins.left,
+          y: next.y - margins.top,
+        })
         onResponderRelease?.(e)
       },
     })
@@ -276,10 +278,10 @@ export default function Carousel({
       onLayout={onContainerLayout}>
       <Animated.View
         {...(disabled ? {} : panResponder.panHandlers)}
-        style={[
-          { flexDirection: axis === 'x' ? 'row' : 'column' },
-          { transform: positions.getTranslateTransform() },
-        ]}
+        style={{
+          flexDirection: axis === 'x' ? 'row' : 'column',
+          transform: positions.getTranslateTransform(),
+        }}
         onLayout={onWrapperLayout}>
         {children}
       </Animated.View>

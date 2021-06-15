@@ -1,6 +1,13 @@
 import React from 'react'
 import { NavigationProp } from '@react-navigation/core'
-import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import {
+  Button,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native'
 
 import { RootNavigationParamList } from '@/App/Router'
 import ScanButton from '@/components/ScanButton'
@@ -17,37 +24,52 @@ export default function HomeSplash({
   const { set, hide } = useScan()
 
   return (
-    <SafeAreaView>
-      <Text>Scan cover!</Text>
-      <ScanButton
-        onPress={() =>
-          set({
-            callbacks: {
-              default: () => null,
-              map_castle: () => {
-                navigation.navigate('Chapter:Castle', {})
-                hide()
+    <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        <Text>Scan cover!</Text>
+        <Button
+          title="Goto Castle"
+          onPress={() => navigation.navigate('Chapter:Castle', {})}
+        />
+        <ScanButton
+          style={styles.button}
+          onPress={() =>
+            set({
+              callbacks: {
+                default: () => null,
+                cover: () => {
+                  navigation.navigate('Home:Introduction', {})
+                  hide()
+                },
               },
-              map_port: () => false,
-              map_geillis: () => false,
-              map_church: () => false,
-            },
-            // overlay: (
-            //   <Image
-            //     style={styles.scanOverlayImage}
-            //     source={require('@/assets/agnes_sampson-overlay.png')}
-            //   />
-            // ),
-          })
-        }
-      />
-    </SafeAreaView>
+              // overlay: (
+              //   <Image
+              //     style={styles.scanOverlayImage}
+              //     resizeMode="contain"
+              //     source={require('@/assets/portraits/agnes_sampson.png')}
+              //   />
+              // ),
+            })
+          }
+        />
+      </SafeAreaView>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   scanOverlayImage: {
-    width: '80%',
+    flex: 1,
+    opacity: 0.4,
+    width: '60%',
     maxWidth: 420,
+  },
+  button: {
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: 40,
   },
 })

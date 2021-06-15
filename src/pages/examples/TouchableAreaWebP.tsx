@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Image } from 'react-native'
 import Video from 'react-native-video'
-import FastImage from 'react-native-fast-image'
+import WebPImage from '@/components/shared/WebPImage'
 
 export default function TouchableAreaWebP() {
   return (
@@ -16,10 +16,10 @@ export default function TouchableAreaWebP() {
         }}
         source={require('@/assets/tmp/storm.mp4')}
       />
-      <FastImage
+      <WebPImage
         style={{ position: 'absolute', width: 200, height: 200 }}
         source={require('@/assets/tmp/animated-webp-supported.webp')}
-        resizeMode={FastImage.resizeMode.contain}
+        resizeMode={WebPImage.resizeMode.contain}
       />
     </View>
   )

@@ -19,6 +19,6 @@ export default function InnerSelectors({
   type,
   ...props
 }: InnerSelectorsProps) {
-  const C = COMPONENTS[type]
+  const C = COMPONENTS[type] as any
   return <C {...props} />
 }

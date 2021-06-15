@@ -18,15 +18,18 @@ import useLayout from '@/hooks/useLayout'
 interface InnerCarouselProps {
   editLabel: string
   submitLabel: string
+  length: number
   style?: StyleProp<ViewStyle>
   onSelectedChange?: (index: number | null) => void
-  children: (layout: LayoutRectangle) => ReactNode
+  content: ReactNode[]
 }
 
+const margins = { left: 24, right: 0, top: 0, bottom: 0 }
 export default function InnerCarousel({
-  children,
+  content,
   editLabel,
   submitLabel,
+  length,
   style,
   onSelectedChange,
 }: InnerCarouselProps) {
@@ -53,16 +56,20 @@ export default function InnerCarousel({
         <Carousel
           disabled
           axis="x"
-          length={3}
-          margins={{ left: 24, right: 0, top: 0, bottom: 0 }}
+          length={length}
+          margins={margins}
           targetIndex={index}
           onSlideIndexChange={setIndex}>
-          {children(layout)}
+          {content.map((c, i) => (
+            <View key={i} style={[styles.content, { width: layout.width }]}>
+              {c}
+            </View>
+          ))}
         </Carousel>
       </View>
       <View style={styles.controls}>
         {hasSelectedValue ? (
-          <LargeButton theme="secondary" style={styles.button} onPress={onEdit}>
+          <LargeButton theme="edit" style={styles.button} onPress={onEdit}>
             {editLabel}
           </LargeButton>
         ) : (
@@ -80,8 +87,8 @@ export default function InnerCarousel({
               {submitLabel}
             </LargeButton>
             <RoundedButton
-              style={{ opacity: index >= 3 - 1 ? 0 : 1 }}
-              disabled={index >= 3 - 1}
+              style={{ opacity: index >= length - 1 ? 0 : 1 }}
+              disabled={index >= length - 1}
               onPress={() => setIndex((i) => i + 1)}>
               <ArrowRightIcon />
             </RoundedButton>
@@ -102,6 +109,13 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: 70,
     width: '80%',
+  },
+  content: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    aspectRatio: 1,
+    borderRadius: 4,
+    marginLeft: 24,
   },
   controls: {
     flexDirection: 'row',

@@ -14,7 +14,7 @@ export default function App() {
   return (
     <>
       {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
-      <I18n locale="fr" messages={fr}>
+      <I18n locale="fr" messages={fr} allowMissing>
         <PortalHost>
           <ScanProvider>
             <ScanView />

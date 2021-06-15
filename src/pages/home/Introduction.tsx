@@ -1,8 +1,11 @@
 import React from 'react'
 import { NavigationProp } from '@react-navigation/core'
-import { Button, SafeAreaView, Text } from 'react-native'
+import { SafeAreaView } from 'react-native'
 
 import { RootNavigationParamList } from '@/App/Router'
+
+import VideoWithDialog from '@/components/VideoWithDialog'
+import Fade from '@/components/shared/Fade'
 
 export interface HomeIntroductionProps {}
 type HomePropsWithNavigation = HomeIntroductionProps & {
@@ -13,12 +16,14 @@ export default function HomeIntroduction({
   navigation,
 }: HomePropsWithNavigation) {
   return (
-    <SafeAreaView>
-      <Text>VIDEO!</Text>
-      <Button
-        title="NEXT"
-        onPress={() => navigation.navigate('Chapter:Castle', {})}
+    <>
+      <Fade color="black" start fadeIn={false} />
+      <VideoWithDialog
+        name="???"
+        onEnd={() => navigation.navigate('Chapter:Castle', {})}
+        source={require('@/assets/tmp/storm.mp4')}
+        dialogs={require('@/assets/tmp/videos/out.json')}
       />
-    </SafeAreaView>
+    </>
   )
 }

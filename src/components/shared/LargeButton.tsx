@@ -27,7 +27,7 @@ export default function LargeButton({
       pressedStyle={t.pressed}
       style={[styles.container, style, t.default]}
       {...rest}>
-      <Text style={styles.text}>{children}</Text>
+      <Text style={[styles.text, t.text]}>{children}</Text>
     </TouchableOpacityOrView>
   )
 }
@@ -68,15 +68,25 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  editText: {
+    color: theme.colors.gray,
+  },
 })
 
 const themes = {
   primary: {
     default: styles.primary,
     pressed: styles.primaryPressed,
+    text: undefined,
   },
   secondary: {
     default: undefined,
     pressed: undefined,
+    text: undefined,
+  },
+  edit: {
+    default: undefined,
+    pressed: undefined,
+    text: styles.editText,
   },
 }

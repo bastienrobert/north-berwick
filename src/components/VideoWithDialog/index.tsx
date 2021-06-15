@@ -32,7 +32,7 @@ export default function VideoWithDialog({
 
   return (
     <View style={[styles.container, style]}>
-      <Video {...props} resizeMode="cover" style={styles.video} />
+      <Video {...props} repeat resizeMode="cover" style={styles.video} />
       {dialog && (
         <VideoDialogBox
           name={name}

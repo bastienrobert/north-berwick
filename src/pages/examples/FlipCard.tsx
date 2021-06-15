@@ -11,20 +11,22 @@ import Card from '@/components/Card'
 import BottomCollapsable from '@/components/shared/BottomCollapsable'
 
 import Carousel from '@/components/shared/Carousel'
+import WebPImage from '@/components/shared/WebPImage'
 import ActiveCardIndicator from '@/components/ActiveCardIndicator'
 import FlipWrapper from '@/components/Card/FlipWrapper'
 import InnerCarousel from '@/components/Card/inner/InnerCarousel'
-import FastImage from 'react-native-fast-image'
 import InnerPoster from '@/components/Card/inner/InnerPoster'
 import InnerImage from '@/components/Card/inner/InnerImage'
 import InnerSelectors from '@/components/Card/inner/InnerSelectors'
+
+import AlcoolIcon from '@/assets/pictograms/alcool.svg'
 
 interface FlipCardData {
   front: ReactNode | (() => ReactNode)
   back?: ReactNode | (() => ReactNode)
 }
 
-const Box = ({ style }: any) => {
+const Box = ({ style, source }: any) => {
   return (
     <View
       style={[
@@ -37,10 +39,7 @@ const Box = ({ style }: any) => {
         },
         style,
       ]}>
-      <FastImage
-        source={require('@/assets/tortures/bride.png')}
-        style={{ width: '100%', height: '100%' }}
-      />
+      <WebPImage source={source} style={{ width: '100%', height: '100%' }} />
     </View>
   )
 }
@@ -50,14 +49,196 @@ const data: FlipCardData[] = [
     front: (
       <Card
         number={1}
+        color="purple"
+        title={['Agnes Sampson']}
+        forceBottom={false}
+        bottom="Falcon of Leith"
+        inner={
+          <InnerSelectors
+            type="single"
+            items={{
+              alcool: {
+                icon: <AlcoolIcon />,
+              },
+              alcool2: {
+                icon: <AlcoolIcon />,
+              },
+              alcool3: {
+                icon: <AlcoolIcon />,
+              },
+              alcool4: {
+                icon: <AlcoolIcon />,
+              },
+              alcool5: {
+                icon: <AlcoolIcon />,
+              },
+              alcool6: {
+                icon: <AlcoolIcon />,
+              },
+            }}
+          />
+        }
+      />
+    ),
+  },
+  {
+    front: (
+      <Card
+        number={1}
+        color="purple"
+        title={['Agnes Sampson']}
+        forceBottom={false}
+        bottom="Falcon of Leith"
+        inner={
+          <InnerSelectors
+            type="family"
+            main="Agnès"
+            items={{
+              parent: { text: 'Charles', display: 'C' },
+              children: [
+                {
+                  text: 'Mary',
+                  display: 'M',
+                },
+                {
+                  text: 'Edmond',
+                  display: 'E',
+                },
+                {
+                  text: 'Hughes',
+                  display: 'H',
+                },
+              ],
+            }}
+          />
+        }
+      />
+    ),
+  },
+  {
+    front: (
+      <Card
+        number={1}
         color="pink"
         revert
         title={['Agnes Sampson']}
         forceBottom={false}
         bottom="Falcon of Leith"
-        inner={<InnerSelectors type="equation" />}
+        inner={
+          <InnerSelectors
+            type="equation"
+            result={<AlcoolIcon />}
+            items={[
+              {
+                alcool: {
+                  icon: <AlcoolIcon />,
+                },
+                alcool2: {
+                  icon: <AlcoolIcon />,
+                },
+                alcool3: {
+                  icon: <AlcoolIcon />,
+                },
+                alcool4: {
+                  icon: <AlcoolIcon />,
+                },
+                alcool5: {
+                  icon: <AlcoolIcon />,
+                },
+                alcool6: {
+                  icon: <AlcoolIcon />,
+                },
+              },
+              {
+                alcool: {
+                  icon: <AlcoolIcon />,
+                },
+                alcool2: {
+                  icon: <AlcoolIcon />,
+                },
+                alcool3: {
+                  icon: <AlcoolIcon />,
+                },
+                alcool4: {
+                  icon: <AlcoolIcon />,
+                },
+                alcool5: {
+                  icon: <AlcoolIcon />,
+                },
+                alcool6: {
+                  icon: <AlcoolIcon />,
+                },
+              },
+              // {
+              //   charles: {
+              //     text: 'Charles',
+              //   },
+              //   mary: {
+              //     text: 'Mary',
+              //   },
+              //   edmond: {
+              //     text: 'Edmond',
+              //   },
+              //   hughes: {
+              //     text: 'Hughes',
+              //   },
+              // },
+            ]}
+          />
+        }
       />
     ),
+  },
+  {
+    front: () => {
+      const [title, setTitle] = useState<
+        undefined | [string] | [string, string]
+      >(undefined)
+
+      return (
+        <Card
+          number={1}
+          color="red"
+          forceBottom={false}
+          title={title}
+          bottom="Falcon of Leith"
+          inner={
+            <InnerCarousel
+              editLabel="Editer"
+              submitLabel="Sélectionner"
+              length={4}
+              onSelectedChange={(i) =>
+                setTitle(
+                  typeof i === 'number' ? ['bride de', 'la mégère'] : undefined,
+                )
+              }>
+              {(layout) => {
+                return (
+                  <>
+                    <Box
+                      source={require('@/assets/images/tortures/bride.webp')}
+                      style={{ width: layout.width }}
+                    />
+                    <Box
+                      source={require('@/assets/images/tortures/gresillon.webp')}
+                      style={{ width: layout.width }}
+                    />
+                    <Box
+                      source={require('@/assets/images/tortures/brodequin.webp')}
+                      style={{ width: layout.width }}
+                    />
+                    <Box
+                      source={require('@/assets/images/tortures/estrapade.webp')}
+                      style={{ width: layout.width }}
+                    />
+                  </>
+                )
+              }}
+            </InnerCarousel>
+          }
+        />
+      )
+    },
   },
   {
     front: (
@@ -87,43 +268,6 @@ const data: FlipCardData[] = [
         inner={<InnerPoster width="60%" aspectRatio={0.68} />}
       />
     ),
-  },
-  {
-    front: () => {
-      const [title, setTitle] = useState<
-        undefined | [string] | [string, string]
-      >(undefined)
-
-      return (
-        <Card
-          number={1}
-          color="red"
-          forceBottom={false}
-          title={title}
-          bottom="Falcon of Leith"
-          inner={
-            <InnerCarousel
-              editLabel="Editer"
-              submitLabel="Sélectionner"
-              onSelectedChange={(i) =>
-                setTitle(
-                  typeof i === 'number' ? ['bride de', 'la mégère'] : undefined,
-                )
-              }>
-              {(layout) => {
-                return (
-                  <>
-                    <Box style={{ width: layout.width }} />
-                    <Box style={{ width: layout.width }} />
-                    <Box style={{ width: layout.width }} />
-                  </>
-                )
-              }}
-            </InnerCarousel>
-          }
-        />
-      )
-    },
   },
   {
     front: (
@@ -218,7 +362,6 @@ export default function FlipCardCarousel() {
             disabled={axis === 'y'}
             onResponderStart={onCarouselResponderStart}
             onResponderRelease={onCarouselResponderRelease}
-            // targetIndex={index}
             onSlideIndexChange={setIndex}
             axis="x"
             length={data.length}

@@ -1,10 +1,23 @@
-import React from 'react'
+import { Portal } from '@/lib/Portal'
+import React, { useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import Svg, { SvgProps, Path } from 'react-native-svg'
 
 import SelectorItem from './common/SelectorItem'
+import SelectorKeyboard from './common/SelectorKeyboard'
+import { SelectorKeyboardItemParams } from './common/SelectorKeyboardItem'
 
-export interface FamilySelectorProps {}
+type FamilyItem = SelectorKeyboardItemParams & { display: string }
+
+interface FamilyItems {
+  parent: FamilyItem
+  children: [FamilyItem, FamilyItem, FamilyItem]
+}
+
+export interface FamilySelectorProps {
+  main: string
+  items: FamilyItems
+}
 
 function FamilyTree(props: SvgProps) {
   return (
@@ -18,21 +31,47 @@ function FamilyTree(props: SvgProps) {
   )
 }
 
-export default function FamilySelector({}: FamilySelectorProps) {
+export default function FamilySelector({ main, items }: FamilySelectorProps) {
+  const [active, setActive] = useState<null | 'parent' | 'children'>(null)
+  // const [selected, setSelected] = useState<SelectedItem>([null, null])
+
+  const keyboardItems = useMemo(() => {
+    // return [{name: 'parent', }, ...items.children]
+    return {
+      parent: items.parent,
+      children0: items.children[0],
+      children1: items.children[1],
+      children2: items.children[2],
+    }
+  }, [items])
+
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <View style={styles.topWrapper}>
-          <SelectorItem placeHolderText="Agnès" style={{ marginRight: 45 }} />
-          <SelectorItem placeHolderText="?" />
+          <SelectorItem placeHolderText={main} style={{ marginRight: 45 }} />
+          <SelectorItem onPress={() => setActive('parent')} />
         </View>
         <FamilyTree />
         <View style={styles.bottomWrapper}>
-          <SelectorItem placeHolderText="?" style={[{ marginTop: -30 }]} />
-          <SelectorItem placeHolderText="?" />
-          <SelectorItem placeHolderText="?" style={[{ marginTop: -30 }]} />
+          <SelectorItem
+            style={[{ marginTop: -30 }]}
+            onPress={() => setActive('children')}
+          />
+          <SelectorItem onPress={() => setActive('children')} />
+          <SelectorItem
+            style={[{ marginTop: -30 }]}
+            onPress={() => setActive('children')}
+          />
         </View>
       </View>
+      <Portal>
+        <SelectorKeyboard
+          isOpen={active !== null}
+          onChoose={() => null}
+          items={keyboardItems}
+        />
+      </Portal>
     </View>
   )
 }
@@ -44,7 +83,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   wrapper: {
-    marginBottom: '30%',
+    marginBottom: '15%',
     alignItems: 'center',
   },
   topWrapper: {

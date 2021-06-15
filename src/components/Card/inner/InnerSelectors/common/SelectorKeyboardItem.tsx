@@ -1,23 +1,32 @@
 import React, { ReactNode } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-export interface SelectorKeyboardItemProps {
+export interface SelectorKeyboardItemParams {
   icon?: ReactNode
   text?: string
 }
 
+export interface SelectorKeyboardItemProps extends SelectorKeyboardItemParams {
+  name: string
+  onPress: (el: string) => void
+}
+
 export default function SelectorKeyboardItem({
+  name,
   icon,
   text,
+  onPress,
 }: SelectorKeyboardItemProps) {
   return (
-    <View style={[styles.item, icon ? styles.withIcon : styles.withText]}>
+    <TouchableOpacity
+      style={[styles.item, icon ? styles.withIcon : styles.withText]}
+      onPress={() => onPress(name)}>
       {icon ? (
         <View style={styles.inner}>{icon}</View>
       ) : (
         <Text style={styles.text}>{text}</Text>
       )}
-    </View>
+    </TouchableOpacity>
   )
 }
 
