@@ -17,7 +17,7 @@ export default function HomeIntroduction({
 }: HomePropsWithNavigation) {
   return (
     <>
-      <Fade color="black" start fadeIn={false} />
+      <Fade color="black" start duration={2200} fadeIn={false} />
       <VideoWithDialog
         name="???"
         onEnd={() => navigation.navigate('Chapter:Castle', {})}

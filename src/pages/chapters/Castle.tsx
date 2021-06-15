@@ -17,6 +17,7 @@ import InnerImage from '@/components/Card/inner/InnerImage'
 import Poster from '@/components/Poster'
 import ScanButton from '@/components/ScanButton'
 import CardCarousel from '@/components/CardCarousel'
+import Fade from '@/components/shared/Fade'
 import WebPImage from '@/components/shared/WebPImage'
 
 import getResults from '@/utils/get-results'
@@ -87,6 +88,7 @@ export default function ChapterCastle({
 
   return (
     <View style={styles.container}>
+      <Fade color="black" start duration={2200} fadeIn={false} />
       <Video
         repeat
         style={styles.video}
