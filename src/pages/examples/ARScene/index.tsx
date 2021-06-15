@@ -24,6 +24,8 @@ export default function ARScene() {
         }}
       /> */}
       <ViroARSceneNavigator
+        autofocus={true}
+        style={{ flex: 1 }}
         initialScene={{
           // scene: HDRScene,
           scene: MainScene,

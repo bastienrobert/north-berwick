@@ -1,19 +1,24 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { NavigationProp } from '@react-navigation/core'
+import { useAtom } from 'jotai'
 import Video from 'react-native-video'
 import { useTranslate } from 'react-polyglot'
 
 import { RootNavigationParamList } from '@/App/Router'
-import ScanButton from '@/components/ScanButton'
 import { useScan } from '@/App/Scan/ScanProvider'
+
+import store, { ASSETS, CORRECTS } from '@/controllers/castle'
+
 import Card from '@/components/Card'
-import CardCarousel from '@/components/CardCarousel'
-import WebPImage from '@/components/shared/WebPImage'
 import InnerCarousel from '@/components/Card/inner/InnerCarousel'
 import InnerPoster from '@/components/Card/inner/InnerPoster'
-import Poster from '@/components/Poster'
 import InnerImage from '@/components/Card/inner/InnerImage'
+import Poster from '@/components/Poster'
+import ScanButton from '@/components/ScanButton'
+import CardCarousel from '@/components/CardCarousel'
+import WebPImage from '@/components/shared/WebPImage'
+
 import getResults from '@/utils/get-results'
 
 export interface ChapterCastleProps {}
@@ -21,92 +26,21 @@ type ChapterCastlePropsWithNavigation = ChapterCastleProps & {
   navigation: NavigationProp<RootNavigationParamList, 'Chapter:Castle'>
 }
 
-const PORTRAITS = [
-  {
-    name: 'agnes_sampson',
-    image: require('@/assets/images/portraits/agnes_sampson.png'),
-  },
-  {
-    name: 'alanis_muir',
-    image: require('@/assets/images/portraits/alanis_muir.png'),
-  },
-  {
-    name: 'euphame_maccalzean',
-    image: require('@/assets/images/portraits/euphame_maccalzean.png'),
-  },
-  {
-    name: 'geillis_ducan',
-    image: require('@/assets/images/portraits/geillis_ducan.png'),
-  },
-  {
-    name: 'john_cunningham',
-    image: require('@/assets/images/portraits/john_cunningham.png'),
-  },
-  {
-    name: 'margaret_acheson',
-    image: require('@/assets/images/portraits/margaret_acheson.png'),
-  },
-  {
-    name: 'robert_grierson',
-    image: require('@/assets/images/portraits/robert_grierson.png'),
-  },
-  {
-    name: 'smith_du_pont_hallis',
-    image: require('@/assets/images/portraits/smith_du_pont_hallis.png'),
-  },
-]
-
-const TORTURES = [
-  {
-    name: 'gresillon',
-    multiline: false,
-    image: require('@/assets/images/tortures/gresillon.webp'),
-  },
-  {
-    name: 'bride',
-    multiline: true,
-    image: require('@/assets/images/tortures/bride.webp'),
-  },
-  {
-    name: 'brodequin',
-    multiline: false,
-    image: require('@/assets/images/tortures/brodequin.webp'),
-  },
-  {
-    name: 'estrapade',
-    multiline: false,
-    image: require('@/assets/images/tortures/estrapade.webp'),
-  },
-]
-
-const CORRECT = {
-  portrait: 'agnes',
-  torture: 'bride',
-  poster: true,
-}
-
 export default function ChapterCastle({
   navigation,
 }: ChapterCastlePropsWithNavigation) {
   const t = useTranslate()
-  const [answers, setAnswers] = useState<{
-    portrait: string | null
-    torture: string | null
-    poster: boolean
-  }>({
-    portrait: null,
-    torture: null,
-    poster: false,
-  })
+  const [answers, setAnswers] = useAtom(store)
+
   const [showPoster, setShowPoster] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(true)
   const [index, setIndex] = useState(0)
   const isPosterCompletedRef = useRef(false)
   const { set, hide } = useScan()
 
-  const torture = TORTURES.find((t) => answers.torture === t.name)
+  const torture = ASSETS.tortures.find((t) => answers.torture === t.name)
 
-  const portrait = PORTRAITS.find((t) => answers.portrait === t.name)
+  const portrait = ASSETS.portraits.find((t) => answers.portrait === t.name)
 
   const setPortrait = useCallback((portrait) => {
     setAnswers((t) => ({ ...t, portrait }))
@@ -134,7 +68,7 @@ export default function ChapterCastle({
 
       const { next, errors } = getResults({
         answers,
-        corrects: CORRECT,
+        corrects: CORRECTS,
         reset: {
           portrait: null,
           torture: null,
@@ -219,8 +153,8 @@ export default function ChapterCastle({
                   <InnerCarousel
                     editLabel={t('edit')}
                     submitLabel={t('select')}
-                    length={TORTURES.length}
-                    content={TORTURES.map(({ image }, i) => (
+                    length={ASSETS.tortures.length}
+                    content={ASSETS.tortures.map(({ image }, i) => (
                       <WebPImage
                         source={image}
                         style={{ marginTop: 20, width: '90%', aspectRatio: 1 }}
@@ -230,7 +164,9 @@ export default function ChapterCastle({
                       setAnswers((t) => ({
                         ...t,
                         torture:
-                          typeof i === 'number' ? TORTURES[i].name : null,
+                          typeof i === 'number'
+                            ? ASSETS.tortures[i].name
+                            : null,
                       }))
                     }}
                   />
@@ -239,7 +175,7 @@ export default function ChapterCastle({
             ),
           },
           {
-            complete: answers.poster,
+            complete: answers.poster ?? false,
             front: (
               <Card
                 number={1}
