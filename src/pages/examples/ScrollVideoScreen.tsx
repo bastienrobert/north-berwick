@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Video, { OnLoadData, OnProgressData } from 'react-native-video'
-import { Animated, Easing, PanResponder, View } from 'react-native'
+import { Animated, Easing, PanResponder, StyleSheet, View } from 'react-native'
 import { clamp } from '@/utils/math'
 
 export interface ScrollVideoScreenProps {}
@@ -9,7 +9,7 @@ export interface ScrollVideoScreenProps {}
 const THROTTLE = 20
 
 export default function ScrollVideoScreen() {
-  const [isPanning, setIsPanning] = useState(false)
+  const [isLock, setIsLock] = useState(false)
   const [isRepeating, setIsRepeating] = useState(true)
 
   const videoRef = useRef<Video>()
@@ -19,12 +19,6 @@ export default function ScrollVideoScreen() {
     .current
 
   const loopVideoRef = useRef<Video>()
-  const loopVideoPositionRef = useRef({ init: 0, current: 0, panning: 0 })
-    .current
-  const loopVideoDurationRef = useRef(0)
-  const loopVideoPositionAnim = useRef(
-    new Animated.Value(videoPositionRef.current),
-  ).current
 
   useEffect(() => {
     const listener = videoPositionAnim.addListener(({ value }) => {
@@ -36,17 +30,6 @@ export default function ScrollVideoScreen() {
       videoPositionAnim.removeListener(listener)
     }
   }, [videoRef, videoPositionAnim])
-
-  useEffect(() => {
-    const listener = loopVideoPositionAnim.addListener(({ value }) => {
-      loopVideoRef.current?.seek(loopVideoPositionRef.panning + value * 0.001)
-      loopVideoPositionRef.current = value
-    })
-
-    return () => {
-      loopVideoPositionAnim.removeListener(listener)
-    }
-  }, [loopVideoRef, loopVideoPositionAnim])
 
   const handleVideoRef = (ref: Video | null) => {
     if (ref) {
@@ -64,38 +47,21 @@ export default function ScrollVideoScreen() {
     videoDurationRef.current = duration * 1000
   }
 
-  const handleLoopVideoLoad = ({ duration }: OnLoadData) => {
-    loopVideoDurationRef.current = duration * 1000
-  }
-
   const onLoopVideoEnd = () => {
-    // if (isPanning) setIsRepeating(false)
+    if (isLock) setIsRepeating(false)
   }
 
   const panResponder = useMemo(
     () =>
       PanResponder.create({
-        onMoveShouldSetPanResponder: () => true,
+        onStartShouldSetPanResponder: () => !isLock,
+        onMoveShouldSetPanResponder: () => !isLock,
         onPanResponderGrant: () => {
           videoPositionRef.init = videoPositionRef.current
-          loopVideoPositionRef.init = loopVideoPositionRef.current
-
-          setIsPanning(true)
+          setIsLock(true)
         },
         onPanResponderMove: (_, gesture) => {
-          // if (isRepeating) {
-          //   Animated.timing(loopVideoPositionAnim, {
-          //     useNativeDriver: false,
-          //     toValue: clamp(
-          //       (loopVideoPositionRef.init - gesture.dy) * THROTTLE,
-          //       loopVideoPositionRef.init,
-          //       loopVideoDurationRef.current,
-          //     ),
-          //     easing: Easing.out(Easing.cubic),
-          //     duration: 500,
-          //   }).start()
-          // }
-          if (videoRef.current && videoDurationRef.current) {
+          if (videoRef.current && videoDurationRef.current && !isRepeating) {
             Animated.timing(videoPositionAnim, {
               useNativeDriver: false,
               toValue: Math.floor(
@@ -106,7 +72,7 @@ export default function ScrollVideoScreen() {
                 ),
               ),
               easing: Easing.out(Easing.cubic),
-              duration: 500,
+              duration: 300,
             }).start()
           }
         },
@@ -116,11 +82,14 @@ export default function ScrollVideoScreen() {
             toValue: 0,
             easing: Easing.out(Easing.cubic),
             duration: 1500,
-          }).start()
-          setIsPanning(false)
+          }).start(() => {
+            loopVideoRef.current?.seek(0)
+            setIsLock(false)
+            setIsRepeating(true)
+          })
         },
       }),
-    [videoRef],
+    [videoRef, isLock, isRepeating],
   )
 
   return (
@@ -142,20 +111,15 @@ export default function ScrollVideoScreen() {
         source={require('@/assets/tmp/storm.mp4')}
       />
       <Video
-        paused={isPanning}
         repeat
         ref={handleLoopVideoRef}
-        onLoad={handleLoopVideoLoad}
         onEnd={onLoopVideoEnd}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          opacity: 0,
-          // opacity: isRepeating ? 1 : 0,
-        }}
+        style={[
+          StyleSheet.absoluteFill,
+          {
+            opacity: isRepeating ? 1 : 0,
+          },
+        ]}
         resizeMode="cover"
         source={require('@/assets/tmp/storm_loop.mp4')}
       />

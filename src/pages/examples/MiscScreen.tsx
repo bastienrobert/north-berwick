@@ -25,35 +25,6 @@ export default function TouchableAreaWebP() {
         dialogs={require('@/assets/tmp/videos/out.json')}
       /> */}
 
-      {/* <Summary
-        title="Récapitulatif"
-        titleColor="#480D00"
-        button="Retourner au château"
-        onPress={() => {}}
-        content={[
-          {
-            text:
-              'Selon Mr Seaton, Geillis aurait eu des pouvoirs de guérison grâce à',
-            label: 'La Sorcellerie',
-          },
-          {
-            text:
-              "Afin de la faire avouer, Mr Seaton la fit torturer à l'aide de",
-            label: 'Brodequins',
-          },
-          {
-            text:
-              'En réalité, Geillis était capable de prodiguer des soins car elle était ',
-            label: 'Guérisseuse',
-          },
-          {
-            text: "Geillis s'échappait la nuit afin de pratiquer",
-            label: 'La Médecine',
-          },
-        ]}
-        colors={['#ffe5e3', '#fff0ef', '#ffffff']}
-      /> */}
-
       <WebPImage
         source={require('@/assets/images/tortures/bride.webp')}
         style={{

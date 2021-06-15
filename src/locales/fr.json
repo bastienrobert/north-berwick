@@ -1,6 +1,8 @@
 {
   "go_to": "Aller",
+  "summary": "Récapitulatif",
   "scan_again": "Scanner à nouveau",
+  "wrong_results": "Merci ! Mais j’ai l’impression qu’une partie de ces informations est erronée…",
   "missing_informations": "Tu n'as pas encore assez d'informations pour remplir cette carte",
   "not_good_place": "Mh, je crois que ce n’était pas ce lieu que je voulais voir",
   "cover": "au Chateau",
@@ -16,6 +18,7 @@
   "portrait_margaret_acheson": "Margaret Acheson",
   "portrait_robert_grierson": "Robert Grierson",
   "portrait_smith_du_pont_hallis": "Smith Du Pont Hallis",
+  "agnes": "Agnès",
   "edit": "Editer",
   "select": "Sélectionner",
   "the_ghost": "Le Fantôme",

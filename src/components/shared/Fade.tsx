@@ -5,6 +5,7 @@ import { Portal } from '@/lib/Portal'
 
 export interface FadeProps {
   start: boolean
+  initial?: number
   fadeIn?: boolean
   easingIn?: Animated.TimingAnimationConfig['easing']
   easingOut?: Animated.TimingAnimationConfig['easing']
@@ -16,6 +17,7 @@ export interface FadeProps {
 }
 
 export default function Fade({
+  initial = 0,
   color = 'black',
   duration = 1600,
   fadeIn = true,
@@ -26,7 +28,7 @@ export default function Fade({
   onHalf,
   onComplete,
 }: FadeProps) {
-  const opacity = useRef(new Animated.Value(0)).current
+  const opacity = useRef(new Animated.Value(initial)).current
 
   const startFadeOut = useCallback(() => {
     Animated.timing(opacity, {
