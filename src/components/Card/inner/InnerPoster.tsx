@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, ReactNode, useEffect, useState } from 'react'
-import { SafeAreaView, StyleSheet, View } from 'react-native'
+import { SafeAreaView, StyleSheet, View, ViewProps } from 'react-native'
 
 import RoundedButton from '@/components/shared/RoundedButton'
 import LinearGradient from '@/components/shared/LinearGradient'
@@ -8,7 +8,7 @@ import ArrowLeftIcon from '@/components/icons/ArrowLeftIcon'
 
 import { Portal } from '@/lib/Portal'
 
-interface InnerPosterProps {
+interface InnerPosterProps extends Omit<ViewProps, 'style'> {
   width: number | string
   aspectRatio: number
   placeholder: ReactNode
@@ -25,6 +25,7 @@ export default function InnerPoster({
   width,
   visible,
   aspectRatio,
+  ...props
 }: PropsWithChildren<InnerPosterProps>) {
   const [isPosterVisible, setIsPosterVisible] = useState(visible)
 
@@ -33,7 +34,7 @@ export default function InnerPoster({
   }, [isPosterVisible])
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} {...props}>
       <View style={[styles.wrapper, { width, aspectRatio }]}>
         {placeholder}
       </View>

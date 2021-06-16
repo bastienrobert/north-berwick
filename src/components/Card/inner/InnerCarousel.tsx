@@ -1,4 +1,12 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import React, {
+  ForwardedRef,
+  forwardRef,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from 'react'
 import {
   LayoutRectangle,
   StyleProp,
@@ -24,19 +32,32 @@ interface InnerCarouselProps {
   content: ReactNode[]
 }
 
+export interface InnerCarouselRef {
+  reset: () => void
+}
+
 const margins = { left: 24, right: 0, top: 0, bottom: 0 }
-export default function InnerCarousel({
-  content,
-  editLabel,
-  submitLabel,
-  length,
-  style,
-  onSelectedChange,
-}: InnerCarouselProps) {
+function InnerCarousel(
+  {
+    content,
+    editLabel,
+    submitLabel,
+    length,
+    style,
+    onSelectedChange,
+  }: InnerCarouselProps,
+  ref: ForwardedRef<InnerCarouselRef>,
+) {
   const [index, setIndex] = useState(0)
   const [selected, setSelected] = useState<number | null>(null)
   const [layout, onLayout] = useLayout()
   const hasSelectedValue = typeof selected === 'number'
+
+  useImperativeHandle(ref, () => ({
+    reset: () => {
+      setSelected(null)
+    },
+  }))
 
   const onSubmit = useCallback(() => {
     setSelected(index)
@@ -98,6 +119,8 @@ export default function InnerCarousel({
     </View>
   )
 }
+
+export default forwardRef(InnerCarousel)
 
 const styles = StyleSheet.create({
   container: {

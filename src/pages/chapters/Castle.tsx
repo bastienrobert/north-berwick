@@ -1,22 +1,23 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Image } from 'react-native'
 import { NavigationProp } from '@react-navigation/core'
-import { useAtom } from 'jotai'
 import { useTranslate } from 'react-polyglot'
 
 import { RootNavigationParamList } from '@/App/Router'
 import { useScan } from '@/App/Scan/ScanProvider'
 
-import store, { ASSETS, CORRECTS } from '@/controllers/castle'
+import store, { ASSETS, CastleStore, CORRECTS } from '@/controllers/castle'
 
 import Card from '@/components/Card'
-import InnerCarousel from '@/components/Card/inner/InnerCarousel'
+import InnerCarousel, {
+  InnerCarouselRef,
+} from '@/components/Card/inner/InnerCarousel'
 import InnerPoster from '@/components/Card/inner/InnerPoster'
 import InnerImage from '@/components/Card/inner/InnerImage'
 import Poster from '@/components/Poster'
 import WebPImage from '@/components/shared/WebPImage'
 
-import getResults from '@/utils/get-results'
+import useChapterAnswers from '@/hooks/useChapterAnswers'
 import ChapterLayout from '@/layouts/ChapterLayout'
 
 export interface ChapterCastleProps {}
@@ -44,34 +45,42 @@ export default function ChapterCastle({
 }: ChapterCastlePropsWithNavigation) {
   const t = useTranslate()
   const { set, hide } = useScan()
-  const [answers, _setAnswers] = useAtom(store)
 
-  const [results, setResults] = useState<typeof answers | true>()
+  const {
+    answers,
+    results,
+    setAnswers,
+    swapAnswers,
+  } = useChapterAnswers<CastleStore>({
+    store,
+    corrects: CORRECTS,
+    reset: {
+      portrait: null,
+      torture: null,
+      poster: false,
+    },
+  })
+
   const [isCollapsed, setIsCollapsed] = useState(true)
   const [index, setIndex] = useState(0)
   const [showPoster, setShowPoster] = useState(false)
 
+  const torturesCarouselRef = useRef<InnerCarouselRef | null>()
   const isPosterCompletedRef = useRef(false)
 
   const torture = ASSETS.tortures.find((t) => answers.torture === t.name)
   const portrait = ASSETS.portraits.find((t) => answers.portrait === t.name)
 
-  const setAnswers = useCallback(
-    (payload: Partial<typeof answers>) => {
-      const next = { ...answers, ...payload }
-      _setAnswers(next)
-      return next.portrait && next.torture && next.poster
+  const setPortrait = useCallback(
+    (portrait) => {
+      if (!setAnswers({ portrait })) {
+        setIndex(0)
+        setIsCollapsed(false)
+      }
+      hide()
     },
-    [answers],
+    [setAnswers, hide],
   )
-
-  const setPortrait = useCallback((portrait) => {
-    if (!setAnswers({ portrait })) {
-      setIndex(0)
-      setIsCollapsed(false)
-    }
-    hide()
-  }, [])
   const portraits_callbacks = useMemo(() => {
     return {
       portrait_agnes_sampson: () => setPortrait('agnes_sampson'),
@@ -89,25 +98,14 @@ export default function ChapterCastle({
     if (!answers.portrait) return false
     setShowPoster(true)
     setIndex(2)
-    hide()
     return true
   }, [answers, setShowPoster])
 
   useEffect(() => {
-    if (answers.portrait && answers.torture && answers.poster) {
-      const { next, errors } = getResults({
-        answers,
-        corrects: CORRECTS,
-        reset: {
-          portrait: null,
-          torture: null,
-          poster: false,
-        },
-      })
-
-      setResults(errors > 0 ? next : true)
+    if (answers.torture === null) {
+      torturesCarouselRef.current?.reset()
     }
-  }, [answers])
+  }, [answers, torturesCarouselRef])
 
   return (
     <ChapterLayout
@@ -169,8 +167,7 @@ export default function ChapterCastle({
       wrongButtonProps={{
         children: 'Modifier mes cartes',
         onPress: () => {
-          setAnswers(results as typeof answers)
-          setResults(undefined)
+          swapAnswers()
         },
       }}
       data={[
@@ -235,6 +232,7 @@ export default function ChapterCastle({
               bottom={t('the_torture')}
               inner={
                 <InnerCarousel
+                  ref={(el) => (torturesCarouselRef.current = el)}
                   editLabel={t('edit')}
                   submitLabel={t('select')}
                   length={ASSETS.tortures.length}
@@ -275,6 +273,7 @@ export default function ChapterCastle({
                     width="60%"
                     aspectRatio={0.68}
                     visible={showPoster}
+                    onLayout={() => hide()}
                     onBack={() => {
                       if (isPosterCompletedRef.current) {
                         if (!setAnswers({ poster: true })) {

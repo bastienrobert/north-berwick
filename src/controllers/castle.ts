@@ -79,7 +79,9 @@ export const CORRECTS: CastleCorrects = {
   poster: true,
 }
 
-export default atom<Nullable<CastleCorrects>>({
+export type CastleStore = Nullable<CastleCorrects>
+
+export default atom<CastleStore>({
   portrait: null,
   torture: null,
   poster: false,
