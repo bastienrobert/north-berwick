@@ -11,35 +11,40 @@ type ChapterPortPropsWithNavigation = ChapterPortProps & {
   navigation: NavigationProp<RootNavigationParamList, 'Chapter:Port'>
 }
 
-const CAT = {
-  king: [
-    {
-      name: 'bones',
-      image: undefined,
-    },
-  ],
-  user: [
-    {
-      name: 'bones',
-      image: undefined,
-    },
-  ],
-}
-
-const DEMONS = {
-  king: [
-    {
-      name: 'bones',
-      image: undefined,
-    },
-  ],
-  user: [
-    {
-      name: 'bones',
-      image: undefined,
-    },
-  ],
-}
+const CAT = [
+  {
+    name: 'waves',
+    image: undefined,
+  },
+  {
+    name: 'sailor_cap',
+    image: undefined,
+  },
+  {
+    name: 'demon',
+    image: undefined,
+  },
+  {
+    name: 'storm',
+    image: undefined,
+  },
+  {
+    name: 'bones',
+    image: undefined,
+  },
+  {
+    name: 'witch_hat',
+    image: undefined,
+  },
+  {
+    name: 'cat',
+    image: undefined,
+  },
+  {
+    name: 'alcool',
+    image: undefined,
+  },
+]
 
 const CORRECT = {
   cat_king: ['bones', 'bones'],

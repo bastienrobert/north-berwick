@@ -3,11 +3,12 @@ import { Animated, StyleSheet, View } from 'react-native'
 
 import ChapterCarousel, { ChapterCarouselProps } from './ChapterCarousel'
 import ChapterCompleted, { ChapterCompletedParams } from './ChapterCompleted'
+import VideoWithDialog, {
+  VideoWithDialogProps,
+} from '@/components/VideoWithDialog'
 import ScanButton from '@/components/ScanButton'
 import CardCarousel from '@/components/CardCarousel'
 import Fade from '@/components/shared/Fade'
-
-import Video, { VideoProperties } from 'react-native-video'
 
 type ChapterCarouselForwardedProps = Pick<
   ChapterCarouselProps,
@@ -16,14 +17,14 @@ type ChapterCarouselForwardedProps = Pick<
 export interface ChapterLayoutProps
   extends ChapterCompletedParams,
     ChapterCarouselForwardedProps {
-  background: VideoProperties['source']
+  videoProps: Pick<VideoWithDialogProps, 'source' | 'name' | 'dialogs'>
   onScanButtonPress: () => void
 }
 
 export default function ChapterLayout({
-  background,
-  completed,
   color,
+  completed,
+  videoProps,
   data,
   index,
   collapsed,
@@ -34,9 +35,10 @@ export default function ChapterLayout({
   wrongButtonProps,
 }: ChapterLayoutProps) {
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false)
+  const [isDialogsOver, setIsDialogsOver] = useState(false)
   const [completedOpacity, setCompletedOpacity] = useState(0)
 
-  const mainOpacity = useRef(new Animated.Value(1)).current
+  const mainOpacity = useRef(new Animated.Value(0)).current
   const resultsOpacity = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
@@ -47,6 +49,13 @@ export default function ChapterLayout({
     }).start()
   }, [completed, mainOpacity, resultsOpacity])
 
+  useEffect(() => {
+    Animated.spring(mainOpacity, {
+      useNativeDriver: false,
+      toValue: isDialogsOver ? 1 : 0,
+    }).start()
+  }, [isDialogsOver])
+
   return (
     <View style={styles.container}>
       <Fade
@@ -55,12 +64,14 @@ export default function ChapterLayout({
         initial={1}
         fadeIn={false}
       />
-      <Video
+      <VideoWithDialog
         repeat
+        hideOnEnd
         style={styles.video}
-        source={background}
         resizeMode="cover"
         onReadyForDisplay={() => setIsBackgroundLoaded(true)}
+        onEnd={() => setIsDialogsOver(true)}
+        {...videoProps}
       />
       <ChapterCompleted
         completed={completed}
@@ -70,7 +81,9 @@ export default function ChapterLayout({
       />
       <Animated.View
         style={[StyleSheet.absoluteFill, { opacity: mainOpacity }]}
-        pointerEvents={completed === undefined ? 'auto' : 'none'}>
+        pointerEvents={
+          completed === undefined && isDialogsOver ? 'auto' : 'none'
+        }>
         <ChapterCarousel
           color={color}
           index={index}

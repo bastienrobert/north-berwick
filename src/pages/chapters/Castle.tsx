@@ -110,7 +110,11 @@ export default function ChapterCastle({
   return (
     <ChapterLayout
       color="red"
-      background={require('@/assets/tmp/storm.mp4')}
+      videoProps={{
+        source: require('@/assets/tmp/storm.mp4'),
+        name: t('agnes'),
+        dialogs: require('@/assets/tmp/videos/out.json'),
+      }}
       completed={results ? (results === true ? 'right' : 'wrong') : undefined}
       index={index}
       collapsed={isCollapsed}
