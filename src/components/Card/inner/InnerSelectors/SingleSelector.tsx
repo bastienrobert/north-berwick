@@ -1,5 +1,5 @@
 import { Portal } from '@/lib/Portal'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import SelectorItem from './common/SelectorItem'
@@ -8,10 +8,14 @@ import SelectorKeyboard, {
 } from './common/SelectorKeyboard'
 
 export interface SingleSelectorProps {
+  keyboardLabel: string
   items: SelectorKeyboardItems
 }
 
-export default function SingleSelector({ items }: SingleSelectorProps) {
+export default function SingleSelector({
+  keyboardLabel,
+  items,
+}: SingleSelectorProps) {
   const [active, setActive] = useState<boolean>(false)
   const [selected, setSelected] = useState<string>()
 
@@ -23,18 +27,27 @@ export default function SingleSelector({ items }: SingleSelectorProps) {
     [active, selected],
   )
 
+  const choice = useMemo(() => {
+    return selected ? items.find((i) => i.name === selected) : null
+  }, [selected, items])
+
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <SelectorItem
           theme="big"
-          onPress={() => setActive(true)}
+          selected={active}
+          onPress={() => (active ? setActive(false) : setActive(true))}
           placeHolderText="?">
-          {selected ? items[selected].icon : null}
+          {choice?.icon}
         </SelectorItem>
       </View>
       <Portal>
-        <SelectorKeyboard isOpen={active} onChoose={onChoose} items={items} />
+        <SelectorKeyboard
+          label={keyboardLabel}
+          onChoose={onChoose}
+          items={active ? items : undefined}
+        />
       </Portal>
     </View>
   )

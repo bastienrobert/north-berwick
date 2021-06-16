@@ -13,16 +13,17 @@ export interface SelectorKeyboardProps {
   label: string
   onChoose: (name: string) => void
   items?: SelectorKeyboardItems
+  size?: 'small' | 'medium' | 'large'
 }
 
 function getWrapperStyleByLength(length: number) {
   switch (length) {
     case 4:
-      return styles.wrapper4
+      return styles.small
     case 6:
-      return styles.wrapper6
+      return styles.medium
     case 8:
-      return styles.wrapper8
+      return styles.large
     default:
       return null
   }
@@ -32,6 +33,7 @@ export default function SelectorKeyboard({
   label,
   onChoose,
   items,
+  size,
 }: SelectorKeyboardProps) {
   const transform = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current
   const [innerItems, setInnerItems] = useState<SelectorKeyboardItems>()
@@ -63,7 +65,9 @@ export default function SelectorKeyboard({
       <View
         style={[
           styles.wrapper,
-          getWrapperStyleByLength(innerItems?.length ?? 0),
+          size
+            ? styles[size]
+            : getWrapperStyleByLength(innerItems?.length ?? 0),
         ]}>
         {innerItems?.map(({ name, ...item }, i) => (
           <SelectorKeyboardItem
@@ -106,13 +110,13 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'center',
   },
-  wrapper4: {
+  small: {
     width: '60%',
   },
-  wrapper6: {
+  medium: {
     width: '80%',
   },
-  wrapper8: {
+  large: {
     width: '100%',
   },
 })

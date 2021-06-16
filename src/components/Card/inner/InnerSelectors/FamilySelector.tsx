@@ -17,6 +17,7 @@ interface FamilyItems {
 export interface FamilySelectorProps {
   main: string
   items: FamilyItems
+  keyboardLabel: string
 }
 
 function FamilyTree(props: SvgProps) {
@@ -31,18 +32,18 @@ function FamilyTree(props: SvgProps) {
   )
 }
 
-export default function FamilySelector({ main, items }: FamilySelectorProps) {
-  const [active, setActive] = useState<null | 'parent' | 'children'>(null)
+export default function FamilySelector({
+  main,
+  items,
+  keyboardLabel,
+}: FamilySelectorProps) {
+  const [active, setActive] = useState<
+    null | 'parent' | 'children_left' | 'children_center' | 'children_right'
+  >(null)
   // const [selected, setSelected] = useState<SelectedItem>([null, null])
 
   const keyboardItems = useMemo(() => {
-    // return [{name: 'parent', }, ...items.children]
-    return {
-      parent: items.parent,
-      children0: items.children[0],
-      children1: items.children[1],
-      children2: items.children[2],
-    }
+    return [items.parent, ...items.children]
   }, [items])
 
   return (
@@ -56,20 +57,21 @@ export default function FamilySelector({ main, items }: FamilySelectorProps) {
         <View style={styles.bottomWrapper}>
           <SelectorItem
             style={[{ marginTop: -30 }]}
-            onPress={() => setActive('children')}
+            onPress={() => setActive('children_left')}
           />
-          <SelectorItem onPress={() => setActive('children')} />
+          <SelectorItem onPress={() => setActive('children_center')} />
           <SelectorItem
             style={[{ marginTop: -30 }]}
-            onPress={() => setActive('children')}
+            onPress={() => setActive('children_right')}
           />
         </View>
       </View>
       <Portal>
         <SelectorKeyboard
-          isOpen={active !== null}
+          size="medium"
           onChoose={() => null}
-          items={keyboardItems}
+          label={keyboardLabel}
+          items={active ? keyboardItems : undefined}
         />
       </Portal>
     </View>

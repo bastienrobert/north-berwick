@@ -108,6 +108,66 @@ export default function ChapterPort({
       }}
       data={[
         {
+          complete: true,
+          front: (
+            <Card
+              revert
+              number={2}
+              color="blue"
+              title={["L'Histoire", 'Selon le Roi']}
+              forceBottom={false}
+              bottom={'James Royall'}
+              inner={
+                <InnerSelectors
+                  type="family"
+                  main="Agnès"
+                  keyboardLabel="Falcon of Leith"
+                  items={{
+                    parent: { name: 'charles', text: 'Charles', display: 'C' },
+                    children: [
+                      {
+                        name: 'mary',
+                        text: 'Mary',
+                        display: 'M',
+                      },
+                      {
+                        name: 'edmond',
+                        text: 'Edmond',
+                        display: 'E',
+                      },
+                      {
+                        name: 'hughes',
+                        text: 'Hughes',
+                        display: 'H',
+                      },
+                    ],
+                  }}
+                />
+              }
+            />
+          ),
+        },
+        {
+          complete: true,
+          front: (
+            <Card
+              revert
+              number={2}
+              color="blue"
+              title={["L'Histoire", 'Selon le Roi']}
+              forceBottom={false}
+              bottom={'James Royall'}
+              inner={
+                <InnerSelectors
+                  type="single"
+                  keyboardLabel="Falcon of Leith"
+                  items={keyboard}
+                />
+              }
+            />
+          ),
+        },
+        {
           complete: false,
           side: boatFlip,
           front: (

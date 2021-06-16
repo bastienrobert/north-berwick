@@ -5,6 +5,7 @@ export interface SelectorKeyboardItemParams {
   name: string
   icon?: ReactNode
   text?: string
+  disabled?: boolean
 }
 
 export interface SelectorKeyboardItemProps extends SelectorKeyboardItemParams {
@@ -15,10 +16,12 @@ export default function SelectorKeyboardItem({
   name,
   icon,
   text,
+  disabled,
   onPress,
 }: SelectorKeyboardItemProps) {
   return (
     <TouchableOpacity
+      disabled={disabled}
       style={[styles.item, icon ? styles.withIcon : styles.withText]}
       onPress={() => onPress(name)}>
       {icon ? (
