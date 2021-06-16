@@ -1,43 +1,39 @@
-import React, { memo, ReactNode } from 'react'
-import {
-  View,
-  StyleSheet,
-  Animated,
-  TouchableWithoutFeedback,
-  ViewStyle,
-  StyleProp,
-} from 'react-native'
+import React, { memo, ReactNode, useEffect } from 'react'
+import { View, StyleSheet, Animated, ViewStyle, StyleProp } from 'react-native'
 
-import useFlippable from '@/hooks/useFlippable'
+import useFlippable, { FlippableSide } from '@/hooks/useFlippable'
 
 export interface FlipWrapperProps {
+  side: FlippableSide
   front: ReactNode | (() => ReactNode)
   back: ReactNode | (() => ReactNode)
   style?: StyleProp<ViewStyle>
 }
 
-function FlipWrapper({ front, back, style }: FlipWrapperProps) {
+function FlipWrapper({ side, front, back, style }: FlipWrapperProps) {
   const { flip, frontFaceStyle, backFaceStyle } = useFlippable()
 
+  useEffect(() => {
+    flip(side)
+  }, [side])
+
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        flip()
-      }}>
-      <View style={style}>
-        <Animated.View style={[frontFaceStyle, { alignItems: 'center' }]}>
-          {typeof front === 'function' ? front() : front}
-        </Animated.View>
-        <Animated.View
-          style={[
-            backFaceStyle,
-            StyleSheet.absoluteFill,
-            { alignItems: 'center' },
-          ]}>
-          {typeof back === 'function' ? back() : back}
-        </Animated.View>
-      </View>
-    </TouchableWithoutFeedback>
+    <View style={style}>
+      <Animated.View
+        style={[frontFaceStyle, { alignItems: 'center' }]}
+        pointerEvents={side === 'front' ? 'auto' : 'none'}>
+        {typeof front === 'function' ? front() : front}
+      </Animated.View>
+      <Animated.View
+        style={[
+          backFaceStyle,
+          StyleSheet.absoluteFill,
+          { alignItems: 'center' },
+        ]}
+        pointerEvents={side === 'back' ? 'auto' : 'none'}>
+        {typeof back === 'function' ? back() : back}
+      </Animated.View>
+    </View>
   )
 }
 

@@ -19,7 +19,7 @@ export interface SummaryProps {
   button: string
   content: SummaryParagraphProps[]
   onPress: LargeButtonProps['onPress']
-  colors: [string, string, string]
+  colors: [string, string] | [string, string, string]
   style?: StyleProp<ViewStyle>
 }
 
@@ -39,11 +39,18 @@ export default function Summary({
     <View style={[styles.container, style]}>
       <LinearGradient
         style={StyleSheet.absoluteFill}
-        stops={[
-          { offset: '0', stopColor: colors[0] },
-          { offset: '0.48', stopColor: colors[1] },
-          { offset: '1', stopColor: colors[2] },
-        ]}
+        stops={
+          colors[2]
+            ? [
+                { offset: '0', stopColor: colors[0] },
+                { offset: '0.48', stopColor: colors[1] },
+                { offset: '1', stopColor: colors[2] },
+              ]
+            : [
+                { offset: '0', stopColor: colors[0] },
+                { offset: '1', stopColor: colors[1] },
+              ]
+        }
       />
       <SafeAreaView>
         <View style={styles.main}>

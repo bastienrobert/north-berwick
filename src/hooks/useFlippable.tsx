@@ -1,22 +1,23 @@
 import { useEffect, useRef, useCallback } from 'react'
 import { Animated, ViewStyle } from 'react-native'
 
+export type FlippableSide = 'front' | 'back'
 interface UseFlippableReturns {
-  flip: (side?: 'front' | 'back') => void
+  flip: (side?: FlippableSide) => void
   frontFaceStyle: Animated.AnimatedProps<ViewStyle>
   backFaceStyle: Animated.AnimatedProps<ViewStyle>
 }
 
 export default function useFlippable({
-  flipBackSpring = {
-    useNativeDriver: false,
-    toValue: 0,
-    friction: 8,
-    tension: 10,
-  },
   flipFrontSpring = {
     useNativeDriver: false,
     toValue: 180,
+    friction: 8,
+    tension: 10,
+  },
+  flipBackSpring = {
+    useNativeDriver: false,
+    toValue: 0,
     friction: 8,
     tension: 10,
   },
@@ -26,7 +27,7 @@ export default function useFlippable({
 
   const flip = useCallback(
     (side = rotation.current >= 90 ? 'back' : 'front') => {
-      if (side === 'back') {
+      if (side === 'front') {
         Animated.spring(animatedRotation, flipBackSpring).start()
       } else {
         Animated.spring(animatedRotation, flipFrontSpring).start()

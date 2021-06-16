@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Animated, StyleSheet, Text, View } from 'react-native'
 
 import SelectorKeyboardItem, {
@@ -7,33 +7,50 @@ import SelectorKeyboardItem, {
 
 import useLayout from '@/hooks/useLayout'
 
-export type SelectorKeyboardItems = Record<string, SelectorKeyboardItemParams>
+export type SelectorKeyboardItems = SelectorKeyboardItemParams[]
 
 export interface SelectorKeyboardProps {
-  items: SelectorKeyboardItems
-  isOpen: boolean
+  label: string
   onChoose: (name: string) => void
+  items?: SelectorKeyboardItems
+}
+
+function getWrapperStyleByLength(length: number) {
+  switch (length) {
+    case 4:
+      return styles.wrapper4
+    case 6:
+      return styles.wrapper6
+    case 8:
+      return styles.wrapper8
+    default:
+      return null
+  }
 }
 
 export default function SelectorKeyboard({
+  label,
   onChoose,
   items,
-  isOpen,
 }: SelectorKeyboardProps) {
   const transform = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current
+  const [innerItems, setInnerItems] = useState<SelectorKeyboardItems>()
   const [layout, onLayout] = useLayout()
 
   useEffect(() => {
+    if (items?.length) {
+      setInnerItems(items)
+    }
     Animated.spring(transform, {
       useNativeDriver: false,
       toValue: {
         x: 0,
-        y: isOpen ? -layout.height : 0,
+        y: items ? -layout.height : 0,
       },
       friction: 8,
       tension: 20,
     }).start()
-  }, [isOpen, layout])
+  }, [items, layout])
 
   return (
     <Animated.View
@@ -42,9 +59,13 @@ export default function SelectorKeyboard({
         { transform: transform.getTranslateTransform() },
       ]}
       onLayout={onLayout}>
-      <Text style={styles.text}>Le Savoir</Text>
-      <View style={styles.wrapper}>
-        {Object.entries(items).map(([name, item], i) => (
+      <Text style={styles.text}>{label}</Text>
+      <View
+        style={[
+          styles.wrapper,
+          getWrapperStyleByLength(innerItems?.length ?? 0),
+        ]}>
+        {innerItems?.map(({ name, ...item }, i) => (
           <SelectorKeyboardItem
             key={i}
             name={name}
@@ -84,6 +105,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
+  },
+  wrapper4: {
+    width: '60%',
+  },
+  wrapper6: {
     width: '80%',
+  },
+  wrapper8: {
+    width: '100%',
   },
 })

@@ -2,12 +2,12 @@ import React, { ReactNode } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 export interface SelectorKeyboardItemParams {
+  name: string
   icon?: ReactNode
   text?: string
 }
 
 export interface SelectorKeyboardItemProps extends SelectorKeyboardItemParams {
-  name: string
   onPress: (el: string) => void
 }
 

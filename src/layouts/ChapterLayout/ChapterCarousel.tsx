@@ -23,16 +23,20 @@ import FlipWrapper from '@/components/Card/FlipWrapper'
 import BottomCollapsable from '@/components/shared/BottomCollapsable'
 import Carousel from '@/components/shared/Carousel'
 
+import { FlippableSide } from '@/hooks/useFlippable'
+
 type FlipCardData =
   | {
       complete: CompleteIndicatorCard
       front: ReactNode | (() => ReactNode)
       back?: undefined
+      side?: undefined
     }
   | {
       complete: CompleteHalfIndicatorCard
       front: ReactNode | (() => ReactNode)
       back: ReactNode | (() => ReactNode)
+      side: FlippableSide
     }
 
 export interface ChapterCarouselProps {
@@ -87,7 +91,7 @@ function ChapterCarousel({
 
   return (
     <View style={[styles.container, style]}>
-      <SafeAreaView style={{ position: 'absolute', top: 65, right: 30 }}>
+      <SafeAreaView style={styles.indicator}>
         <ActiveCardIndicator
           color={color}
           cards={data.map((d, i) => ({
@@ -98,7 +102,7 @@ function ChapterCarousel({
           }))}
         />
       </SafeAreaView>
-      <View style={{ flex: 1 }}>{children}</View>
+      <View style={styles.children}>{children}</View>
       <BottomCollapsable
         disabled={axis === 'x'}
         style={bottomCollapsableStyle}
@@ -123,6 +127,7 @@ function ChapterCarousel({
                 <FlipWrapper
                   key={i}
                   style={cardStyle}
+                  side={d.side}
                   front={d.front}
                   back={d.back}
                 />
@@ -149,5 +154,13 @@ const styles = StyleSheet.create({
     flex: 1,
     overflow: 'hidden',
     alignItems: 'center',
+  },
+  indicator: {
+    position: 'absolute',
+    top: 65,
+    right: 30,
+  },
+  children: {
+    flex: 1,
   },
 })

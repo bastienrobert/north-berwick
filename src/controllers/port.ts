@@ -1,43 +1,52 @@
 import { atom } from 'jotai'
 
-const ASSETS = {
+import Waves from '@/assets/pictograms/waves.svg'
+import SailorCap from '@/assets/pictograms/sailor_cap.svg'
+import Demon from '@/assets/pictograms/demon.svg'
+import Storm from '@/assets/pictograms/storm.svg'
+import Bones from '@/assets/pictograms/bones.svg'
+import WitchHat from '@/assets/pictograms/witch_hat.svg'
+import Cat from '@/assets/pictograms/cat.svg'
+import Alcool from '@/assets/pictograms/alcool.svg'
+
+export const ASSETS = {
   icons: [
     {
       name: 'waves',
-      image: undefined,
+      component: Waves,
     },
     {
       name: 'sailor_cap',
-      image: undefined,
+      component: SailorCap,
     },
     {
       name: 'demon',
-      image: undefined,
+      component: Demon,
     },
     {
       name: 'storm',
-      image: undefined,
+      component: Storm,
     },
     {
       name: 'bones',
-      image: undefined,
+      component: Bones,
     },
     {
       name: 'witch_hat',
-      image: undefined,
+      component: WitchHat,
     },
     {
       name: 'cat',
-      image: undefined,
+      component: Cat,
     },
     {
       name: 'alcool',
-      image: undefined,
+      component: Alcool,
     },
   ],
 } as const
 
-type AssetsIconsName = typeof ASSETS.icons[number]['name']
+export type AssetsIconsName = typeof ASSETS.icons[number]['name']
 export interface PortCorrects {
   cat_king: [AssetsIconsName, AssetsIconsName]
   cat_revealed: [AssetsIconsName, AssetsIconsName]

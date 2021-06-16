@@ -11,6 +11,9 @@ import SelectorKeyboard, {
 import { Portal } from '@/lib/Portal'
 
 export interface EquationSelectorProps {
+  keyboardLabel: string
+  plusColor: string
+  equalColor: string
   items: [SelectorKeyboardItems, SelectorKeyboardItems]
   result: ReactNode
 }
@@ -18,6 +21,9 @@ export interface EquationSelectorProps {
 type SelectedItem = [string | null, string | null]
 
 export default function EquationSelector({
+  keyboardLabel,
+  plusColor,
+  equalColor,
   items,
   result,
 }: EquationSelectorProps) {
@@ -31,11 +37,19 @@ export default function EquationSelector({
       next[active] = choice
       setSelected(next)
 
+      console.log(active)
       if (active === 0) setActive(1)
       if (active === 1) setActive(null)
     },
     [active, selected],
   )
+
+  const leftIcon = selected[0]
+    ? items[0].find((i) => i.name === selected[0])
+    : null
+  const rightIcon = selected[1]
+    ? items[1].find((i) => i.name === selected[1])
+    : null
 
   return (
     <View style={styles.container}>
@@ -44,28 +58,26 @@ export default function EquationSelector({
           <SelectorItem
             placeHolderText="?"
             selected={active === 0}
-            onPress={() => setActive(0)}>
-            {selected[0] ? items[0][selected[0]].icon : null}
+            onPress={() => (active === 0 ? setActive(null) : setActive(0))}>
+            {leftIcon?.icon}
           </SelectorItem>
-          <PlusIcon style={styles.plus} fill="#FFADA7" />
+          <PlusIcon style={styles.plus} fill={plusColor} />
           <SelectorItem
             placeHolderText="?"
             selected={active === 1}
-            onPress={() => setActive(1)}>
-            {selected[1] ? items[1][selected[1]].icon : null}
+            onPress={() => (active === 1 ? setActive(null) : setActive(1))}>
+            {rightIcon?.icon}
           </SelectorItem>
         </View>
-        <EqualIcon style={styles.equal} fill="#FFDAD7" />
+        <EqualIcon style={styles.equal} fill={equalColor} />
         <SelectorItem theme="large">{result}</SelectorItem>
       </View>
       <Portal>
-        {active !== null && (
-          <SelectorKeyboard
-            isOpen={active !== null}
-            onChoose={onChoose}
-            items={items[active]}
-          />
-        )}
+        <SelectorKeyboard
+          label={keyboardLabel}
+          onChoose={onChoose}
+          items={active !== null ? items[active] : undefined}
+        />
       </Portal>
     </View>
   )

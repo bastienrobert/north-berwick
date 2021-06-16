@@ -2,6 +2,8 @@ import React, { useMemo, ReactNode, memo, MemoExoticComponent } from 'react'
 import { StyleSheet, View, Text, StyleProp, ViewStyle } from 'react-native'
 
 import CardTitle, { CardTitleContent } from './CardTitle'
+import RoundedButton from '@/components/shared/RoundedButton'
+import RevertIcon from '@/components/icons/RevertIcon'
 
 import colors, { CardColors } from './colors'
 import RedFront from './backgrounds/RedFront.svg'
@@ -24,6 +26,7 @@ type CardBaseProps = {
   bottom?: string
   inner?: ReactNode
   forceBottom?: boolean
+  onFlipPress?: () => void
 } & (
   | {
       color: CardBaseRevertableColors
@@ -75,6 +78,7 @@ function Card({
   inner,
   forceBottom = true,
   revert = false,
+  onFlipPress,
 }: CardBaseProps) {
   const [Background, BackgroundColors] = useMemo(() => {
     // already typed w/ props
@@ -97,6 +101,11 @@ function Card({
         </Text>
       )}
       {inner}
+      {onFlipPress && (
+        <RoundedButton onPress={onFlipPress} style={styles.revert}>
+          <RevertIcon />
+        </RoundedButton>
+      )}
       <Text
         style={[
           styles.bottom,
@@ -147,6 +156,10 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
     fontSize: 17,
     opacity: 0.8,
+  },
+  revert: {
+    alignSelf: 'center',
+    marginBottom: 10,
   },
   bottom: {
     marginBottom: `${(100 / 570) * 100}%`,
