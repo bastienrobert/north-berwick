@@ -31,6 +31,10 @@ export default function HomeSplash({
           title="Goto Castle"
           onPress={() => navigation.navigate('Chapter:Castle', {})}
         />
+        <Button
+          title="Goto Port"
+          onPress={() => navigation.navigate('Chapter:Port', {})}
+        />
         <ScanButton
           style={styles.button}
           onPress={() =>

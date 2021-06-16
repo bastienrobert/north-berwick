@@ -4,34 +4,42 @@ export const ASSETS = {
   portraits: [
     {
       name: 'agnes_sampson',
+      multiline: false,
       image: require('@/assets/images/portraits/agnes_sampson.png'),
     },
     {
       name: 'alanis_muir',
+      multiline: false,
       image: require('@/assets/images/portraits/alanis_muir.png'),
     },
     {
       name: 'euphame_maccalzean',
+      multiline: true,
       image: require('@/assets/images/portraits/euphame_maccalzean.png'),
     },
     {
       name: 'geillis_ducan',
+      multiline: false,
       image: require('@/assets/images/portraits/geillis_ducan.png'),
     },
     {
       name: 'john_cunningham',
+      multiline: true,
       image: require('@/assets/images/portraits/john_cunningham.png'),
     },
     {
       name: 'margaret_acheson',
+      multiline: true,
       image: require('@/assets/images/portraits/margaret_acheson.png'),
     },
     {
       name: 'robert_grierson',
+      multiline: false,
       image: require('@/assets/images/portraits/robert_grierson.png'),
     },
     {
       name: 'smith_du_pont_hallis',
+      multiline: true,
       image: require('@/assets/images/portraits/smith_du_pont_hallis.png'),
     },
   ],

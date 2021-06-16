@@ -24,6 +24,21 @@ type ChapterCastlePropsWithNavigation = ChapterCastleProps & {
   navigation: NavigationProp<RootNavigationParamList, 'Chapter:Castle'>
 }
 
+function PortraitOverlay() {
+  return (
+    <Image
+      style={{
+        flex: 1,
+        opacity: 0.4,
+        width: '60%',
+        maxWidth: 420,
+      }}
+      resizeMode="contain"
+      source={require('@/assets/images/portraits/agnes_sampson.png')}
+    />
+  )
+}
+
 export default function ChapterCastle({
   navigation,
 }: ChapterCastlePropsWithNavigation) {
@@ -59,8 +74,7 @@ export default function ChapterCastle({
   }, [])
   const portraits_callbacks = useMemo(() => {
     return {
-      cover: () => setPortrait('agnes_sampson'),
-      map_castle: () => setPortrait('agnes_sampson'),
+      portrait_agnes_sampson: () => setPortrait('agnes_sampson'),
       portrait_alanis_muir: () => setPortrait('alanis_muir'),
       portrait_euphame_maccalzean: () => setPortrait('euphame_maccalzean'),
       portrait_geillis_ducan: () => setPortrait('geillis_ducan'),
@@ -70,6 +84,14 @@ export default function ChapterCastle({
       portrait_smith_du_pont_hallis: () => setPortrait('smith_du_pont_hallis'),
     }
   }, [setPortrait])
+
+  const poster_callback = useCallback(() => {
+    if (!answers.portrait) return false
+    setShowPoster(true)
+    setIndex(2)
+    hide()
+    return true
+  }, [answers, setShowPoster])
 
   useEffect(() => {
     if (answers.portrait && answers.torture && answers.poster) {
@@ -89,6 +111,7 @@ export default function ChapterCastle({
 
   return (
     <ChapterLayout
+      color="red"
       background={require('@/assets/tmp/storm.mp4')}
       completed={results ? (results === true ? 'right' : 'wrong') : undefined}
       index={index}
@@ -96,17 +119,25 @@ export default function ChapterCastle({
       onIndexChange={setIndex}
       onCollapsed={setIsCollapsed}
       onScanButtonPress={() => {
-        set({
-          callbacks: {
-            default: () => undefined,
-            map_port: () => {
-              setShowPoster(true)
-              setIndex(2)
-              hide()
+        if (answers.portrait) {
+          set({
+            callbacks: {
+              default: () => false,
+              poster_first: poster_callback,
+              poster_second: poster_callback,
             },
-            ...portraits_callbacks,
-          },
-        })
+          })
+        } else {
+          set({
+            callbacks: {
+              default: () => false,
+              ...portraits_callbacks,
+            },
+            wrongPlaceLabel: t('not_portrait'),
+            goToLabel: '',
+            overlay: <PortraitOverlay />,
+          })
+        }
       }}
       successSummaryProps={{
         titleColor: '#480D00',
@@ -149,7 +180,16 @@ export default function ChapterCastle({
             <Card
               number={1}
               color="red"
-              title={portrait ? [t(`portrait_${portrait.name}`)] : undefined}
+              title={
+                portrait
+                  ? portrait.multiline
+                    ? [
+                        t(`portrait_${portrait.name}_line_1`),
+                        t(`portrait_${portrait.name}_line_2`),
+                      ]
+                    : [t(`portrait_${portrait.name}`)]
+                  : undefined
+              }
               text={portrait ? undefined : t('missing_informations')}
               forceBottom={!portrait}
               bottom={t('the_ghost')}
@@ -163,6 +203,9 @@ export default function ChapterCastle({
                           default: () => undefined,
                           ...portraits_callbacks,
                         },
+                        wrongPlaceLabel: t('not_portrait'),
+                        goToLabel: '',
+                        overlay: <PortraitOverlay />,
                       })
                     }
                     image={portrait.image}

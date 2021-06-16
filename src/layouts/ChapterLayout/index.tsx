@@ -11,7 +11,7 @@ import Video, { VideoProperties } from 'react-native-video'
 
 type ChapterCarouselForwardedProps = Pick<
   ChapterCarouselProps,
-  'data' | 'index' | 'collapsed' | 'onIndexChange' | 'onCollapsed'
+  'color' | 'data' | 'index' | 'collapsed' | 'onIndexChange' | 'onCollapsed'
 >
 export interface ChapterLayoutProps
   extends ChapterCompletedParams,
@@ -23,6 +23,7 @@ export interface ChapterLayoutProps
 export default function ChapterLayout({
   background,
   completed,
+  color,
   data,
   index,
   collapsed,
@@ -71,7 +72,7 @@ export default function ChapterLayout({
         style={[StyleSheet.absoluteFill, { opacity: mainOpacity }]}
         pointerEvents={completed === undefined ? 'auto' : 'none'}>
         <ChapterCarousel
-          color="red"
+          color={color}
           index={index}
           onIndexChange={onIndexChange}
           collapsed={collapsed}

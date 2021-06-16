@@ -47,6 +47,18 @@ const targets = {
     orientation: 'Up',
     physicalWidth: 0.15,
   },
+  poster_first: {
+    source: require('@/assets/targets/poster_first.jpg'),
+    type: 'poster',
+    orientation: 'Up',
+    physicalWidth: 0.15,
+  },
+  poster_second: {
+    source: require('@/assets/targets/poster_second.jpg'),
+    type: 'poster',
+    orientation: 'Up',
+    physicalWidth: 0.15,
+  },
   portrait_agnes_sampson: {
     source: require('@/assets/targets/portrait_agnes_sampson.jpg'),
     type: 'portait',
@@ -207,7 +219,9 @@ export default function ScanView() {
             theme="secondary"
             style={styles.button}
             onPress={onSubmit}>
-            {params.goToLabel + ' ' + capitalizeFirstLetter(t(current.name))}
+            {params.goToLabel
+              ? params.goToLabel + ' ' + t(current.name)
+              : capitalizeFirstLetter(t(current.name))}
           </LargeButton>
         )}
         {isWrong && (
