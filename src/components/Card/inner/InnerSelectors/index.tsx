@@ -1,8 +1,18 @@
-import React from 'react'
+import React, { ForwardedRef, forwardRef } from 'react'
 
 import EquationSelector, { EquationSelectorProps } from './EquationSelector'
 import SingleSelector, { SingleSelectorProps } from './SingleSelector'
 import FamilySelector, { FamilySelectorProps } from './FamilySelector'
+
+export interface InnerSelectorsBase {
+  keyboardLabel: string
+  onSelectedChange?: (selected: any) => void
+}
+
+export interface InnerSelectorsRef {
+  collapse: () => void
+  reset: () => void
+}
 
 type InnerSelectorsProps =
   | ({ type: 'equation' } & EquationSelectorProps)
@@ -15,10 +25,13 @@ const COMPONENTS = {
   family: FamilySelector,
 }
 
-export default function InnerSelectors({
-  type,
-  ...props
-}: InnerSelectorsProps) {
+function InnerSelectors(
+  { type, ...props }: InnerSelectorsProps,
+  ref: ForwardedRef<InnerSelectorsRef>,
+) {
+  // type is already checked by object key
   const C = COMPONENTS[type] as any
-  return <C {...props} />
+  return <C ref={ref} {...props} />
 }
+
+export default forwardRef(InnerSelectors)

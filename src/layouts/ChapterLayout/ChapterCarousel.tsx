@@ -45,7 +45,8 @@ export interface ChapterCarouselProps {
   index: number
   collapsed: boolean
   onIndexChange: (index: number) => void
-  onCollapsed: (collapsed: boolean) => void
+  onCollapse: (collapsed: boolean) => void
+  onCollapseStart?: () => void
   style?: StyleProp<ViewStyle>
 }
 
@@ -56,7 +57,8 @@ function ChapterCarousel({
   index,
   onIndexChange,
   collapsed,
-  onCollapsed,
+  onCollapse,
+  onCollapseStart,
   color,
   style,
 }: PropsWithChildren<ChapterCarouselProps>) {
@@ -66,6 +68,7 @@ function ChapterCarousel({
 
   const onBottomCollapsableResponderStart = useCallback(() => {
     setAxis('y')
+    onCollapseStart?.()
   }, [])
   const onBottomCollapsableResponderRelease = useCallback(() => {
     setAxis(null)
@@ -107,7 +110,7 @@ function ChapterCarousel({
         disabled={axis === 'x'}
         style={bottomCollapsableStyle}
         collapsed={collapsed}
-        onChange={onCollapsed}
+        onChange={onCollapse}
         onResponderStart={onBottomCollapsableResponderStart}
         onResponderRelease={onBottomCollapsableResponderRelease}
         startOffset={ChapterCarousel.COLLAPSIBLE_START_OFFSET}

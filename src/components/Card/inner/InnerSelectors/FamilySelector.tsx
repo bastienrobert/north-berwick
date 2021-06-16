@@ -1,8 +1,17 @@
 import { Portal } from '@/lib/Portal'
-import React, { useMemo, useState } from 'react'
+import React, {
+  ForwardedRef,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from 'react'
 import { StyleSheet, View } from 'react-native'
 import Svg, { SvgProps, Path } from 'react-native-svg'
 
+import { InnerSelectorsBase, InnerSelectorsRef } from './index'
 import SelectorItem from './common/SelectorItem'
 import SelectorKeyboard from './common/SelectorKeyboard'
 import { SelectorKeyboardItemParams } from './common/SelectorKeyboardItem'
@@ -14,10 +23,15 @@ interface FamilyItems {
   children: [FamilyItem, FamilyItem, FamilyItem]
 }
 
-export interface FamilySelectorProps {
+interface FamilyResults {
+  parent: string
+  children: [string, string, string]
+}
+
+export interface FamilySelectorProps extends InnerSelectorsBase {
   main: string
   items: FamilyItems
-  keyboardLabel: string
+  onSelectedChange?: (selected: FamilyResults) => void
 }
 
 function FamilyTree(props: SvgProps) {
@@ -32,51 +46,113 @@ function FamilyTree(props: SvgProps) {
   )
 }
 
-export default function FamilySelector({
-  main,
-  items,
-  keyboardLabel,
-}: FamilySelectorProps) {
-  const [active, setActive] = useState<
-    null | 'parent' | 'children_left' | 'children_center' | 'children_right'
-  >(null)
-  // const [selected, setSelected] = useState<SelectedItem>([null, null])
+type SelectedItems = Nullable<[string, string, string, string]>
+
+function FamilySelector(
+  { main, items, keyboardLabel, onSelectedChange }: FamilySelectorProps,
+  ref: ForwardedRef<InnerSelectorsRef>,
+) {
+  const [active, _setActive] = useState<null | 0 | 1 | 2 | 3>(null)
+  const [selected, setSelected] = useState<SelectedItems>([
+    null,
+    null,
+    null,
+    null,
+  ])
 
   const keyboardItems = useMemo(() => {
     return [items.parent, ...items.children]
   }, [items])
+
+  const selectedItems = useMemo(() => {
+    return selected.map((s) => keyboardItems.find((i) => i.name === s))
+  }, [selected])
+
+  const setActive = useCallback(
+    (payload: typeof active) => {
+      _setActive(active !== payload ? payload : null)
+    },
+    [active],
+  )
+
+  const onChoose = useCallback(
+    (choice: string) => {
+      if (active === null) return
+      const next: SelectedItems = [...selected]
+      next[active] = choice
+      setSelected(next)
+
+      const nextIndex = next.every((n) => n !== null)
+        ? active + 1
+        : next.findIndex((n, i) => i > active && n === null)
+      // SelectedItems length is fixed to 4
+      _setActive(
+        nextIndex > 0 && nextIndex < 4 ? (nextIndex as 0 | 1 | 2 | 3) : null,
+      )
+    },
+    [active, selected],
+  )
+
+  useEffect(() => {
+    if (active === null && selected.every((s) => s !== null)) {
+      // can't be null because of test below
+      onSelectedChange?.({
+        parent: selected[0],
+        children: [selected[1], selected[2], selected[3]],
+      } as any)
+    }
+  }, [active, selected])
+
+  useImperativeHandle(ref, () => ({
+    reset: () => {
+      setSelected([null, null, null, null])
+    },
+    collapse: () => {
+      setActive(null)
+    },
+  }))
 
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <View style={styles.topWrapper}>
           <SelectorItem placeHolderText={main} style={{ marginRight: 45 }} />
-          <SelectorItem onPress={() => setActive('parent')} />
+          <SelectorItem
+            onPress={() => setActive(0)}
+            placeHolderText={selectedItems[0]?.display || '?'}
+          />
         </View>
         <FamilyTree />
         <View style={styles.bottomWrapper}>
           <SelectorItem
             style={[{ marginTop: -30 }]}
-            onPress={() => setActive('children_left')}
+            placeHolderText={selectedItems[1]?.display || '?'}
+            onPress={() => setActive(1)}
           />
-          <SelectorItem onPress={() => setActive('children_center')} />
+          <SelectorItem
+            onPress={() => setActive(2)}
+            placeHolderText={selectedItems[2]?.display || '?'}
+          />
           <SelectorItem
             style={[{ marginTop: -30 }]}
-            onPress={() => setActive('children_right')}
+            placeHolderText={selectedItems[3]?.display || '?'}
+            onPress={() => setActive(3)}
           />
         </View>
       </View>
       <Portal>
         <SelectorKeyboard
           size="medium"
-          onChoose={() => null}
+          onChoose={onChoose}
           label={keyboardLabel}
-          items={active ? keyboardItems : undefined}
+          items={active !== null ? keyboardItems : undefined}
         />
       </Portal>
     </View>
   )
 }
+
+export default forwardRef(FamilySelector)
 
 const styles = StyleSheet.create({
   container: {

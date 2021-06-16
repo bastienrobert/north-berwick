@@ -119,7 +119,7 @@ export default function ChapterCastle({
       index={index}
       collapsed={isCollapsed}
       onIndexChange={setIndex}
-      onCollapsed={setIsCollapsed}
+      onCollapse={setIsCollapsed}
       onScanButtonPress={() => {
         if (answers.portrait) {
           set({

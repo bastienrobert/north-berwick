@@ -12,7 +12,13 @@ import Fade from '@/components/shared/Fade'
 
 type ChapterCarouselForwardedProps = Pick<
   ChapterCarouselProps,
-  'color' | 'data' | 'index' | 'collapsed' | 'onIndexChange' | 'onCollapsed'
+  | 'color'
+  | 'data'
+  | 'index'
+  | 'collapsed'
+  | 'onIndexChange'
+  | 'onCollapse'
+  | 'onCollapseStart'
 >
 export interface ChapterLayoutProps
   extends ChapterCompletedParams,
@@ -29,7 +35,8 @@ export default function ChapterLayout({
   index,
   collapsed,
   onIndexChange,
-  onCollapsed,
+  onCollapse,
+  onCollapseStart,
   onScanButtonPress,
   successSummaryProps,
   wrongButtonProps,
@@ -89,7 +96,8 @@ export default function ChapterLayout({
           index={index}
           onIndexChange={onIndexChange}
           collapsed={collapsed}
-          onCollapsed={onCollapsed}
+          onCollapse={onCollapse}
+          onCollapseStart={onCollapseStart}
           data={data}>
           <ScanButton style={styles.scan} onPress={onScanButtonPress} />
         </ChapterCarousel>

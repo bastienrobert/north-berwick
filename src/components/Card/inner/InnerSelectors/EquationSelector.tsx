@@ -1,12 +1,16 @@
 import React, {
+  ForwardedRef,
+  forwardRef,
   ReactNode,
   useCallback,
   useEffect,
+  useImperativeHandle,
   useMemo,
   useState,
 } from 'react'
 import { StyleSheet, View } from 'react-native'
 
+import { InnerSelectorsBase, InnerSelectorsRef } from './index'
 import SelectorItem from './common/SelectorItem'
 import PlusIcon from './common/PlusIcon'
 import EqualIcon from './common/EqualIcon'
@@ -16,23 +20,27 @@ import SelectorKeyboard, {
 
 import { Portal } from '@/lib/Portal'
 
-export interface EquationSelectorProps {
-  keyboardLabel: string
+export interface EquationSelectorProps extends InnerSelectorsBase {
   plusColor: string
   equalColor: string
   items: [SelectorKeyboardItems, SelectorKeyboardItems]
   result: ReactNode
+  onSelectedChange?: (selected: [string, string]) => void
 }
 
 type SelectedItem = [string | null, string | null]
 
-export default function EquationSelector({
-  keyboardLabel,
-  plusColor,
-  equalColor,
-  items,
-  result,
-}: EquationSelectorProps) {
+function EquationSelector(
+  {
+    keyboardLabel,
+    plusColor,
+    equalColor,
+    items,
+    result,
+    onSelectedChange,
+  }: EquationSelectorProps,
+  ref: ForwardedRef<InnerSelectorsRef>,
+) {
   const [active, setActive] = useState<null | 0 | 1>(null)
   const [selected, setSelected] = useState<SelectedItem>([null, null])
 
@@ -56,6 +64,22 @@ export default function EquationSelector({
   const rightChoice = useMemo(() => {
     return selected[1] ? items[1].find((i) => i.name === selected[1]) : null
   }, [selected, items])
+
+  useEffect(() => {
+    if (active === null && selected.every((s) => s !== null)) {
+      // can't be null because of test below
+      onSelectedChange?.(selected as any)
+    }
+  }, [selected, active])
+
+  useImperativeHandle(ref, () => ({
+    reset: () => {
+      setSelected([null, null])
+    },
+    collapse: () => {
+      setActive(null)
+    },
+  }))
 
   return (
     <View style={styles.container}>
@@ -101,6 +125,8 @@ export default function EquationSelector({
     </View>
   )
 }
+
+export default forwardRef(EquationSelector)
 
 const styles = StyleSheet.create({
   container: {

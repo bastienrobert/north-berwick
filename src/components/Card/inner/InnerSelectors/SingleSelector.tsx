@@ -1,23 +1,42 @@
 import { Portal } from '@/lib/Portal'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, {
+  ForwardedRef,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from 'react'
 import { StyleSheet, View } from 'react-native'
 
+import { InnerSelectorsBase, InnerSelectorsRef } from './index'
 import SelectorItem from './common/SelectorItem'
 import SelectorKeyboard, {
   SelectorKeyboardItems,
 } from './common/SelectorKeyboard'
 
-export interface SingleSelectorProps {
+export interface SingleSelectorProps extends InnerSelectorsBase {
   keyboardLabel: string
   items: SelectorKeyboardItems
+  onSelectedChange?: (selected: string) => void
 }
 
-export default function SingleSelector({
-  keyboardLabel,
-  items,
-}: SingleSelectorProps) {
+function SingleSelector(
+  { keyboardLabel, items, onSelectedChange }: SingleSelectorProps,
+  ref: ForwardedRef<InnerSelectorsRef>,
+) {
   const [active, setActive] = useState<boolean>(false)
-  const [selected, setSelected] = useState<string>()
+  const [selected, setSelected] = useState<string | null>()
+
+  useImperativeHandle(ref, () => ({
+    reset: () => {
+      setSelected(null)
+    },
+    collapse: () => {
+      setActive(false)
+    },
+  }))
 
   const onChoose = useCallback(
     (choice: string) => {
@@ -30,6 +49,12 @@ export default function SingleSelector({
   const choice = useMemo(() => {
     return selected ? items.find((i) => i.name === selected) : null
   }, [selected, items])
+
+  useEffect(() => {
+    if (active === null && selected) {
+      onSelectedChange?.(selected)
+    }
+  }, [active, selected])
 
   return (
     <View style={styles.container}>
@@ -52,6 +77,8 @@ export default function SingleSelector({
     </View>
   )
 }
+
+export default forwardRef(SingleSelector)
 
 const styles = StyleSheet.create({
   container: {

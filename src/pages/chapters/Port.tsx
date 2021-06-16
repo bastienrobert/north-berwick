@@ -21,7 +21,9 @@ import Card from '@/components/Card'
 
 import useChapterAnswers from '@/hooks/useChapterAnswers'
 import ChapterLayout from '@/layouts/ChapterLayout'
-import InnerSelectors from '@/components/Card/inner/InnerSelectors'
+import InnerSelectors, {
+  InnerSelectorsRef,
+} from '@/components/Card/inner/InnerSelectors'
 
 import { FlippableSide } from '@/hooks/useFlippable'
 
@@ -35,6 +37,8 @@ export default function ChapterPort({
 }: ChapterPortPropsWithNavigation) {
   const t = useTranslate()
   const { set, hide } = useScan()
+
+  const boatSelectorRef = useRef<InnerSelectorsRef | null>()
 
   const {
     answers,
@@ -62,6 +66,14 @@ export default function ChapterPort({
     icon: <C />,
   }))
 
+  const collapseSelectors = useCallback(() => {
+    boatSelectorRef.current?.collapse()
+  }, [boatSelectorRef])
+
+  useEffect(() => {
+    collapseSelectors()
+  }, [index])
+
   return (
     <ChapterLayout
       color="blue"
@@ -74,7 +86,10 @@ export default function ChapterPort({
       index={index}
       collapsed={isCollapsed}
       onIndexChange={setIndex}
-      onCollapsed={setIsCollapsed}
+      onCollapse={setIsCollapsed}
+      onCollapseStart={() => {
+        collapseSelectors()
+      }}
       onScanButtonPress={() => {}}
       successSummaryProps={{
         titleColor: '#000848',
@@ -181,6 +196,7 @@ export default function ChapterPort({
               bottom={'James Royall'}
               inner={
                 <InnerSelectors
+                  ref={(el) => (boatSelectorRef.current = el)}
                   type="equation"
                   keyboardLabel="Falcon of Leith"
                   plusColor="#A2BDFF"
