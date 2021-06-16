@@ -11,9 +11,9 @@ import {
 import SummaryTitle from './SummaryTitle'
 import SummaryParagraph, { SummaryParagraphProps } from './SummaryParagraph'
 import LargeButton, { LargeButtonProps } from '@/components/shared/LargeButton'
-import LinearGradient from '../shared/LinearGradient'
+import LinearGradient from '@/components/shared/LinearGradient'
 
-interface SummaryProps {
+export interface SummaryProps {
   title: string
   titleColor: string
   button: string
