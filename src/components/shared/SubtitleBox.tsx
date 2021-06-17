@@ -5,15 +5,15 @@ import BaseSubtitleBox, {
   BaseSubtitleBoxProps,
 } from '@/components/shared/BaseSubtitleBox'
 
-export type VideoSubtitleBoxProps = BaseSubtitleBoxProps & {
+export type SubtitleBoxProps = BaseSubtitleBoxProps & {
   content: string
 }
 
-export default function VideoSubtitleBox({
+export default function SubtitleBox({
   children,
   content,
   ...props
-}: PropsWithChildren<VideoSubtitleBoxProps>) {
+}: PropsWithChildren<SubtitleBoxProps>) {
   return (
     <BaseSubtitleBox under={children} {...props}>
       <Text style={styles.text}>{content}</Text>

@@ -130,8 +130,9 @@ export default function ChapterGeillisHouse({
     <ChapterLayout
       color="pink"
       videoProps={{
+        hdr: true,
         name: t('agnes'),
-        source: require('@/assets/tmp/storm.mp4'),
+        source: require('@/assets/tmp/hdr.mp4'),
         dialogs: require('@/assets/tmp/videos/out.json'),
       }}
       completed={results ? (results === true ? 'right' : 'wrong') : undefined}

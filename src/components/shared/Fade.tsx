@@ -52,11 +52,11 @@ export default function Fade({
           startFadeOut()
         })
       } else {
-        opacity.setValue(1)
+        opacity.setValue(initial)
         startFadeOut()
       }
     }
-  }, [start, opacity, duration])
+  }, [start, initial, fadeIn, opacity, duration])
 
   const inner = (
     <Animated.View

@@ -4,7 +4,7 @@ import { useTranslate } from 'react-polyglot'
 
 import Summary, { SummaryProps } from '@/components/Summary'
 import LargeButton, { LargeButtonProps } from '@/components/shared/LargeButton'
-import VideoSubtitleBox from '@/components/VideoWithSubtitles/VideoSubtitleBox'
+import SubtitleBox from '@/components/shared/SubtitleBox'
 
 import { Portal } from '@/lib/Portal'
 
@@ -53,7 +53,7 @@ export default function ChapterCompleted({
             bottom: 42,
             width: '100%',
           }}>
-          <VideoSubtitleBox
+          <SubtitleBox
             style={styles.subtitle}
             under={
               <LargeButton

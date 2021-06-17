@@ -2,33 +2,44 @@ import React, { useCallback, useRef, useState } from 'react'
 import { Animated, StyleSheet, View, ViewStyle } from 'react-native'
 import Video, { VideoProperties } from 'react-native-video'
 
+import Video360, { Video360Props } from './Video360'
 import VideoDialogBox, { VideoDialogBoxProps } from './VideoDialogBox'
 
 interface Dialog {
   content: string[]
 }
 
-export interface VideoWithDialogProps extends Omit<VideoProperties, 'style'> {
+export type VideoWithDialogProps = {
   name: VideoDialogBoxProps['name']
   dialogs: Dialog[]
   hideOnEnd?: boolean
   arrow?: boolean
   style?: ViewStyle
   onEnd?: () => void
-}
+} & (
+  | (Omit<VideoProperties, 'style'> & {
+      hdr?: false
+    })
+  | (Video360Props & {
+      hdr: true
+    })
+)
 
 /**
  * uses `srt-to-json` script to convert SRT to JSON
  */
-export default function VideoWithDialog({
-  name,
-  hideOnEnd = false,
-  dialogs,
-  style,
-  arrow,
-  onEnd,
-  ...props
-}: VideoWithDialogProps) {
+export default function VideoWithDialog(params: VideoWithDialogProps) {
+  const {
+    name,
+    hideOnEnd = false,
+    hdr = false,
+    dialogs,
+    style,
+    arrow,
+    onEnd,
+    ...props
+  } = params
+
   const [dialogIndex, setDialogIndex] = useState(0)
   const opacity = useRef(new Animated.Value(1)).current
   const dialog = dialogs[dialogIndex]
@@ -46,7 +57,16 @@ export default function VideoWithDialog({
 
   return (
     <View style={[styles.container, style]}>
-      <Video {...props} repeat resizeMode="cover" style={styles.video} />
+      {hdr ? (
+        <Video360 {...(props as Video360Props)} loop />
+      ) : (
+        <Video
+          {...(props as VideoProperties)}
+          repeat
+          resizeMode="cover"
+          style={styles.video}
+        />
+      )}
       {dialog && (
         <Animated.View style={{ opacity }}>
           <VideoDialogBox

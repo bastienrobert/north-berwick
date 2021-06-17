@@ -23,7 +23,7 @@ type ChapterCarouselForwardedProps = Pick<
 export interface ChapterLayoutProps
   extends ChapterCompletedParams,
     ChapterCarouselForwardedProps {
-  videoProps: Pick<VideoWithDialogProps, 'source' | 'name' | 'dialogs'>
+  videoProps: Pick<VideoWithDialogProps, 'source' | 'name' | 'dialogs' | 'hdr'>
   onScanButtonPress: () => void
   introduction?: boolean
   onIntroductionEnd?: () => void
@@ -74,12 +74,16 @@ export default function ChapterLayout({
     }
   }, [introduction])
 
+  /**
+   * @todo
+   * fix fade
+   */
   return (
     <View style={styles.container}>
       <Fade
         color="black"
         start={isBackgroundLoaded}
-        initial={1}
+        initial={videoProps.hdr ? 0 : 1}
         fadeIn={false}
       />
       <VideoWithDialog
@@ -89,6 +93,7 @@ export default function ChapterLayout({
         resizeMode="cover"
         onReadyForDisplay={() => setIsBackgroundLoaded(true)}
         onEnd={() => setIsDialogsOver(true)}
+        hdr={videoProps.hdr}
         name={videoProps.name}
         source={videoProps.source}
         dialogs={introduction ? videoProps.dialogs : []}

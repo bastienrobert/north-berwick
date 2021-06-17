@@ -28,7 +28,6 @@ export default function ChapterChurch({
   const { set, hide } = useScan()
 
   const introducedRef = useRef(false)
-  const familyInteractionShowedRef = useRef(false)
   const familyCardSelectorRef = useRef<InnerSelectorsRef | null>()
   const jobCardSelectorRef = useRef<InnerSelectorsRef | null>()
 
@@ -59,6 +58,7 @@ export default function ChapterChurch({
 
   const [isCollapsed, setIsCollapsed] = useState(true)
   const [index, setIndex] = useState(0)
+  const [familyInteractionShowed, setFamilyInteractionShowed] = useState(false)
 
   const keyboardJob = ASSETS.icons.map(({ name, component: C }) => ({
     name,
@@ -101,6 +101,7 @@ export default function ChapterChurch({
           callbacks: {
             default: () => false,
             place_cemetery: () => {
+              setFamilyInteractionShowed(true)
               console.log('CEMETERY')
             },
           },
@@ -144,19 +145,17 @@ export default function ChapterChurch({
               number={3}
               color="purple"
               title={
-                familyInteractionShowedRef.current
+                familyInteractionShowed
                   ? ["L'Histoire", 'Selon le Roi']
                   : undefined
               }
               text={
-                familyInteractionShowedRef.current
-                  ? undefined
-                  : t('missing_informations')
+                familyInteractionShowed ? undefined : t('missing_informations')
               }
-              forceBottom={!familyInteractionShowedRef.current}
+              forceBottom={!familyInteractionShowed}
               bottom={'James Royall'}
               inner={
-                familyInteractionShowedRef.current ? (
+                familyInteractionShowed ? (
                   <InnerSelectors
                     ref={(el) => (familyCardSelectorRef.current = el)}
                     type="family"
