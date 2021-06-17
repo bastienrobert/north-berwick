@@ -47,6 +47,24 @@ const targets = {
     orientation: 'Up',
     physicalWidth: 0.15,
   },
+  place_falcon_of_leith: {
+    source: require('@/assets/targets/place_falcon_of_leith.jpg'),
+    type: 'place',
+    orientation: 'Up',
+    physicalWidth: 0.15,
+  },
+  place_james_royall: {
+    source: require('@/assets/targets/place_james_royall.jpg'),
+    type: 'place',
+    orientation: 'Up',
+    physicalWidth: 0.15,
+  },
+  place_cemetery: {
+    source: require('@/assets/targets/place_cemetery.jpg'),
+    type: 'place',
+    orientation: 'Up',
+    physicalWidth: 0.15,
+  },
   poster_first: {
     source: require('@/assets/targets/poster_first.jpg'),
     type: 'poster',

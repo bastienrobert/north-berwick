@@ -21,18 +21,21 @@ import SelectorKeyboard, {
 
 import { Portal } from '@/lib/Portal'
 
+type SelectedItems = [string | null, string | null]
+type SelectedItemsResults = [string | null, string | null]
+
 export interface EquationSelectorProps extends InnerSelectorsBase {
   plusColor: string
   equalColor: string
   items: [SelectorKeyboardItems, SelectorKeyboardItems]
   result: ReactNode
-  onSelectedChange?: (selected: [string, string]) => void
+  initial?: SelectedItemsResults
+  onSelectedChange?: (selected: SelectedItemsResults) => void
 }
-
-type SelectedItem = [string | null, string | null]
 
 function EquationSelector(
   {
+    initial,
     keyboardLabel,
     plusColor,
     equalColor,
@@ -44,12 +47,14 @@ function EquationSelector(
 ) {
   const hasBeenModified = useRef(false)
   const [active, setActive] = useState<null | 0 | 1>(null)
-  const [selected, setSelected] = useState<SelectedItem>([null, null])
+  const [selected, setSelected] = useState<SelectedItems>(
+    initial || [null, null],
+  )
 
   const onChoose = useCallback(
     (choice: string) => {
       if (active === null) return
-      const next: SelectedItem = [...selected]
+      const next: SelectedItems = [...selected]
       next[active] = choice
       if (selected[active] !== choice) {
         hasBeenModified.current = true

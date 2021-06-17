@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { Animated, StyleSheet, View, ViewProps } from 'react-native'
 
 export type CompleteIndicatorCard = boolean | undefined
-export type CompleteHalfIndicatorCard = 1 | 2 | false | undefined
+export type CompleteHalfIndicatorCard = [boolean, boolean] | undefined
 
 type SharedIndicatorCardProps = {
   active?: boolean
@@ -45,15 +45,25 @@ function SmallCard({
   }, [active])
 
   useEffect(() => {
-    Animated.spring(opacity, {
-      useNativeDriver: false,
-      toValue:
-        (!half && complete) || (half && complete === 1) ? 1 : uncompleteOpacity,
-    }).start()
-    Animated.spring(opacitySecondHalf, {
-      useNativeDriver: false,
-      toValue: half && complete === 2 ? 1 : uncompleteOpacity,
-    }).start()
+    if (half) {
+      Animated.spring(opacity, {
+        useNativeDriver: false,
+        toValue: (complete as CompleteHalfIndicatorCard)?.[0]
+          ? 1
+          : uncompleteOpacity,
+      }).start()
+      Animated.spring(opacitySecondHalf, {
+        useNativeDriver: false,
+        toValue: (complete as CompleteHalfIndicatorCard)?.[1]
+          ? 1
+          : uncompleteOpacity,
+      }).start()
+    } else {
+      Animated.spring(opacity, {
+        useNativeDriver: false,
+        toValue: complete ? 1 : uncompleteOpacity,
+      }).start()
+    }
   }, [complete])
 
   return half ? (
@@ -74,7 +84,7 @@ function SmallCard({
             styles.half,
             {
               backgroundColor: color,
-              opacity,
+              opacity: opacitySecondHalf,
             },
           ]}
         />

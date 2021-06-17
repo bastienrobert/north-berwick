@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { Image } from 'react-native'
+import { Button, Image, View } from 'react-native'
 import { NavigationProp } from '@react-navigation/core'
 import { useTranslate } from 'react-polyglot'
 
@@ -15,7 +15,8 @@ import { useScan } from '@/App/Scan/ScanProvider'
 
 import store, { ASSETS, PortStore, CORRECTS } from '@/controllers/port'
 
-import SunkenShip from '@/assets/pictograms/sunken_ship.svg'
+import SunkenShipIcon from '@/assets/pictograms/sunken_ship.svg'
+import DeathIcon from '@/assets/pictograms/death.svg'
 
 import Card from '@/components/Card'
 
@@ -38,7 +39,26 @@ export default function ChapterPort({
   const t = useTranslate()
   const { set, hide } = useScan()
 
-  const boatSelectorRef = useRef<InnerSelectorsRef | null>()
+  const introducedRef = useRef(false)
+  const demonsInteractionShowedRef = useRef(false)
+  const catInteractionShowedRef = useRef(false)
+  const catCardKingSelectorRef = useRef<InnerSelectorsRef | null>()
+  const catCardRevealedSelectorRef = useRef<InnerSelectorsRef | null>()
+  const demonsCardKingSelectorRef = useRef<InnerSelectorsRef | null>()
+  const demonsCardRevealedSelectorRef = useRef<InnerSelectorsRef | null>()
+
+  const isCompleted = useCallback(
+    ({ cat_revealed, cat_king, demons_revealed, demons_king }: PortStore) => {
+      return {
+        cat_revealed: cat_revealed[0] !== null && cat_revealed[1] !== null,
+        cat_king: cat_king[0] !== null && cat_king[1] !== null,
+        demons_revealed:
+          demons_revealed[0] !== null && demons_revealed[1] !== null,
+        demons_king: demons_king[0] !== null && demons_king[1] !== null,
+      }
+    },
+    [],
+  )
 
   const {
     answers,
@@ -48,7 +68,9 @@ export default function ChapterPort({
   } = useChapterAnswers<PortStore>({
     store,
     corrects: CORRECTS,
-    isComplete: () => false,
+    isComplete: (store) => {
+      return Object.values(isCompleted(store)).every((s) => s === true)
+    },
     reset: {
       cat_king: [null, null],
       cat_revealed: [null, null],
@@ -59,7 +81,10 @@ export default function ChapterPort({
 
   const [isCollapsed, setIsCollapsed] = useState(true)
   const [index, setIndex] = useState(0)
-  const [boatFlip, setBoatFlip] = useState<FlippableSide>('front')
+  const [demonsInteraction, setDemonsInteraction] = useState(false)
+  const [catInteraction, setCatInteraction] = useState(false)
+  const [catCardFlip, setCatCardFlip] = useState<FlippableSide>('front')
+  const [demonsCardFlip, setDemonsCardFlip] = useState<FlippableSide>('front')
 
   const keyboard = ASSETS.icons.map(({ name, component: C }) => ({
     name,
@@ -67,16 +92,66 @@ export default function ChapterPort({
   }))
 
   const collapseSelectors = useCallback(() => {
-    boatSelectorRef.current?.collapse()
-  }, [boatSelectorRef])
+    catCardKingSelectorRef.current?.collapse()
+    catCardRevealedSelectorRef.current?.collapse()
+    demonsCardKingSelectorRef.current?.collapse()
+    demonsCardRevealedSelectorRef.current?.collapse()
+  }, [
+    catCardKingSelectorRef,
+    catCardRevealedSelectorRef,
+    demonsCardKingSelectorRef,
+    demonsCardRevealedSelectorRef,
+  ])
 
   useEffect(() => {
     collapseSelectors()
   }, [index])
 
+  useEffect(() => {
+    if (catInteraction) {
+      catInteractionShowedRef.current = true
+    }
+  }, [catInteraction])
+
+  useEffect(() => {
+    if (demonsInteraction) {
+      demonsInteractionShowedRef.current = true
+    }
+  }, [demonsInteraction])
+
+  const {
+    cat_revealed: catCardRevealedComplete,
+    cat_king: catCardKingComplete,
+    demons_revealed: demonsCardRevealedComplete,
+    demons_king: demonsCardKingComplete,
+  } = useMemo(() => {
+    return isCompleted(answers)
+  }, [answers])
+
+  if (catInteraction) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Button title="CLOSE CAT" onPress={() => setCatInteraction(false)} />
+      </View>
+    )
+  }
+
+  if (demonsInteraction) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Button
+          title="CLOSE DEMONS"
+          onPress={() => setDemonsInteraction(false)}
+        />
+      </View>
+    )
+  }
+
   return (
     <ChapterLayout
       color="blue"
+      introduction={!introducedRef.current}
+      onIntroductionEnd={() => (introducedRef.current = true)}
       videoProps={{
         name: t('agnes'),
         source: require('@/assets/tmp/storm.mp4'),
@@ -90,10 +165,24 @@ export default function ChapterPort({
       onCollapseStart={() => {
         collapseSelectors()
       }}
-      onScanButtonPress={() => {}}
+      onScanButtonPress={() => {
+        set({
+          callbacks: {
+            default: () => false,
+            place_falcon_of_leith: () => {
+              setDemonsInteraction(true)
+              hide()
+            },
+            place_james_royall: () => {
+              setCatInteraction(true)
+              hide()
+            },
+          },
+        })
+      }}
       successSummaryProps={{
         titleColor: '#000848',
-        colors: ['#ffe5e3', '#E0E9FF'],
+        colors: ['#E0E9FF', '#fff'],
         button: 'Explorer le lieu suivant',
         onPress: () => console.log('OPEN CAMERA'),
         content: [
@@ -123,109 +212,165 @@ export default function ChapterPort({
       }}
       data={[
         {
-          complete: true,
-          front: (
-            <Card
-              // revert
-              number={2}
-              color="purple"
-              title={["L'Histoire", 'Selon le Roi']}
-              forceBottom={false}
-              bottom={'James Royall'}
-              inner={
-                <InnerSelectors
-                  type="family"
-                  main="Agnès"
-                  keyboardLabel="Falcon of Leith"
-                  items={{
-                    parent: { name: 'charles', text: 'Charles', display: 'C' },
-                    children: [
-                      {
-                        name: 'mary',
-                        text: 'Mary',
-                        display: 'M',
-                      },
-                      {
-                        name: 'edmond',
-                        text: 'Edmond',
-                        display: 'E',
-                      },
-                      {
-                        name: 'hughes',
-                        text: 'Hughes',
-                        display: 'H',
-                      },
-                    ],
-                  }}
-                />
-              }
-            />
-          ),
-        },
-        {
-          complete: true,
+          complete: [catCardKingComplete, catCardRevealedComplete],
+          side: catCardFlip,
           front: (
             <Card
               revert
+              onFlipPress={() => setCatCardFlip('back')}
               number={2}
               color="blue"
-              title={["L'Histoire", 'Selon le Roi']}
-              forceBottom={false}
-              bottom={'James Royall'}
-              inner={
-                <InnerSelectors
-                  type="single"
-                  keyboardLabel="Falcon of Leith"
-                  items={keyboard}
-                />
+              title={
+                catInteractionShowedRef.current
+                  ? ["L'Histoire", 'Selon le Roi']
+                  : undefined
               }
-            />
-          ),
-        },
-        {
-          complete: false,
-          side: boatFlip,
-          front: (
-            <Card
-              revert
-              onFlipPress={() => setBoatFlip('back')}
-              number={2}
-              color="blue"
-              title={["L'Histoire", 'Selon le Roi']}
-              forceBottom={false}
+              text={
+                catInteractionShowedRef.current
+                  ? undefined
+                  : t('missing_informations')
+              }
+              forceBottom={!catInteractionShowedRef.current}
               bottom={'James Royall'}
               inner={
-                <InnerSelectors
-                  ref={(el) => (boatSelectorRef.current = el)}
-                  type="equation"
-                  keyboardLabel="Falcon of Leith"
-                  onSelectedChange={() => setBoatFlip('back')}
-                  plusColor="#A2BDFF"
-                  equalColor="#C5D5FF"
-                  result={<SunkenShip />}
-                  items={[keyboard, keyboard]}
-                />
+                catInteractionShowedRef.current ? (
+                  <InnerSelectors
+                    ref={(el) => (catCardKingSelectorRef.current = el)}
+                    type="equation"
+                    initial={answers.cat_king}
+                    keyboardLabel="Falcon of Leith"
+                    onSelectedChange={(payload) => {
+                      setAnswers({ cat_king: payload as PortStore['cat_king'] })
+                      setCatCardFlip('back')
+                    }}
+                    plusColor="#A2BDFF"
+                    equalColor="#C5D5FF"
+                    result={<DeathIcon />}
+                    items={[keyboard, keyboard]}
+                  />
+                ) : null
               }
             />
           ),
           back: (
             <Card
-              onFlipPress={() => setBoatFlip('front')}
+              onFlipPress={() => setCatCardFlip('front')}
               number={2}
               color="blue"
-              title={["L'Histoire", 'Selon le Roi']}
-              forceBottom={false}
+              title={
+                catInteractionShowedRef.current
+                  ? ["L'Histoire", 'Révélée']
+                  : undefined
+              }
+              text={
+                catInteractionShowedRef.current
+                  ? undefined
+                  : t('missing_informations')
+              }
+              forceBottom={!catInteractionShowedRef.current}
               bottom={'James Royall'}
               inner={
-                <InnerSelectors
-                  type="equation"
-                  keyboardLabel="Falcon of Leith"
-                  onSelectedChange={() => setBoatFlip('front')}
-                  plusColor="#C5D5FF"
-                  equalColor="#C5D5FF"
-                  result={<SunkenShip />}
-                  items={[keyboard, keyboard]}
-                />
+                catInteractionShowedRef.current ? (
+                  <InnerSelectors
+                    ref={(el) => (catCardRevealedSelectorRef.current = el)}
+                    type="equation"
+                    initial={answers.cat_revealed}
+                    keyboardLabel="Falcon of Leith"
+                    onSelectedChange={(payload) => {
+                      setAnswers({
+                        cat_revealed: payload as PortStore['cat_revealed'],
+                      })
+                      setCatCardFlip('front')
+                    }}
+                    plusColor="#C5D5FF"
+                    equalColor="#C5D5FF"
+                    result={<DeathIcon />}
+                    items={[keyboard, keyboard]}
+                  />
+                ) : null
+              }
+            />
+          ),
+        },
+        {
+          complete: [demonsCardKingComplete, demonsCardRevealedComplete],
+          side: demonsCardFlip,
+          front: (
+            <Card
+              revert
+              onFlipPress={() => setDemonsCardFlip('back')}
+              number={2}
+              color="blue"
+              title={
+                demonsInteractionShowedRef.current
+                  ? ["L'Histoire", 'Selon le Roi']
+                  : undefined
+              }
+              text={
+                demonsInteractionShowedRef.current
+                  ? undefined
+                  : t('missing_informations')
+              }
+              forceBottom={!demonsInteractionShowedRef.current}
+              bottom={'James Royall'}
+              inner={
+                demonsInteractionShowedRef.current ? (
+                  <InnerSelectors
+                    ref={(el) => (demonsCardKingSelectorRef.current = el)}
+                    type="equation"
+                    initial={answers.demons_king}
+                    keyboardLabel="Falcon of Leith"
+                    onSelectedChange={(payload) => {
+                      setAnswers({
+                        demons_king: payload as PortStore['demons_king'],
+                      })
+                      setDemonsCardFlip('back')
+                    }}
+                    plusColor="#A2BDFF"
+                    equalColor="#C5D5FF"
+                    result={<SunkenShipIcon />}
+                    items={[keyboard, keyboard]}
+                  />
+                ) : null
+              }
+            />
+          ),
+          back: (
+            <Card
+              onFlipPress={() => setDemonsCardFlip('front')}
+              number={2}
+              color="blue"
+              title={
+                demonsInteractionShowedRef.current
+                  ? ["L'Histoire", 'Révélée']
+                  : undefined
+              }
+              text={
+                demonsInteractionShowedRef.current
+                  ? undefined
+                  : t('missing_informations')
+              }
+              forceBottom={!demonsInteractionShowedRef.current}
+              bottom={'James Royall'}
+              inner={
+                demonsInteractionShowedRef.current ? (
+                  <InnerSelectors
+                    ref={(el) => (demonsCardRevealedSelectorRef.current = el)}
+                    type="equation"
+                    initial={answers.demons_revealed}
+                    keyboardLabel="Falcon of Leith"
+                    onSelectedChange={(payload) => {
+                      setAnswers({
+                        demons_revealed: payload as PortStore['demons_revealed'],
+                      })
+                      setDemonsCardFlip('front')
+                    }}
+                    plusColor="#C5D5FF"
+                    equalColor="#C5D5FF"
+                    result={<SunkenShipIcon />}
+                    items={[keyboard, keyboard]}
+                  />
+                ) : null
               }
             />
           ),

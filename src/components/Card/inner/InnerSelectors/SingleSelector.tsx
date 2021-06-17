@@ -19,15 +19,16 @@ import SelectorKeyboard, {
 export interface SingleSelectorProps extends InnerSelectorsBase {
   keyboardLabel: string
   items: SelectorKeyboardItems
+  initial?: string
   onSelectedChange?: (selected: string) => void
 }
 
 function SingleSelector(
-  { keyboardLabel, items, onSelectedChange }: SingleSelectorProps,
+  { initial, keyboardLabel, items, onSelectedChange }: SingleSelectorProps,
   ref: ForwardedRef<InnerSelectorsRef>,
 ) {
   const [active, setActive] = useState<boolean>(false)
-  const [selected, setSelected] = useState<string | null>()
+  const [selected, setSelected] = useState<string | null>(initial || null)
 
   useImperativeHandle(ref, () => ({
     reset: () => {

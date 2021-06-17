@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useAtom, WritableAtom } from 'jotai'
+import { compareArrayValues } from '@/utils/array'
 
 interface Results<T> {
   next: T
@@ -19,9 +20,16 @@ function getResults<T extends Record<string, any>>({
 }: GetResultsParams<T>): Results<T> {
   return Object.entries<T>(answers).reduce(
     (acc, [key, value]: [keyof T, any]) => {
-      if (corrects[key] !== value) {
-        acc.next[key] = reset[key]
-        acc.errors++
+      if (Array.isArray(corrects[key])) {
+        if (!compareArrayValues(value, corrects[key])) {
+          acc.next[key] = reset[key]
+          acc.errors++
+        }
+      } else {
+        if (corrects[key] !== value) {
+          acc.next[key] = reset[key]
+          acc.errors++
+        }
       }
 
       return acc

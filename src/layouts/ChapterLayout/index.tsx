@@ -25,6 +25,8 @@ export interface ChapterLayoutProps
     ChapterCarouselForwardedProps {
   videoProps: Pick<VideoWithDialogProps, 'source' | 'name' | 'dialogs'>
   onScanButtonPress: () => void
+  introduction?: boolean
+  onIntroductionEnd?: () => void
 }
 
 export default function ChapterLayout({
@@ -38,6 +40,8 @@ export default function ChapterLayout({
   onCollapse,
   onCollapseStart,
   onScanButtonPress,
+  introduction = true,
+  onIntroductionEnd,
   successSummaryProps,
   wrongButtonProps,
 }: ChapterLayoutProps) {
@@ -57,11 +61,18 @@ export default function ChapterLayout({
   }, [completed, mainOpacity, resultsOpacity])
 
   useEffect(() => {
+    onIntroductionEnd?.()
     Animated.spring(mainOpacity, {
       useNativeDriver: false,
       toValue: isDialogsOver ? 1 : 0,
     }).start()
   }, [isDialogsOver])
+
+  useEffect(() => {
+    if (!introduction) {
+      setIsDialogsOver(true)
+    }
+  }, [introduction])
 
   return (
     <View style={styles.container}>
@@ -78,7 +89,9 @@ export default function ChapterLayout({
         resizeMode="cover"
         onReadyForDisplay={() => setIsBackgroundLoaded(true)}
         onEnd={() => setIsDialogsOver(true)}
-        {...videoProps}
+        name={videoProps.name}
+        source={videoProps.source}
+        dialogs={introduction ? videoProps.dialogs : []}
       />
       <ChapterCompleted
         completed={completed}

@@ -101,21 +101,23 @@ function Card({
         </Text>
       )}
       {inner}
-      {onFlipPress && (
-        <RoundedButton onPress={onFlipPress} style={styles.revert}>
-          <RevertIcon />
-        </RoundedButton>
-      )}
-      <Text
-        style={[
-          styles.bottom,
-          {
-            color: BackgroundColors.bottom,
-            marginTop: forceBottom ? 'auto' : undefined,
-          },
-        ]}>
-        {bottom}
-      </Text>
+      <View
+        style={[styles.end, { marginTop: forceBottom ? 'auto' : undefined }]}>
+        {onFlipPress && (
+          <RoundedButton onPress={onFlipPress} style={styles.revert}>
+            <RevertIcon />
+          </RoundedButton>
+        )}
+        <Text
+          style={[
+            styles.bottom,
+            {
+              color: BackgroundColors.bottom,
+            },
+          ]}>
+          {bottom}
+        </Text>
+      </View>
       <CardTitle content={title} color={BackgroundColors.title} />
     </View>
   )
@@ -157,13 +159,15 @@ const styles = StyleSheet.create({
     fontSize: 17,
     opacity: 0.8,
   },
+  end: {
+    marginBottom: `${(100 / 570) * 100}%`,
+  },
   revert: {
     marginTop: -(45 + 10),
     alignSelf: 'center',
     marginBottom: 10,
   },
   bottom: {
-    marginBottom: `${(100 / 570) * 100}%`,
     width: '100%',
     lineHeight: 20,
     textAlign: 'center',

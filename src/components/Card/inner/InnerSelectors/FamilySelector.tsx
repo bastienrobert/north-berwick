@@ -32,6 +32,7 @@ interface FamilyResults {
 export interface FamilySelectorProps extends InnerSelectorsBase {
   main: string
   items: FamilyItems
+  initial?: FamilyResults
   onSelectedChange?: (selected: FamilyResults) => void
 }
 
@@ -50,17 +51,20 @@ function FamilyTree(props: SvgProps) {
 type SelectedItems = Nullable<[string, string, string, string]>
 
 function FamilySelector(
-  { main, items, keyboardLabel, onSelectedChange }: FamilySelectorProps,
+  {
+    initial,
+    main,
+    items,
+    keyboardLabel,
+    onSelectedChange,
+  }: FamilySelectorProps,
   ref: ForwardedRef<InnerSelectorsRef>,
 ) {
   const hasBeenModified = useRef(false)
   const [active, _setActive] = useState<null | 0 | 1 | 2 | 3>(null)
-  const [selected, setSelected] = useState<SelectedItems>([
-    null,
-    null,
-    null,
-    null,
-  ])
+  const [selected, setSelected] = useState<SelectedItems>(
+    initial ? [initial.parent, ...initial.children] : [null, null, null, null],
+  )
 
   const keyboardItems = useMemo(() => {
     return [items.parent, ...items.children]
