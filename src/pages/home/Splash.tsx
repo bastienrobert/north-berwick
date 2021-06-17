@@ -35,6 +35,14 @@ export default function HomeSplash({
           title="Goto Port"
           onPress={() => navigation.navigate('Chapter:Port', {})}
         />
+        <Button
+          title="Goto Church"
+          onPress={() => navigation.navigate('Chapter:Church', {})}
+        />
+        <Button
+          title="Goto GeillisHouse"
+          onPress={() => navigation.navigate('Chapter:GeillisHouse', {})}
+        />
         <ScanButton
           style={styles.button}
           onPress={() =>

@@ -52,7 +52,7 @@ function SingleSelector(
   }, [selected, items])
 
   useEffect(() => {
-    if (active === null && selected) {
+    if (active === false && selected) {
       onSelectedChange?.(selected)
     }
   }, [active, selected])

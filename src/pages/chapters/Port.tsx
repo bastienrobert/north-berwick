@@ -1,12 +1,5 @@
-import React, {
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
-import { Button, Image, View } from 'react-native'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Button, View } from 'react-native'
 import { NavigationProp } from '@react-navigation/core'
 import { useTranslate } from 'react-polyglot'
 
@@ -19,13 +12,13 @@ import SunkenShipIcon from '@/assets/pictograms/sunken_ship.svg'
 import DeathIcon from '@/assets/pictograms/death.svg'
 
 import Card from '@/components/Card'
-
-import useChapterAnswers from '@/hooks/useChapterAnswers'
-import ChapterLayout from '@/layouts/ChapterLayout'
 import InnerSelectors, {
   InnerSelectorsRef,
 } from '@/components/Card/inner/InnerSelectors'
 
+import ChapterLayout from '@/layouts/ChapterLayout'
+
+import useChapterAnswers from '@/hooks/useChapterAnswers'
 import { FlippableSide } from '@/hooks/useFlippable'
 
 export interface ChapterPortProps {}
@@ -131,7 +124,14 @@ export default function ChapterPort({
   if (catInteraction) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Button title="CLOSE CAT" onPress={() => setCatInteraction(false)} />
+        <Button
+          title="CLOSE CAT"
+          onPress={() => {
+            setCatInteraction(false)
+            setIndex(1)
+            setIsCollapsed(false)
+          }}
+        />
       </View>
     )
   }
@@ -141,7 +141,11 @@ export default function ChapterPort({
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Button
           title="CLOSE DEMONS"
-          onPress={() => setDemonsInteraction(false)}
+          onPress={() => {
+            setDemonsInteraction(false)
+            setIndex(0)
+            setIsCollapsed(false)
+          }}
         />
       </View>
     )

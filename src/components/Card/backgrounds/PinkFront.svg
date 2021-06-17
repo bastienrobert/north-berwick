@@ -53,8 +53,5 @@
             <circle id="Oval" fill-opacity="0.7" fill="#FFFFFF" cx="6.82842712" cy="6.82842712" r="6"></circle>
             <circle id="Oval" fill="#FFCBC7" cx="279.828427" cy="534.828427" r="6"></circle>
         </g>
-        <text id="IV" font-family="NewYork" font-size="26" font-weight="normal" fill="#FFFFFF">
-            <tspan x="146.775" y="41">IV</tspan>
-        </text>
     </g>
 </svg>

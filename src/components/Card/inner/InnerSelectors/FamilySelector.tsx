@@ -17,22 +17,23 @@ import SelectorItem from './common/SelectorItem'
 import SelectorKeyboard from './common/SelectorKeyboard'
 import { SelectorKeyboardItemParams } from './common/SelectorKeyboardItem'
 
-type FamilyItem = SelectorKeyboardItemParams & { display: string }
-
-interface FamilyItems {
-  parent: FamilyItem
-  children: [FamilyItem, FamilyItem, FamilyItem]
-}
+export type FamilyItem = SelectorKeyboardItemParams & { display: string }
+export type FamilyItems = [FamilyItem, FamilyItem, FamilyItem, FamilyItem]
 
 interface FamilyResults {
   parent: string
   children: [string, string, string]
 }
 
+type SelectedItems = Nullable<[string, string, string, string]>
+
 export interface FamilySelectorProps extends InnerSelectorsBase {
   main: string
   items: FamilyItems
-  initial?: FamilyResults
+  initial?: {
+    parent: FamilyResults['parent'] | null
+    children: Nullable<FamilyResults['children']>
+  }
   onSelectedChange?: (selected: FamilyResults) => void
 }
 
@@ -47,8 +48,6 @@ function FamilyTree(props: SvgProps) {
     </Svg>
   )
 }
-
-type SelectedItems = Nullable<[string, string, string, string]>
 
 function FamilySelector(
   {
@@ -66,12 +65,8 @@ function FamilySelector(
     initial ? [initial.parent, ...initial.children] : [null, null, null, null],
   )
 
-  const keyboardItems = useMemo(() => {
-    return [items.parent, ...items.children]
-  }, [items])
-
   const selectedItems = useMemo(() => {
-    return selected.map((s) => keyboardItems.find((i) => i.name === s))
+    return selected.map((s) => items.find((i) => i.name === s))
   }, [selected])
 
   const setActive = useCallback(
@@ -163,7 +158,7 @@ function FamilySelector(
           label={keyboardLabel}
           items={
             active !== null
-              ? keyboardItems.map((item) => {
+              ? items.map((item) => {
                   // if (selected.includes(item.name)) {
                   //   return { ...item, disabled: true }
                   // }

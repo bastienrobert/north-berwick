@@ -13,7 +13,7 @@ import PurpleFront from './backgrounds/PurpleFront.svg'
 import PinkFront from './backgrounds/PinkFront.svg'
 import PinkBack from './backgrounds/PinkBack.svg'
 
-import { range } from '@/utils/math'
+import { romanize } from '@/utils/math'
 
 type CardBaseColors = 'blue' | 'pink' | 'red' | 'purple'
 type CardBaseRevertableColors = Extract<CardBaseColors, 'blue' | 'pink'>
@@ -93,7 +93,7 @@ function Card({
         style={[StyleSheet.absoluteFill, { flex: 1, width: '100%' }]}
       />
       <Text style={[styles.number, { color: BackgroundColors.number }]}>
-        {range(number).map(() => 'I')}
+        {romanize(number)}
       </Text>
       {text && (
         <Text style={[styles.text, { color: BackgroundColors.text }]}>
