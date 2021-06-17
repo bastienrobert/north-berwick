@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   useMemo,
+  useRef,
   useState,
 } from 'react'
 import { StyleSheet, View } from 'react-native'
@@ -52,6 +53,7 @@ function FamilySelector(
   { main, items, keyboardLabel, onSelectedChange }: FamilySelectorProps,
   ref: ForwardedRef<InnerSelectorsRef>,
 ) {
+  const hasBeenModified = useRef(false)
   const [active, _setActive] = useState<null | 0 | 1 | 2 | 3>(null)
   const [selected, setSelected] = useState<SelectedItems>([
     null,
@@ -79,6 +81,7 @@ function FamilySelector(
     (choice: string) => {
       if (active === null) return
       const next: SelectedItems = [...selected]
+      hasBeenModified.current = true
       next[active] = choice
       setSelected(next)
 
@@ -94,7 +97,12 @@ function FamilySelector(
   )
 
   useEffect(() => {
-    if (active === null && selected.every((s) => s !== null)) {
+    if (
+      hasBeenModified.current &&
+      active === null &&
+      selected.every((s) => s !== null)
+    ) {
+      hasBeenModified.current = false
       // can't be null because of test below
       onSelectedChange?.({
         parent: selected[0],
@@ -118,6 +126,7 @@ function FamilySelector(
         <View style={styles.topWrapper}>
           <SelectorItem placeHolderText={main} style={{ marginRight: 45 }} />
           <SelectorItem
+            selected={active === 0}
             onPress={() => setActive(0)}
             placeHolderText={selectedItems[0]?.display || '?'}
           />
@@ -125,15 +134,18 @@ function FamilySelector(
         <FamilyTree />
         <View style={styles.bottomWrapper}>
           <SelectorItem
+            selected={active === 1}
             style={[{ marginTop: -30 }]}
             placeHolderText={selectedItems[1]?.display || '?'}
             onPress={() => setActive(1)}
           />
           <SelectorItem
+            selected={active === 2}
             onPress={() => setActive(2)}
             placeHolderText={selectedItems[2]?.display || '?'}
           />
           <SelectorItem
+            selected={active === 3}
             style={[{ marginTop: -30 }]}
             placeHolderText={selectedItems[3]?.display || '?'}
             onPress={() => setActive(3)}
@@ -145,7 +157,16 @@ function FamilySelector(
           size="medium"
           onChoose={onChoose}
           label={keyboardLabel}
-          items={active !== null ? keyboardItems : undefined}
+          items={
+            active !== null
+              ? keyboardItems.map((item) => {
+                  // if (selected.includes(item.name)) {
+                  //   return { ...item, disabled: true }
+                  // }
+                  return item
+                })
+              : undefined
+          }
         />
       </Portal>
     </View>
@@ -161,7 +182,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   wrapper: {
-    marginBottom: '15%',
+    marginBottom: '5%',
     alignItems: 'center',
   },
   topWrapper: {

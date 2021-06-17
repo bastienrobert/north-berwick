@@ -126,9 +126,9 @@ export default function ChapterPort({
           complete: true,
           front: (
             <Card
-              revert
+              // revert
               number={2}
-              color="blue"
+              color="purple"
               title={["L'Histoire", 'Selon le Roi']}
               forceBottom={false}
               bottom={'James Royall'}
@@ -199,6 +199,7 @@ export default function ChapterPort({
                   ref={(el) => (boatSelectorRef.current = el)}
                   type="equation"
                   keyboardLabel="Falcon of Leith"
+                  onSelectedChange={() => setBoatFlip('back')}
                   plusColor="#A2BDFF"
                   equalColor="#C5D5FF"
                   result={<SunkenShip />}
@@ -219,6 +220,7 @@ export default function ChapterPort({
                 <InnerSelectors
                   type="equation"
                   keyboardLabel="Falcon of Leith"
+                  onSelectedChange={() => setBoatFlip('front')}
                   plusColor="#C5D5FF"
                   equalColor="#C5D5FF"
                   result={<SunkenShip />}

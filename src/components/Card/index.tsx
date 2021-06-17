@@ -158,6 +158,7 @@ const styles = StyleSheet.create({
     opacity: 0.8,
   },
   revert: {
+    marginTop: -(45 + 10),
     alignSelf: 'center',
     marginBottom: 10,
   },
@@ -170,10 +171,5 @@ const styles = StyleSheet.create({
     fontFamily: 'iAWriterQuattroS-Italic',
     color: '#480D00',
     fontSize: 19,
-  },
-  inner: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 })

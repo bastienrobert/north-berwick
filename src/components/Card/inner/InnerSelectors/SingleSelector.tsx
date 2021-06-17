@@ -71,7 +71,16 @@ function SingleSelector(
         <SelectorKeyboard
           label={keyboardLabel}
           onChoose={onChoose}
-          items={active ? items : undefined}
+          items={
+            active
+              ? items.map((item) => {
+                  if (item.name === selected) {
+                    return { ...item, disabled: true }
+                  }
+                  return item
+                })
+              : undefined
+          }
         />
       </Portal>
     </View>

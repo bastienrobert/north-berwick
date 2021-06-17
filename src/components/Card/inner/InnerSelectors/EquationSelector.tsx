@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   useMemo,
+  useRef,
   useState,
 } from 'react'
 import { StyleSheet, View } from 'react-native'
@@ -41,6 +42,7 @@ function EquationSelector(
   }: EquationSelectorProps,
   ref: ForwardedRef<InnerSelectorsRef>,
 ) {
+  const hasBeenModified = useRef(false)
   const [active, setActive] = useState<null | 0 | 1>(null)
   const [selected, setSelected] = useState<SelectedItem>([null, null])
 
@@ -49,6 +51,9 @@ function EquationSelector(
       if (active === null) return
       const next: SelectedItem = [...selected]
       next[active] = choice
+      if (selected[active] !== choice) {
+        hasBeenModified.current = true
+      }
       setSelected(next)
 
       if (active === 0) setActive(1)
@@ -66,7 +71,12 @@ function EquationSelector(
   }, [selected, items])
 
   useEffect(() => {
-    if (active === null && selected.every((s) => s !== null)) {
+    if (
+      hasBeenModified.current &&
+      active === null &&
+      selected.every((s) => s !== null)
+    ) {
+      hasBeenModified.current = false
       // can't be null because of test below
       onSelectedChange?.(selected as any)
     }
