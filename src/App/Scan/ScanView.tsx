@@ -2,6 +2,8 @@ import React, { ReactNode, useCallback, useState } from 'react'
 import { Animated, SafeAreaView, StyleSheet, View } from 'react-native'
 import { useTranslate } from 'react-polyglot'
 import {
+  Viro3DObject,
+  ViroAmbientLight,
   ViroARImageMarker,
   ViroARScene,
   ViroARSceneNavigator,
@@ -16,7 +18,7 @@ import NotificationBox from '@/components/shared/NotificationBox'
 
 import { capitalizeFirstLetter } from '@/utils/text'
 
-const targets = {
+const TARGETS = {
   cover: {
     source: require('@/assets/targets/cover.jpg'),
     type: 'misc',
@@ -126,10 +128,28 @@ const targets = {
     physicalWidth: 0.045,
   },
 }
+type TargetsName = keyof typeof TARGETS
+const TARGETS_KEYS = Object.keys(TARGETS) as TargetsName[]
 
-ViroARTrackingTargets.createTargets(targets)
+interface Model {
+  visible: boolean
+}
+const models: PartialRecord<TargetsName, (params: Model) => ReactNode> = {
+  place_cemetery: ({ visible }: Model) => {
+    return (
+      <Viro3DObject
+        source={require('@/assets/objects/grave.gltf')}
+        scale={[0.05, 0.05, 0.05]}
+        type="GLTF"
+        animation={{ name: 'animation_0', run: true, loop: false }}
+        visible={visible}
+      />
+    )
+  },
+}
 
-type TargetsName = keyof typeof targets
+ViroARTrackingTargets.createTargets(TARGETS)
+
 export type ScanCallbacks = Partial<Record<TargetsName, () => void>> & {
   default: (target?: TargetsName) => void | null | false
 }
@@ -137,6 +157,7 @@ export type ScanParams = {
   wrongPlaceLabel?: string
   goToLabel?: string
   overlay?: ReactNode
+  models?: string[]
   callbacks: ScanCallbacks
 }
 
@@ -147,10 +168,11 @@ interface CurrentScanState {
 }
 
 export interface ScanProps {
+  keys: TargetsName
   current: CurrentScanState
   setCurrent: (current: CurrentScanState) => void
 }
-function ScanScene({ current, setCurrent }: ScanProps) {
+function ScanScene({ keys, current, setCurrent }: ScanProps) {
   const onAnchorUpdated = useCallback(
     ({ name, type }: Omit<CurrentScanState, 'id'>) => {
       return (marker: any) => {
@@ -163,16 +185,18 @@ function ScanScene({ current, setCurrent }: ScanProps) {
 
   return (
     <ViroARScene>
-      {Object.keys(targets).map((name) => {
+      <ViroAmbientLight color="#FFFFFF" />
+      {TARGETS_KEYS.map((name) => {
         return (
           <ViroARImageMarker
             target={name}
             key={name}
             onAnchorUpdated={onAnchorUpdated({
               name: name as TargetsName,
-              type: targets[name as TargetsName].type,
-            })}
-          />
+              type: TARGETS[name as TargetsName].type,
+            })}>
+            {models[name]?.({ visible: keys.includes(name) })}
+          </ViroARImageMarker>
         )
       })}
     </ViroARScene>
@@ -257,7 +281,11 @@ export default function ScanView() {
         numberOfTrackedImages={1}
         initialScene={{
           scene: ScanScene,
-          passProps: { current, setCurrent: setSafeCurrent },
+          passProps: {
+            keys: Object.keys(params.callbacks),
+            current,
+            setCurrent: setSafeCurrent,
+          },
         }}
       />
     </Animated.View>

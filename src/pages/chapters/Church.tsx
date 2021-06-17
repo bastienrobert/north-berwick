@@ -100,6 +100,9 @@ export default function ChapterChurch({
         set({
           callbacks: {
             default: () => false,
+            place_cemetery: () => {
+              console.log('CEMETERY')
+            },
           },
         })
       }}
