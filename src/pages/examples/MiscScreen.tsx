@@ -4,6 +4,7 @@ import VideoWithSubtitles from '@/components/VideoWithSubtitles'
 import VideoWithDialog from '@/components/VideoWithDialog'
 import Summary from '@/components/Summary'
 import WebPImage from '@/components/shared/WebPImage'
+import BoatDemons from '@/components/BoatDemons'
 
 export default function TouchableAreaWebP() {
   return (
@@ -25,7 +26,9 @@ export default function TouchableAreaWebP() {
         dialogs={require('@/assets/tmp/videos/out.json')}
       /> */}
 
-      <WebPImage
+      <BoatDemons />
+
+      {/* <WebPImage
         source={require('@/assets/images/tortures/bride.webp')}
         style={{
           position: 'absolute',
@@ -53,7 +56,7 @@ export default function TouchableAreaWebP() {
         name="Agnes"
         source={require('@/assets/tmp/storm.mp4')}
         dialogs={require('@/assets/tmp/videos/out.json')}
-      />
+      /> */}
 
       {/* <WebPImage
         source={require('@/assets/images/tortures/bride.webp')}
