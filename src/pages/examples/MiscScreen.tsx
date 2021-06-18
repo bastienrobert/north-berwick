@@ -5,7 +5,7 @@ import Card from '@/components/Card'
 import FlippableCarousel from '@/components/FlippableCarousel'
 import BoatDemons from '@/components/BoatDemons'
 
-export default function TouchableAreaWebP() {
+export default function TouchableAreaWebP({ navigation }: any) {
   return (
     <View style={{ flex: 1 }}>
       {/* <Video
@@ -29,6 +29,7 @@ export default function TouchableAreaWebP() {
 
       <View style={{ width: '90%', flex: 1, alignSelf: 'center' }}>
         <FlippableCarousel
+          onClosePress={() => navigation.navigate('Development')}
           data={[
             [
               {

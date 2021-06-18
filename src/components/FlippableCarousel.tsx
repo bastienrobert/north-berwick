@@ -92,13 +92,18 @@ function FlippableCarousel({
 
         <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
           <RoundedButton
-            onPress={() => setIndex((i) => clamp(i - 1, 0, data.length - 1))}
-            style={styles.leftRightButtons}>
+            onPress={() => setIndex((i) => i - 1)}
+            style={[styles.leftRightButtons, { opacity: index <= 0 ? 0 : 1 }]}
+            disabled={index <= 0}>
             <ArrowLeftIcon />
           </RoundedButton>
           <RoundedButton
-            onPress={() => setIndex((i) => clamp(i + 1, 0, data.length - 1))}
-            style={styles.leftRightButtons}>
+            onPress={() => setIndex((i) => i + 1)}
+            style={[
+              styles.leftRightButtons,
+              { opacity: index >= data.length - 1 ? 0 : 1 },
+            ]}
+            disabled={index >= data.length - 1}>
             <ArrowRightIcon />
           </RoundedButton>
         </View>
