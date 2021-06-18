@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.white,
     alignSelf: 'center',
     marginTop: -7,
   },

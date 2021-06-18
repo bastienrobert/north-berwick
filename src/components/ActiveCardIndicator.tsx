@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react'
 import { Animated, StyleSheet, View, ViewProps } from 'react-native'
 
+import theme from '@/styles/theme'
+
 export type CompleteIndicatorCard = boolean | undefined
 export type CompleteHalfIndicatorCard = [boolean, boolean] | undefined
 
@@ -130,10 +132,10 @@ function ActiveCardIndicator({
 }
 
 ActiveCardIndicator.COLORS = {
-  red: '#FFDAC5',
-  blue: '#C5D5FF',
-  pink: '#FFDAD7',
-  purple: '#D9CCFF',
+  red: theme.colors.tuftBrush,
+  blue: theme.colors.periwinkle,
+  pink: theme.colors.peachSchnapps,
+  purple: theme.colors.fog,
 }
 
 export default ActiveCardIndicator
@@ -169,7 +171,7 @@ const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.white,
   },
   half: {
     width: 10,

@@ -4,9 +4,9 @@ import { View, StyleSheet, Animated, ViewStyle, StyleProp } from 'react-native'
 import useFlippable, { FlippableSide } from '@/hooks/useFlippable'
 
 export interface FlipWrapperProps {
-  side: FlippableSide
   front: ReactNode | (() => ReactNode)
   back: ReactNode | (() => ReactNode)
+  side?: FlippableSide
   style?: StyleProp<ViewStyle>
 }
 

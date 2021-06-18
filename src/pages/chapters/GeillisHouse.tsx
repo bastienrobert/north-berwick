@@ -17,15 +17,17 @@ import Card from '@/components/Card'
 import InnerSelectors, {
   InnerSelectorsRef,
 } from '@/components/Card/inner/InnerSelectors'
+import InnerCarousel, {
+  InnerCarouselRef,
+} from '@/components/Card/inner/InnerCarousel'
+import WebPImage from '@/components/shared/WebPImage'
 
 import ChapterLayout from '@/layouts/ChapterLayout'
 
 import useChapterAnswers from '@/hooks/useChapterAnswers'
 import { FlippableSide } from '@/hooks/useFlippable'
-import InnerCarousel, {
-  InnerCarouselRef,
-} from '@/components/Card/inner/InnerCarousel'
-import WebPImage from '@/components/shared/WebPImage'
+
+import theme from '@/styles/theme'
 
 export interface ChapterGeillisHouseProps {}
 type ChapterGeillisHousePropsWithNavigation = ChapterGeillisHouseProps & {
@@ -151,33 +153,34 @@ export default function ChapterGeillisHouse({
         })
       }}
       successSummaryProps={{
-        titleColor: '#250048',
+        titleColor: theme.colors.darkTan,
         colors: ['#E1D7FF', '#fff'],
-        button: 'Explorer le lieu suivant',
-        onPress: () => console.log('OPEN CAMERA'),
+        button: t('next_place'),
+        onPress: () => {
+          navigation.navigate('Conclusion:End', {})
+        },
+        contentLabelBackgroundColor: theme.colors.darkTan,
         content: [
           {
-            text:
-              "Selon le Roi, l'incident du Falcon of Leith aurait été dû à un sort provoquant",
-            label: "L'Invocation de Démons",
+            text: t('geillis_summary_1_text'),
+            label: t('geillis_summary_1_label'),
           },
           {
-            text: 'En réalité, ce bateau a failli couler à cause de',
-            label: 'Marins Éméchés',
+            text: t('geillis_summary_2_text'),
+            label: t('geillis_summary_2_label'),
           },
           {
-            text:
-              'Selon le Roi, le James Royall aurait fait naufrage suite à un sort impliquant',
-            label: 'Un Chat et des Os',
+            text: t('geillis_summary_3_text'),
+            label: t('geillis_summary_3_label'),
           },
           {
-            text: "En réalité, ce navire chavira lors d'une",
-            label: 'Forte Tempête',
+            text: t('geillis_summary_4_text'),
+            label: t('geillis_summary_4_label'),
           },
         ],
       }}
       wrongButtonProps={{
-        children: 'Modifier mes cartes',
+        children: t('edit_cards'),
         onPress: () => swapAnswers(),
       }}
       data={[
@@ -190,22 +193,25 @@ export default function ChapterGeillisHouse({
               onFlipPress={() => setCaresCardFlip('back')}
               number={4}
               color="pink"
-              title={['Les guérisons', 'Selon Mr Seaton']}
+              title={[
+                t('cares_seaton_title_line_1'),
+                t('cares_seaton_title_line_2'),
+              ]}
               forceBottom={false}
-              bottom={'James Royall'}
+              bottom={t('cares_label')}
               inner={
                 <InnerSelectors
                   ref={(el) => (caresCardSeatonSelectorRef.current = el)}
                   type="equation"
-                  keyboardLabel="Falcon of Leith"
+                  keyboardLabel={t('cares_label')}
                   onSelectedChange={(payload) => {
                     setAnswers({
                       cares_seaton: payload as GeillisHouseStore['cares_seaton'],
                     })
                     setCaresCardFlip('back')
                   }}
-                  plusColor="#FFADA7"
-                  equalColor="#FFDAD7"
+                  plusColor={theme.colors.cornflowerLilac}
+                  equalColor={theme.colors.peachSchnapps}
                   result={<DrugIcon />}
                   items={[keyboardCares, keyboardCares]}
                 />
@@ -217,22 +223,25 @@ export default function ChapterGeillisHouse({
               onFlipPress={() => setCaresCardFlip('front')}
               number={4}
               color="pink"
-              title={['Les guérisons', 'Révélées']}
+              title={[
+                t('cares_revealed_title_line_1'),
+                t('cares_revealed_title_line_2'),
+              ]}
               forceBottom={false}
-              bottom={'James Royall'}
+              bottom={t('cares_label')}
               inner={
                 <InnerSelectors
                   ref={(el) => (caresCardRevealedSelectorRef.current = el)}
                   type="equation"
-                  keyboardLabel="Falcon of Leith"
+                  keyboardLabel={t('cares_label')}
                   onSelectedChange={(payload) => {
                     setAnswers({
                       cares_revealed: payload as GeillisHouseStore['cares_revealed'],
                     })
                     setCaresCardFlip('back')
                   }}
-                  plusColor="#FFDAD7"
-                  equalColor="#FFDAD7"
+                  plusColor={theme.colors.peachSchnapps}
+                  equalColor={theme.colors.peachSchnapps}
                   result={<DrugIcon />}
                   items={[keyboardCares, keyboardCares]}
                 />
@@ -246,14 +255,14 @@ export default function ChapterGeillisHouse({
             <Card
               number={4}
               color="pink"
-              title={["L'activité Nocturne", 'de Geillis']}
+              title={[t('activity_title_line_1'), t('activity_title_line_2')]}
               forceBottom={false}
-              bottom={'Les liens'}
+              bottom={t('activity_label')}
               inner={
                 <InnerSelectors
                   ref={(el) => (activityCardSelectorRef.current = el)}
                   type="single"
-                  keyboardLabel="Falcon of Leith"
+                  keyboardLabel={t('activity_label')}
                   onSelectedChange={(payload) => {
                     setAnswers({
                       activity: payload as GeillisHouseStore['activity'],
@@ -282,7 +291,7 @@ export default function ChapterGeillisHouse({
                   : undefined
               }
               forceBottom={false}
-              bottom={t('the_torture')}
+              bottom={t('torture_label')}
               inner={
                 <InnerCarousel
                   ref={(el) => (torturesCarouselRef.current = el)}

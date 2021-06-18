@@ -19,9 +19,10 @@ import {
 import Svg, { G, Path, PathProps } from 'react-native-svg'
 
 import Fade from '@/components/shared/Fade'
-import LinearGradient from '@/components/shared/LinearGradient'
 
 import { range } from '@/utils/math'
+
+import theme from '@/styles/theme'
 
 const PATHS = [
   'M0,106.332618 C0,106.332618 11.0825579,106.928831 15.2951507,106.332618 C19.5076845,105.736404 23.9208404,105.272735 29.336989,106.597588 C34.7531376,107.9225 43.3409484,104.386845 48.795035,104.544036 C54.2490625,104.701169 57.391178,110.298044 65.013875,108.719812 C72.6366311,107.141522 74.7225108,102.846491 91.7229795,105.724813 C105.540558,108.064235 148.893444,87.2542036 148.893444,82.4846148 C148.893444,77.715026 152.501688,55.2118986 146.686895,41.5455366 C144.313585,35.9676878 146.961148,27.8451605 147.671923,20.3939586 C148.702631,9.58876453 148.692821,0 148.692821,0 L0,0 L0,106.332618 Z',
@@ -217,19 +218,26 @@ export default function Poster({ completed = false, onComplete }: PosterProps) {
     range(PATHS.length).map(() => false),
   )
 
+  const isComplete = useMemo(() => {
+    return innerCompleted.every((c) => c === true)
+  }, [innerCompleted])
+
   const setLayout = useCallback((key: number, layout: LayoutRectangle) => {
     if (key === 0) setLayouts([layout])
     else setLayouts((l) => [...l, layout])
   }, [])
 
+  useEffect(() => {
+    if (isComplete) onComplete?.()
+  }, [isComplete])
+
   return (
     <View style={styles.container}>
       <Fade
         position="inherit"
-        start={innerCompleted.every((c) => c === true)}
+        start={isComplete}
         color="white"
         onHalf={() => setShowCompleted(true)}
-        onComplete={onComplete}
       />
       {completed || showCompleted ? (
         <Image
@@ -251,8 +259,8 @@ export default function Poster({ completed = false, onComplete }: PosterProps) {
               strokeDasharray={4}>
               <G
                 transform="translate(-29.000000, -25.000000)"
-                fill="#FFCEB2"
-                stroke="#f22707"
+                fill={theme.colors.romantic}
+                stroke={theme.colors.scarlet}
                 strokeWidth={1}>
                 <G transform="translate(31.000000, 27.000000)">
                   {PATHS.map((d, i) => (

@@ -21,6 +21,8 @@ import ChapterLayout from '@/layouts/ChapterLayout'
 import useChapterAnswers from '@/hooks/useChapterAnswers'
 import { FlippableSide } from '@/hooks/useFlippable'
 
+import theme from '@/styles/theme'
+
 export interface ChapterPortProps {}
 type ChapterPortPropsWithNavigation = ChapterPortProps & {
   navigation: NavigationProp<RootNavigationParamList, 'Chapter:Port'>
@@ -185,33 +187,41 @@ export default function ChapterPort({
         })
       }}
       successSummaryProps={{
-        titleColor: '#000848',
+        titleColor: theme.colors.stratos,
         colors: ['#E0E9FF', '#fff'],
-        button: 'Explorer le lieu suivant',
-        onPress: () => console.log('OPEN CAMERA'),
+        button: t('next_place'),
+        onPress: () =>
+          set({
+            callbacks: {
+              default: () => false,
+              map_church: () => {
+                navigation.navigate('Chapter:Church', {})
+                hide()
+              },
+            },
+          }),
+        contentLabelBackgroundColor: theme.colors.stratos,
         content: [
           {
-            text:
-              "Selon le Roi, l'incident du Falcon of Leith aurait été dû à un sort provoquant",
-            label: "L'Invocation de Démons",
+            text: t('port_summary_1_text'),
+            label: t('port_summary_1_label'),
           },
           {
-            text: 'En réalité, ce bateau a failli couler à cause de',
-            label: 'Marins Éméchés',
+            text: t('port_summary_2_text'),
+            label: t('port_summary_2_label'),
           },
           {
-            text:
-              'Selon le Roi, le James Royall aurait fait naufrage suite à un sort impliquant',
-            label: 'Un Chat et des Os',
+            text: t('port_summary_3_text'),
+            label: t('port_summary_3_label'),
           },
           {
-            text: "En réalité, ce navire chavira lors d'une",
-            label: 'Forte Tempête',
+            text: t('port_summary_4_text'),
+            label: t('port_summary_4_label'),
           },
         ],
       }}
       wrongButtonProps={{
-        children: 'Modifier mes cartes',
+        children: t('edit_cards'),
         onPress: () => swapAnswers(),
       }}
       data={[
@@ -226,7 +236,7 @@ export default function ChapterPort({
               color="blue"
               title={
                 catInteractionShowedRef.current
-                  ? ["L'Histoire", 'Selon le Roi']
+                  ? [t('port_title_king_line_1'), t('port_title_king_line_2')]
                   : undefined
               }
               text={
@@ -235,7 +245,7 @@ export default function ChapterPort({
                   : t('missing_informations')
               }
               forceBottom={!catInteractionShowedRef.current}
-              bottom={'James Royall'}
+              bottom={t('james_royall_label')}
               inner={
                 catInteractionShowedRef.current ? (
                   <InnerSelectors
@@ -247,8 +257,8 @@ export default function ChapterPort({
                       setAnswers({ cat_king: payload as PortStore['cat_king'] })
                       setCatCardFlip('back')
                     }}
-                    plusColor="#A2BDFF"
-                    equalColor="#C5D5FF"
+                    plusColor={theme.colors.anakiwa}
+                    equalColor={theme.colors.periwinkle}
                     result={<DeathIcon />}
                     items={[keyboard, keyboard]}
                   />
@@ -263,7 +273,7 @@ export default function ChapterPort({
               color="blue"
               title={
                 catInteractionShowedRef.current
-                  ? ["L'Histoire", 'Révélée']
+                  ? t('port_title_revealed')
                   : undefined
               }
               text={
@@ -272,7 +282,7 @@ export default function ChapterPort({
                   : t('missing_informations')
               }
               forceBottom={!catInteractionShowedRef.current}
-              bottom={'James Royall'}
+              bottom={t('james_royall_label')}
               inner={
                 catInteractionShowedRef.current ? (
                   <InnerSelectors
@@ -286,8 +296,8 @@ export default function ChapterPort({
                       })
                       setCatCardFlip('front')
                     }}
-                    plusColor="#C5D5FF"
-                    equalColor="#C5D5FF"
+                    plusColor={theme.colors.periwinkle}
+                    equalColor={theme.colors.periwinkle}
                     result={<DeathIcon />}
                     items={[keyboard, keyboard]}
                   />
@@ -307,7 +317,7 @@ export default function ChapterPort({
               color="blue"
               title={
                 demonsInteractionShowedRef.current
-                  ? ["L'Histoire", 'Selon le Roi']
+                  ? [t('port_title_king_line_1'), t('port_title_king_line_2')]
                   : undefined
               }
               text={
@@ -316,7 +326,7 @@ export default function ChapterPort({
                   : t('missing_informations')
               }
               forceBottom={!demonsInteractionShowedRef.current}
-              bottom={'James Royall'}
+              bottom={t('falcon_of_leith_label')}
               inner={
                 demonsInteractionShowedRef.current ? (
                   <InnerSelectors
@@ -330,8 +340,8 @@ export default function ChapterPort({
                       })
                       setDemonsCardFlip('back')
                     }}
-                    plusColor="#A2BDFF"
-                    equalColor="#C5D5FF"
+                    plusColor={theme.colors.anakiwa}
+                    equalColor={theme.colors.periwinkle}
                     result={<SunkenShipIcon />}
                     items={[keyboard, keyboard]}
                   />
@@ -346,7 +356,7 @@ export default function ChapterPort({
               color="blue"
               title={
                 demonsInteractionShowedRef.current
-                  ? ["L'Histoire", 'Révélée']
+                  ? t('port_title_revealed')
                   : undefined
               }
               text={
@@ -355,7 +365,7 @@ export default function ChapterPort({
                   : t('missing_informations')
               }
               forceBottom={!demonsInteractionShowedRef.current}
-              bottom={'James Royall'}
+              bottom={t('falcon_of_leith_label')}
               inner={
                 demonsInteractionShowedRef.current ? (
                   <InnerSelectors
@@ -369,8 +379,8 @@ export default function ChapterPort({
                       })
                       setDemonsCardFlip('front')
                     }}
-                    plusColor="#C5D5FF"
-                    equalColor="#C5D5FF"
+                    plusColor={theme.colors.periwinkle}
+                    equalColor={theme.colors.periwinkle}
                     result={<SunkenShipIcon />}
                     items={[keyboard, keyboard]}
                   />

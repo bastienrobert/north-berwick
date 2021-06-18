@@ -3,15 +3,22 @@ import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
 
 import LabelBox from '@/components/shared/LabelBox'
 
-export interface SummaryParagraphProps {
+import theme from '@/styles/theme'
+
+export interface SummaryParagraphParams {
   text: string
   label: string
+}
+
+interface SummaryParagraphProps extends SummaryParagraphParams {
+  labelBackgroundColor: string
   style?: StyleProp<ViewStyle>
 }
 
 export default function SummaryParagraph({
   label,
   text,
+  labelBackgroundColor,
   style,
 }: SummaryParagraphProps) {
   return (
@@ -19,8 +26,8 @@ export default function SummaryParagraph({
       <Text style={styles.text}>{text}</Text>
       <LabelBox
         name={label}
-        backgroundColor="#680E1C"
-        textColor="#fff"
+        backgroundColor={labelBackgroundColor}
+        textColor={theme.colors.white}
         style={styles.label}
       />
     </View>
@@ -34,7 +41,7 @@ const styles = StyleSheet.create({
     fontFamily: 'iAWriterQuattroS-Regular',
     letterSpacing: -0.21,
     fontSize: 16,
-    color: '#2C2C2C',
+    color: theme.colors.mineShaft,
   },
   label: {
     marginTop: 8,

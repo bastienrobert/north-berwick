@@ -23,6 +23,7 @@ type ChapterCarouselForwardedProps = Pick<
 export interface ChapterLayoutProps
   extends ChapterCompletedParams,
     ChapterCarouselForwardedProps {
+  reveal?: boolean
   videoProps: Pick<VideoWithDialogProps, 'source' | 'name' | 'dialogs' | 'hdr'>
   onScanButtonPress: () => void
   introduction?: boolean
@@ -40,11 +41,13 @@ export default function ChapterLayout({
   onCollapse,
   onCollapseStart,
   onScanButtonPress,
+  reveal = true,
   introduction = true,
   onIntroductionEnd,
   successSummaryProps,
   wrongButtonProps,
 }: ChapterLayoutProps) {
+  const isIntroductionEnd = useRef(false)
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false)
   const [isDialogsOver, setIsDialogsOver] = useState(false)
   const [completedOpacity, setCompletedOpacity] = useState(0)
@@ -53,20 +56,28 @@ export default function ChapterLayout({
   const resultsOpacity = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
-    setCompletedOpacity(completed !== undefined ? 1 : 0)
-    Animated.spring(mainOpacity, {
-      useNativeDriver: false,
-      toValue: completed === undefined ? 1 : 0,
-    }).start()
-  }, [completed, mainOpacity, resultsOpacity])
+    if (isDialogsOver && completed) {
+      setCompletedOpacity(1)
+      Animated.spring(mainOpacity, {
+        useNativeDriver: false,
+        toValue: 1,
+      }).start()
+    }
+  }, [isDialogsOver, completed, mainOpacity, resultsOpacity])
 
   useEffect(() => {
-    onIntroductionEnd?.()
-    Animated.spring(mainOpacity, {
-      useNativeDriver: false,
-      toValue: isDialogsOver ? 1 : 0,
-    }).start()
-  }, [isDialogsOver])
+    if (isDialogsOver) {
+      isIntroductionEnd.current = true
+      onIntroductionEnd?.()
+    }
+
+    if (reveal) {
+      Animated.spring(mainOpacity, {
+        useNativeDriver: false,
+        toValue: isDialogsOver ? 1 : 0,
+      }).start()
+    }
+  }, [reveal, isDialogsOver])
 
   useEffect(() => {
     if (!introduction) {

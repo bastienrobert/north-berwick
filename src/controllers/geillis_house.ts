@@ -61,22 +61,22 @@ export const ASSETS = {
     {
       name: 'gresillon',
       multiline: false,
-      image: require('@/assets/images/tortures/gresillon.webp'),
+      image: require('@/assets/images/tortures/geillis/gresillon.webp'),
     },
     {
       name: 'bride',
       multiline: true,
-      image: require('@/assets/images/tortures/bride.webp'),
+      image: require('@/assets/images/tortures/geillis/bride.webp'),
     },
     {
       name: 'brodequin',
       multiline: false,
-      image: require('@/assets/images/tortures/brodequin.webp'),
+      image: require('@/assets/images/tortures/geillis/brodequin.webp'),
     },
     {
       name: 'estrapade',
       multiline: false,
-      image: require('@/assets/images/tortures/estrapade.webp'),
+      image: require('@/assets/images/tortures/geillis/estrapade.webp'),
     },
   ],
 } as const

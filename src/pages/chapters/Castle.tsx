@@ -18,7 +18,9 @@ import Poster from '@/components/Poster'
 import WebPImage from '@/components/shared/WebPImage'
 
 import useChapterAnswers from '@/hooks/useChapterAnswers'
+
 import ChapterLayout from '@/layouts/ChapterLayout'
+import theme from '@/styles/theme'
 
 export interface ChapterCastleProps {}
 type ChapterCastlePropsWithNavigation = ChapterCastleProps & {
@@ -132,7 +134,7 @@ export default function ChapterCastle({
         } else {
           set({
             callbacks: {
-              default: () => false,
+              default: () => null,
               ...portraits_callbacks,
             },
             wrongPlaceLabel: t('not_portrait'),
@@ -142,34 +144,41 @@ export default function ChapterCastle({
         }
       }}
       successSummaryProps={{
-        titleColor: '#480D00',
+        titleColor: theme.colors.brownPod,
         colors: ['#ffe5e3', '#fff0ef', '#ffffff'],
-        button: 'Explorer le lieu suivant',
-        onPress: () => console.log('OPEN CAMERA'),
+        button: t('next_place'),
+        onPress: () =>
+          set({
+            callbacks: {
+              default: () => false,
+              map_port: () => {
+                navigation.navigate('Chapter:Port', {})
+                hide()
+              },
+            },
+          }),
+        contentLabelBackgroundColor: theme.colors.brownPod,
         content: [
           {
-            text:
-              'Selon Mr Seaton, Geillis aurait eu des pouvoirs de guérison grâce à',
-            label: 'La Sorcellerie',
+            text: t('castle_summary_1_text'),
+            label: t('castle_summary_1_label'),
           },
           {
-            text:
-              "Afin de la faire avouer, Mr Seaton la fit torturer à l'aide de",
-            label: 'Brodequins',
+            text: t('castle_summary_2_text'),
+            label: t('castle_summary_2_label'),
           },
           {
-            text:
-              'En réalité, Geillis était capable de prodiguer des soins car elle était ',
-            label: 'Guérisseuse',
+            text: t('castle_summary_3_text'),
+            label: t('castle_summary_3_label'),
           },
           {
-            text: "Geillis s'échappait la nuit afin de pratiquer",
-            label: 'La Médecine',
+            text: t('castle_summary_4_text'),
+            label: t('castle_summary_4_label'),
           },
         ],
       }}
       wrongButtonProps={{
-        children: 'Modifier mes cartes',
+        children: t('edit_cards'),
         onPress: () => {
           swapAnswers()
         },
@@ -193,7 +202,7 @@ export default function ChapterCastle({
               }
               text={portrait ? undefined : t('missing_informations')}
               forceBottom={!portrait}
-              bottom={t('the_ghost')}
+              bottom={t('ghost_label')}
               inner={
                 portrait ? (
                   <InnerImage
@@ -233,7 +242,7 @@ export default function ChapterCastle({
                     : [t(torture.name)]
                   : undefined
               }
-              bottom={t('the_torture')}
+              bottom={t('torture_label')}
               inner={
                 <InnerCarousel
                   ref={(el) => (torturesCarouselRef.current = el)}
@@ -279,6 +288,7 @@ export default function ChapterCastle({
                     visible={showPoster}
                     onLayout={() => hide()}
                     onBack={() => {
+                      console.log('BACK', isPosterCompletedRef.current)
                       if (isPosterCompletedRef.current) {
                         if (!setAnswers({ poster: true })) {
                           setIsCollapsed(false)
@@ -296,7 +306,10 @@ export default function ChapterCastle({
                     }>
                     <Poster
                       completed={!!answers.poster}
-                      onComplete={() => (isPosterCompletedRef.current = true)}
+                      onComplete={() => {
+                        console.log('COMPLETED')
+                        isPosterCompletedRef.current = true
+                      }}
                     />
                   </InnerPoster>
                 ) : null

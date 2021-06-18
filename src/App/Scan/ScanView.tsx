@@ -1,5 +1,12 @@
 import React, { ReactNode, useCallback, useState } from 'react'
-import { Animated, SafeAreaView, StyleSheet, View } from 'react-native'
+import {
+  Animated,
+  SafeAreaView,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native'
 import { useTranslate } from 'react-polyglot'
 import {
   Viro3DObject,
@@ -17,6 +24,8 @@ import CrossIcon from '@/components/icons/CrossIcon'
 import NotificationBox from '@/components/shared/NotificationBox'
 
 import { capitalizeFirstLetter } from '@/utils/text'
+
+import theme from '@/styles/theme'
 
 const TARGETS = {
   cover: {
@@ -203,7 +212,11 @@ function ScanScene({ keys, current, setCurrent }: ScanProps) {
   )
 }
 
-export default function ScanView() {
+export interface ScanViewProps {
+  style?: StyleProp<ViewStyle>
+}
+
+export default function ScanView({ style }: ScanViewProps) {
   const t = useTranslate()
   const { params, hide } = useScan()
   const [current, setCurrent] = useState<CurrentScanState>({
@@ -215,7 +228,7 @@ export default function ScanView() {
 
   const setSafeCurrent = useCallback(
     (payload: CurrentScanState) => {
-      if (params && payload.name && params.callbacks[payload.name]) {
+      if (params && payload.name) {
         setCurrent(payload)
       }
     },
@@ -245,8 +258,11 @@ export default function ScanView() {
 
   if (!params) return null
   return (
-    <Animated.View style={[StyleSheet.absoluteFill, styles.container]}>
-      <View style={[StyleSheet.absoluteFill, { backgroundColor: 'black' }]} />
+    <Animated.View
+      collapsable={false}
+      pointerEvents="box-none"
+      style={[StyleSheet.absoluteFill, styles.container, style]}>
+      <View style={[StyleSheet.absoluteFill, styles.placeholder]} />
       <SafeAreaView style={[StyleSheet.absoluteFill, styles.safeView]}>
         <RoundedButton style={styles.close} onPress={onClosePress}>
           <CrossIcon />
@@ -294,9 +310,11 @@ export default function ScanView() {
 
 const styles = StyleSheet.create({
   container: {
-    zIndex: 900,
     width: '100%',
     height: '100%',
+  },
+  placeholder: {
+    backgroundColor: theme.colors.black,
   },
   safeView: {
     zIndex: 2,

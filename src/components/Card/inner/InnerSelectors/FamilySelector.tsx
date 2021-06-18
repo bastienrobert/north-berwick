@@ -17,6 +17,8 @@ import SelectorItem from './common/SelectorItem'
 import SelectorKeyboard from './common/SelectorKeyboard'
 import { SelectorKeyboardItemParams } from './common/SelectorKeyboardItem'
 
+import theme from '@/styles/theme'
+
 export type FamilyItem = SelectorKeyboardItemParams & { display: string }
 export type FamilyItems = [FamilyItem, FamilyItem, FamilyItem, FamilyItem]
 
@@ -42,7 +44,7 @@ function FamilyTree(props: SvgProps) {
     <Svg width={153} height={87} viewBox="0 0 153 87" {...props}>
       <Path
         d="M3.5 50.5V55L2 56.5.5 55v-5.5l2-2H75V3H62.5L61 1.5 62.5 0h28L92 1.5 90.5 3H78v44.5h72.5l2 2V55l-1.5 1.5-1.5-1.5v-4.5H78V85l-1.5 1.5L75 85V50.5z"
-        fill="#D9CCFF"
+        fill={theme.colors.fog}
         fillRule="nonzero"
       />
     </Svg>

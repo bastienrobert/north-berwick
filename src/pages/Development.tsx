@@ -36,6 +36,23 @@ export default function Development({ navigation }: HomePropsWithNavigation) {
           })
         }
       />
+      <Text>---</Text>
+      <Button
+        title="Goto Castle"
+        onPress={() => navigation.navigate('Chapter:Castle', {})}
+      />
+      <Button
+        title="Goto Port"
+        onPress={() => navigation.navigate('Chapter:Port', {})}
+      />
+      <Button
+        title="Goto Church"
+        onPress={() => navigation.navigate('Chapter:Church', {})}
+      />
+      <Button
+        title="Goto GeillisHouse"
+        onPress={() => navigation.navigate('Chapter:GeillisHouse', {})}
+      />
     </View>
   )
 }

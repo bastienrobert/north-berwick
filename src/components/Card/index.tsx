@@ -15,6 +15,8 @@ import PinkBack from './backgrounds/PinkBack.svg'
 
 import { romanize } from '@/utils/math'
 
+import theme from '@/styles/theme'
+
 type CardBaseColors = 'blue' | 'pink' | 'red' | 'purple'
 type CardBaseRevertableColors = Extract<CardBaseColors, 'blue' | 'pink'>
 type CardBaseUnrevertableColors = Extract<CardBaseColors, 'red' | 'purple'>
@@ -62,10 +64,10 @@ const BACKGROUNDS: RevertableColorRecord<ReactNode> = {
 }
 
 const DEFAULT_COLORS: CardColors = {
-  title: '#fff',
-  number: '#fff',
-  text: '#fff',
-  bottom: '#fff',
+  title: theme.colors.white,
+  number: theme.colors.white,
+  text: theme.colors.white,
+  bottom: theme.colors.white,
 }
 
 function Card({
@@ -144,7 +146,7 @@ const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
     fontFamily: 'NewYork',
-    color: 'white',
+    color: DEFAULT_COLORS.number,
     textTransform: 'uppercase',
     fontSize: 26,
   },
@@ -154,7 +156,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     textAlign: 'center',
     fontFamily: 'iAWriterQuattroS-Italic',
-    color: 'white',
+    color: DEFAULT_COLORS.text,
     letterSpacing: -0.5,
     fontSize: 17,
     opacity: 0.8,
@@ -173,7 +175,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     letterSpacing: -0.56,
     fontFamily: 'iAWriterQuattroS-Italic',
-    color: '#480D00',
+    color: DEFAULT_COLORS.bottom,
     fontSize: 19,
   },
 })

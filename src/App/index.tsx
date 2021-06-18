@@ -15,12 +15,12 @@ export default function App() {
     <>
       {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
       <I18n locale="fr" messages={fr} allowMissing>
-        <PortalHost>
-          <ScanProvider>
-            <ScanView />
+        <ScanProvider>
+          <ScanView style={{ flex: 1, zIndex: 899 }} />
+          <PortalHost>
             <Router />
-          </ScanProvider>
-        </PortalHost>
+          </PortalHost>
+        </ScanProvider>
       </I18n>
     </>
   )

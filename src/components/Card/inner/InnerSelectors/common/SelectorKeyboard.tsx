@@ -7,6 +7,8 @@ import SelectorKeyboardItem, {
 
 import useLayout from '@/hooks/useLayout'
 
+import theme from '@/styles/theme'
+
 export type SelectorKeyboardItems = SelectorKeyboardItemParams[]
 
 export interface SelectorKeyboardProps {
@@ -94,7 +96,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 15,
     paddingTop: 17,
     paddingBottom: 28,
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.white,
   },
   text: {
     textAlign: 'center',
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.21,
     fontSize: 20,
     lineHeight: 27,
-    color: '#2C2C2C',
+    color: theme.colors.mineShaft,
     marginBottom: 18,
   },
   wrapper: {

@@ -8,13 +8,18 @@ import { useScan } from '@/App/Scan/ScanProvider'
 import store, { ASSETS, ChurchStore, CORRECTS } from '@/controllers/church'
 
 import Card from '@/components/Card'
-
-import useChapterAnswers from '@/hooks/useChapterAnswers'
-import ChapterLayout from '@/layouts/ChapterLayout'
 import InnerSelectors, {
   InnerSelectorsRef,
 } from '@/components/Card/inner/InnerSelectors'
 import { FamilyItems } from '@/components/Card/inner/InnerSelectors/FamilySelector'
+
+import ChapterLayout from '@/layouts/ChapterLayout'
+
+import useChapterAnswers from '@/hooks/useChapterAnswers'
+
+import theme from '@/styles/theme'
+import VideoDialogBox from '@/components/VideoWithDialog/VideoDialogBox'
+import { Button, View } from 'react-native'
 
 export interface ChapterChurchProps {}
 type ChapterChurchPropsWithNavigation = ChapterChurchProps & {
@@ -28,6 +33,7 @@ export default function ChapterChurch({
   const { set, hide } = useScan()
 
   const introducedRef = useRef(false)
+  const mortarInteractionShowedRef = useRef(false)
   const familyCardSelectorRef = useRef<InnerSelectorsRef | null>()
   const jobCardSelectorRef = useRef<InnerSelectorsRef | null>()
 
@@ -59,6 +65,8 @@ export default function ChapterChurch({
   const [isCollapsed, setIsCollapsed] = useState(true)
   const [index, setIndex] = useState(0)
   const [familyInteractionShowed, setFamilyInteractionShowed] = useState(false)
+  const [introductionEnd, setIntroductionEnd] = useState(false)
+  const [mortarInteraction, setMortarInteraction] = useState(false)
 
   const keyboardJob = ASSETS.icons.map(({ name, component: C }) => ({
     name,
@@ -74,133 +82,184 @@ export default function ChapterChurch({
     collapseSelectors()
   }, [index])
 
+  useEffect(() => {
+    if (mortarInteraction) {
+      mortarInteractionShowedRef.current = true
+    }
+  }, [mortarInteraction])
+
+  useEffect(() => {
+    if (familyInteractionShowed) {
+      setIndex(2)
+      setIsCollapsed(false)
+    }
+  }, [familyInteractionShowed])
+
   const { job: jobComplete, family: familyComplete } = useMemo(() => {
     return isCompleted(answers)
   }, [answers])
 
+  if (mortarInteraction) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Button
+          title="CLOSE MORTAR"
+          onPress={() => {
+            setMortarInteraction(false)
+            setIndex(1)
+            setIsCollapsed(false)
+          }}
+        />
+      </View>
+    )
+  }
+
   return (
-    <ChapterLayout
-      color="purple"
-      introduction={!introducedRef.current}
-      onIntroductionEnd={() => (introducedRef.current = true)}
-      videoProps={{
-        name: t('agnes'),
-        source: require('@/assets/tmp/storm.mp4'),
-        dialogs: require('@/assets/tmp/videos/out.json'),
-      }}
-      completed={results ? (results === true ? 'right' : 'wrong') : undefined}
-      index={index}
-      collapsed={isCollapsed}
-      onIndexChange={setIndex}
-      onCollapse={setIsCollapsed}
-      onCollapseStart={() => {
-        collapseSelectors()
-      }}
-      onScanButtonPress={() => {
-        set({
-          callbacks: {
-            default: () => false,
-            place_cemetery: () => {
-              setFamilyInteractionShowed(true)
-              console.log('CEMETERY')
+    <View style={{ flex: 1 }}>
+      {introductionEnd && !mortarInteractionShowedRef.current && (
+        <VideoDialogBox
+          name={t('agnes')}
+          activeOpacity={0.9}
+          style={{
+            position: 'absolute',
+            paddingHorizontal: 30,
+            bottom: 42,
+            width: '100%',
+            zIndex: 2,
+          }}
+          content="OPEN MORTAR"
+          onPress={() => setMortarInteraction(true)}
+        />
+      )}
+      <ChapterLayout
+        color="purple"
+        reveal={mortarInteractionShowedRef.current}
+        introduction={!introducedRef.current}
+        onIntroductionEnd={() => {
+          introducedRef.current = true
+          setTimeout(() => setIntroductionEnd(true), 1000)
+        }}
+        videoProps={{
+          name: t('agnes'),
+          source: require('@/assets/tmp/storm.mp4'),
+          dialogs: require('@/assets/tmp/videos/out.json'),
+        }}
+        completed={results ? (results === true ? 'right' : 'wrong') : undefined}
+        index={index}
+        collapsed={isCollapsed}
+        onIndexChange={setIndex}
+        onCollapse={setIsCollapsed}
+        onCollapseStart={() => {
+          collapseSelectors()
+        }}
+        onScanButtonPress={() => {
+          set({
+            callbacks: {
+              default: () => false,
+              place_cemetery: () => {
+                setFamilyInteractionShowed(true)
+                hide()
+              },
             },
-          },
-        })
-      }}
-      successSummaryProps={{
-        titleColor: '#250048',
-        colors: ['#E1D7FF', '#fff'],
-        button: 'Explorer le lieu suivant',
-        onPress: () => console.log('OPEN CAMERA'),
-        content: [
+          })
+        }}
+        successSummaryProps={{
+          titleColor: theme.colors.tolopoea,
+          colors: ['#E1D7FF', '#fff'],
+          button: t('next_place'),
+          onPress: () =>
+            set({
+              callbacks: {
+                default: () => false,
+                map_geillis: () => {
+                  navigation.navigate('Chapter:GeillisHouse', {})
+                  hide()
+                },
+              },
+            }),
+          contentLabelBackgroundColor: theme.colors.tolopoea,
+          content: [
+            {
+              text: t('church_summary_1_text'),
+              label: t('church_summary_1_label'),
+            },
+            {
+              text: t('church_summary_2_text'),
+              label: t('church_summary_2_label'),
+            },
+          ],
+        }}
+        wrongButtonProps={{
+          children: t('edit_cards'),
+          onPress: () => swapAnswers(),
+        }}
+        data={[
           {
-            text:
-              "Selon le Roi, l'incident du Falcon of Leith aurait été dû à un sort provoquant",
-            label: "L'Invocation de Démons",
+            complete: familyComplete,
+            front: (
+              <Card
+                number={3}
+                color="purple"
+                title={
+                  familyInteractionShowed
+                    ? [t('family_title_line_1'), t('family_title_line_2')]
+                    : undefined
+                }
+                text={
+                  familyInteractionShowed
+                    ? undefined
+                    : t('missing_informations')
+                }
+                forceBottom={!familyInteractionShowed}
+                bottom={t('family_label')}
+                inner={
+                  familyInteractionShowed ? (
+                    <InnerSelectors
+                      ref={(el) => (familyCardSelectorRef.current = el)}
+                      type="family"
+                      main={t('agnes')}
+                      initial={answers}
+                      keyboardLabel={t('family_label')}
+                      onSelectedChange={(payload) => {
+                        setAnswers({
+                          parent: payload.parent as ChurchStore['parent'],
+                          children: payload.children as ChurchStore['children'],
+                        })
+                      }}
+                      items={ASSETS.families as FamilyItems}
+                    />
+                  ) : null
+                }
+              />
+            ),
           },
           {
-            text: 'En réalité, ce bateau a failli couler à cause de',
-            label: 'Marins Éméchés',
-          },
-          {
-            text:
-              'Selon le Roi, le James Royall aurait fait naufrage suite à un sort impliquant',
-            label: 'Un Chat et des Os',
-          },
-          {
-            text: "En réalité, ce navire chavira lors d'une",
-            label: 'Forte Tempête',
-          },
-        ],
-      }}
-      wrongButtonProps={{
-        children: 'Modifier mes cartes',
-        onPress: () => swapAnswers(),
-      }}
-      data={[
-        {
-          complete: familyComplete,
-          front: (
-            <Card
-              number={3}
-              color="purple"
-              title={
-                familyInteractionShowed
-                  ? ["L'Histoire", 'Selon le Roi']
-                  : undefined
-              }
-              text={
-                familyInteractionShowed ? undefined : t('missing_informations')
-              }
-              forceBottom={!familyInteractionShowed}
-              bottom={'James Royall'}
-              inner={
-                familyInteractionShowed ? (
+            complete: jobComplete,
+            front: (
+              <Card
+                number={3}
+                color="purple"
+                title={[t('job_title_line_1'), t('job_title_line_2')]}
+                forceBottom={false}
+                bottom={t('job_label')}
+                inner={
                   <InnerSelectors
-                    ref={(el) => (familyCardSelectorRef.current = el)}
-                    type="family"
-                    main="Agnès"
-                    initial={answers}
-                    keyboardLabel="Falcon of Leith"
+                    ref={(el) => (jobCardSelectorRef.current = el)}
+                    type="single"
+                    keyboardLabel={t('job_label')}
                     onSelectedChange={(payload) => {
                       setAnswers({
-                        parent: payload.parent as ChurchStore['parent'],
-                        children: payload.children as ChurchStore['children'],
+                        job: payload as ChurchStore['job'],
                       })
                     }}
-                    items={ASSETS.families as FamilyItems}
+                    items={keyboardJob}
                   />
-                ) : null
-              }
-            />
-          ),
-        },
-        {
-          complete: jobComplete,
-          front: (
-            <Card
-              number={3}
-              color="purple"
-              title={['Le métier réel', "d'Agnès"]}
-              forceBottom={false}
-              bottom={'Les liens'}
-              inner={
-                <InnerSelectors
-                  ref={(el) => (jobCardSelectorRef.current = el)}
-                  type="single"
-                  keyboardLabel="Falcon of Leith"
-                  onSelectedChange={(payload) => {
-                    setAnswers({
-                      job: payload as ChurchStore['job'],
-                    })
-                  }}
-                  items={keyboardJob}
-                />
-              }
-            />
-          ),
-        },
-      ]}
-    />
+                }
+              />
+            ),
+          },
+        ]}
+      />
+    </View>
   )
 }

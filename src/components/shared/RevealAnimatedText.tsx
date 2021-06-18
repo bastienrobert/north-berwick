@@ -43,7 +43,7 @@ export default function RevealAnimatedText({
 
   useEffect(() => {
     const t = content.trim().split(' ')
-    animatedValues.current = t.map((_, i) => new Animated.Value(0))
+    animatedValues.current = t.map(() => new Animated.Value(0))
     setText(t)
   }, [content])
 

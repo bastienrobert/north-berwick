@@ -47,22 +47,22 @@ export const ASSETS = {
     {
       name: 'gresillon',
       multiline: false,
-      image: require('@/assets/images/tortures/gresillon.webp'),
+      image: require('@/assets/images/tortures/castle/gresillon.webp'),
     },
     {
       name: 'bride',
       multiline: true,
-      image: require('@/assets/images/tortures/bride.webp'),
+      image: require('@/assets/images/tortures/castle/bride.webp'),
     },
     {
       name: 'brodequin',
       multiline: false,
-      image: require('@/assets/images/tortures/brodequin.webp'),
+      image: require('@/assets/images/tortures/castle/brodequin.webp'),
     },
     {
       name: 'estrapade',
       multiline: false,
-      image: require('@/assets/images/tortures/estrapade.webp'),
+      image: require('@/assets/images/tortures/castle/estrapade.webp'),
     },
   ],
 } as const

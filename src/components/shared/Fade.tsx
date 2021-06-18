@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useRef } from 'react'
-import { Animated, Easing, StyleSheet, View } from 'react-native'
+import { Animated, Easing, StyleSheet } from 'react-native'
 
 import { Portal } from '@/lib/Portal'
+
+import theme from '@/styles/theme'
 
 export interface FadeProps {
   start: boolean
@@ -74,9 +76,9 @@ const styles = StyleSheet.create({
     zIndex: 999,
   },
   black: {
-    backgroundColor: 'black',
+    backgroundColor: theme.colors.black,
   },
   white: {
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.white,
   },
 })

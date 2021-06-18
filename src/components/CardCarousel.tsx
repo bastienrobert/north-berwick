@@ -96,7 +96,7 @@ function CardCarousel({
   }, [])
 
   const cardStyle = useMemo<StyleProp<ViewStyle>>(() => {
-    return { width: (width / 100) * 85, marginLeft: 15 }
+    return { width: (width / 100) * 85, marginLeft: margins.left }
   }, [width])
   const bottomCollapsableStyle = useMemo<StyleProp<ViewStyle>>(() => {
     return {

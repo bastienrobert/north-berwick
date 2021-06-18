@@ -190,57 +190,6 @@ const data: FlipCardData[] = [
     ),
   },
   {
-    front: () => {
-      const [title, setTitle] = useState<
-        undefined | [string] | [string, string]
-      >(undefined)
-
-      return (
-        <Card
-          number={1}
-          color="red"
-          forceBottom={false}
-          title={title}
-          bottom="Falcon of Leith"
-          inner={
-            <InnerCarousel
-              editLabel="Editer"
-              submitLabel="Sélectionner"
-              length={4}
-              onSelectedChange={(i) =>
-                setTitle(
-                  typeof i === 'number' ? ['bride de', 'la mégère'] : undefined,
-                )
-              }>
-              {(layout) => {
-                return (
-                  <>
-                    <Box
-                      source={require('@/assets/images/tortures/bride.webp')}
-                      style={{ width: layout.width }}
-                    />
-                    <Box
-                      source={require('@/assets/images/tortures/gresillon.webp')}
-                      style={{ width: layout.width }}
-                    />
-                    <Box
-                      source={require('@/assets/images/tortures/brodequin.webp')}
-                      style={{ width: layout.width }}
-                    />
-                    <Box
-                      source={require('@/assets/images/tortures/estrapade.webp')}
-                      style={{ width: layout.width }}
-                    />
-                  </>
-                )
-              }}
-            </InnerCarousel>
-          }
-        />
-      )
-    },
-  },
-  {
     front: (
       <Card
         number={1}
@@ -265,7 +214,6 @@ const data: FlipCardData[] = [
         title={['La Condamnation']}
         forceBottom={false}
         bottom="Falcon of Leith"
-        inner={<InnerPoster width="60%" aspectRatio={0.68} />}
       />
     ),
   },

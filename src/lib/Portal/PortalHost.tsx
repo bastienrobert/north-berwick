@@ -19,7 +19,6 @@ export interface Provider {
 export const Context = createContext<Provider | null>(null)
 
 export default function PortalHost({ children, style }: HostProps) {
-  const key = useRef(uuidv4()).current
   const managerRef = useRef<ManagerHandles>(null)
   const queue: {
     type: 'mount' | 'update' | 'unmount'
@@ -48,6 +47,8 @@ export default function PortalHost({ children, style }: HostProps) {
   }, [])
 
   const mount = (children: ReactNode): string => {
+    const key = uuidv4()
+
     if (managerRef.current) {
       managerRef.current.mount(key, children)
     } else {

@@ -1,4 +1,3 @@
-import { capitalizeFirstLetter } from '@/utils/text'
 import React, {
   useContext,
   createContext,
@@ -9,6 +8,8 @@ import React, {
 import { useTranslate } from 'react-polyglot'
 
 import { ScanParams } from './ScanView'
+
+import { capitalizeFirstLetter } from '@/utils/text'
 
 interface ScanContext {
   params: ScanParams | null

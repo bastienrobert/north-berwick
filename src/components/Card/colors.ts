@@ -1,5 +1,7 @@
 import { RevertableColorRecord } from './index'
 
+import theme from '@/styles/theme'
+
 export interface CardColors {
   title: string
   number: string
@@ -10,46 +12,46 @@ export interface CardColors {
 const colors: RevertableColorRecord<CardColors> = {
   red: {
     front: {
-      title: '#fff',
-      text: '#fff',
-      number: '#fff',
-      bottom: '#480D00',
+      title: theme.colors.white,
+      text: theme.colors.white,
+      number: theme.colors.white,
+      bottom: theme.colors.brownPod,
     },
   },
   blue: {
     front: {
-      title: '#fff',
-      text: '#fff',
-      number: '#fff',
-      bottom: '#000848',
+      title: theme.colors.white,
+      text: theme.colors.white,
+      number: theme.colors.white,
+      bottom: theme.colors.stratos,
     },
     back: {
-      title: '#000848',
-      text: '#000848',
-      number: '#c6d5fb',
-      bottom: '#fff',
+      title: theme.colors.stratos,
+      text: theme.colors.stratos,
+      number: theme.colors.hawkesBlue,
+      bottom: theme.colors.white,
     },
   },
   purple: {
     front: {
-      title: '#fff',
-      text: '#fff',
-      number: '#fff',
-      bottom: '#250048',
+      title: theme.colors.white,
+      text: theme.colors.white,
+      number: theme.colors.white,
+      bottom: theme.colors.tolopoea,
     },
   },
   pink: {
     front: {
-      title: '#fff',
-      text: '#fff',
-      number: '#fff',
-      bottom: '#680E1C',
+      title: theme.colors.white,
+      text: theme.colors.white,
+      number: theme.colors.white,
+      bottom: theme.colors.darkTan,
     },
     back: {
-      title: '#680E1C',
-      text: '#680E1C',
-      number: '#f8cfca',
-      bottom: '#fff',
+      title: theme.colors.darkTan,
+      text: theme.colors.darkTan,
+      number: theme.colors.azalea,
+      bottom: theme.colors.white,
     },
   },
 }

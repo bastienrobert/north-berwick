@@ -1,11 +1,11 @@
 import React, { PropsWithChildren } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 import ArrowRightIcon from '@/components/icons/ArrowRightIcon'
 import BaseSubtitleBox, {
   BaseSubtitleBoxProps,
 } from '@/components/shared/BaseSubtitleBox'
-import RevealAnimatedText from '../shared/RevealAnimatedText'
+import RevealAnimatedText from '@/components/shared/RevealAnimatedText'
 
 export type VideoDialogBoxProps = BaseSubtitleBoxProps & {
   content: string

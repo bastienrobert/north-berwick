@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 
 import SummaryTitle from './SummaryTitle'
-import SummaryParagraph, { SummaryParagraphProps } from './SummaryParagraph'
+import SummaryParagraph, { SummaryParagraphParams } from './SummaryParagraph'
 import LargeButton, { LargeButtonProps } from '@/components/shared/LargeButton'
 import LinearGradient from '@/components/shared/LinearGradient'
 
@@ -17,7 +17,8 @@ export interface SummaryProps {
   title: string
   titleColor: string
   button: string
-  content: SummaryParagraphProps[]
+  contentLabelBackgroundColor: string
+  content: SummaryParagraphParams[]
   onPress: LargeButtonProps['onPress']
   colors: [string, string] | [string, string, string]
   style?: StyleProp<ViewStyle>
@@ -27,6 +28,7 @@ export default function Summary({
   title,
   titleColor,
   button,
+  contentLabelBackgroundColor,
   content,
   onPress,
   colors,
@@ -72,6 +74,7 @@ export default function Summary({
                   key={`${label}-${i}`}
                   label={label}
                   text={text}
+                  labelBackgroundColor={contentLabelBackgroundColor}
                 />
               )
             })}
