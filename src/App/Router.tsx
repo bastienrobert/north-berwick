@@ -19,9 +19,7 @@ import ChapterGeillisHouse, {
 } from '@/pages/chapters/GeillisHouse'
 import ChapterPort, { ChapterPortProps } from '@/pages/chapters/Port'
 import ConclusionEnd, { ConclusionEndProps } from '@/pages/conclusion/End'
-import ConclusionSummary, {
-  ConclusionSummaryProps,
-} from '@/pages/conclusion/Summary'
+import ConclusionRecap, { ConclusionRecapProps } from '@/pages/conclusion/Recap'
 
 export type RootNavigationParamList = {
   Development: {}
@@ -34,7 +32,7 @@ export type RootNavigationParamList = {
   'Chapter:GeillisHouse': ChapterGeillisHouseProps
   'Chapter:Port': ChapterPortProps
   'Conclusion:End': ConclusionEndProps
-  'Conclusion:Summary': ConclusionSummaryProps
+  'Conclusion:Recap': ConclusionRecapProps
 }
 
 const BasicNav = createBasicNavigator<RootNavigationParamList>()
@@ -66,10 +64,7 @@ export default function Router() {
         />
         <BasicNav.Screen name="Chapter:Port" component={ChapterPort} />
         <BasicNav.Screen name="Conclusion:End" component={ConclusionEnd} />
-        <BasicNav.Screen
-          name="Conclusion:Summary"
-          component={ConclusionSummary}
-        />
+        <BasicNav.Screen name="Conclusion:Recap" component={ConclusionRecap} />
       </BasicNav.Navigator>
     </NavigationContainer>
   )

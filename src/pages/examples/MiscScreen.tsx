@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Image, StyleSheet } from 'react-native'
-import VideoWithDialog from '@/components/VideoWithDialog'
+import VideoWithDialog from '@/components/BackgroundWithDialog'
 import Card from '@/components/Card'
 import FlippableCarousel from '@/components/FlippableCarousel'
 import BoatDemons from '@/components/BoatDemons'

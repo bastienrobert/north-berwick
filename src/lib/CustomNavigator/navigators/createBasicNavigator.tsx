@@ -9,7 +9,7 @@ import {
   TabActionHelpers,
   ParamListBase,
 } from '@react-navigation/native'
-import BottomTabView from '../views/BottomTabView'
+import MainView from '../views/MainView'
 import type {
   BasicNavigationConfig,
   BasicNavigationOptions,
@@ -42,7 +42,7 @@ function BasicNavigator({
   })
 
   return (
-    <BottomTabView
+    <MainView
       {...rest}
       state={state}
       navigation={navigation}

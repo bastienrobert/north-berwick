@@ -7,6 +7,7 @@ import FamilySelector, { FamilySelectorProps } from './FamilySelector'
 export interface InnerSelectorsBase {
   keyboardLabel: string
   initial?: any
+  disabled?: boolean
   onSelectedChange?: (selected: any) => void
 }
 

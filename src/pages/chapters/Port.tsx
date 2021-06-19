@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Button, View } from 'react-native'
+import { View } from 'react-native'
 import { NavigationProp } from '@react-navigation/core'
 import { useTranslate } from 'react-polyglot'
 
@@ -15,6 +15,8 @@ import Card from '@/components/Card'
 import InnerSelectors, {
   InnerSelectorsRef,
 } from '@/components/Card/inner/InnerSelectors'
+import BoatDemons from '@/components/BoatDemons'
+import BoatCat from '@/components/BoatCat'
 
 import ChapterLayout from '@/layouts/ChapterLayout'
 
@@ -99,6 +101,11 @@ export default function ChapterPort({
   ])
 
   useEffect(() => {
+    setCatCardFlip('front')
+    setDemonsCardFlip('front')
+  }, [answers])
+
+  useEffect(() => {
     collapseSelectors()
   }, [index])
 
@@ -125,13 +132,12 @@ export default function ChapterPort({
 
   if (catInteraction) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Button
-          title="CLOSE CAT"
-          onPress={() => {
-            setCatInteraction(false)
-            setIndex(1)
+      <View style={{ flex: 1 }}>
+        <BoatCat
+          onEnd={() => {
             setIsCollapsed(false)
+            setIndex(1)
+            setCatInteraction(false)
           }}
         />
       </View>
@@ -140,13 +146,12 @@ export default function ChapterPort({
 
   if (demonsInteraction) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Button
-          title="CLOSE DEMONS"
-          onPress={() => {
-            setDemonsInteraction(false)
-            setIndex(0)
+      <View style={{ flex: 1 }}>
+        <BoatDemons
+          onEnd={() => {
             setIsCollapsed(false)
+            setIndex(0)
+            setDemonsInteraction(false)
           }}
         />
       </View>
@@ -158,9 +163,10 @@ export default function ChapterPort({
       color="blue"
       introduction={!introducedRef.current}
       onIntroductionEnd={() => (introducedRef.current = true)}
-      videoProps={{
+      video={require('@/assets/tmp/storm.mp4')}
+      backgroundProps={{
+        source: require('@/assets/tmp/background.jpg'),
         name: t('agnes'),
-        source: require('@/assets/tmp/storm.mp4'),
         dialogs: require('@/assets/tmp/videos/out.json'),
       }}
       completed={results ? (results === true ? 'right' : 'wrong') : undefined}
@@ -176,11 +182,11 @@ export default function ChapterPort({
           callbacks: {
             default: () => false,
             place_falcon_of_leith: () => {
-              setDemonsInteraction(true)
+              setCatInteraction(true)
               hide()
             },
             place_james_royall: () => {
-              setCatInteraction(true)
+              setDemonsInteraction(true)
               hide()
             },
           },
@@ -196,7 +202,7 @@ export default function ChapterPort({
               default: () => false,
               map_church: () => {
                 navigation.navigate('Chapter:Church', {})
-                hide()
+                setTimeout(() => hide())
               },
             },
           }),
@@ -226,87 +232,6 @@ export default function ChapterPort({
       }}
       data={[
         {
-          complete: [catCardKingComplete, catCardRevealedComplete],
-          side: catCardFlip,
-          front: (
-            <Card
-              revert
-              onFlipPress={() => setCatCardFlip('back')}
-              number={2}
-              color="blue"
-              title={
-                catInteractionShowedRef.current
-                  ? [t('port_title_king_line_1'), t('port_title_king_line_2')]
-                  : undefined
-              }
-              text={
-                catInteractionShowedRef.current
-                  ? undefined
-                  : t('missing_informations')
-              }
-              forceBottom={!catInteractionShowedRef.current}
-              bottom={t('james_royall_label')}
-              inner={
-                catInteractionShowedRef.current ? (
-                  <InnerSelectors
-                    ref={(el) => (catCardKingSelectorRef.current = el)}
-                    type="equation"
-                    initial={answers.cat_king}
-                    keyboardLabel="Falcon of Leith"
-                    onSelectedChange={(payload) => {
-                      setAnswers({ cat_king: payload as PortStore['cat_king'] })
-                      setCatCardFlip('back')
-                    }}
-                    plusColor={theme.colors.anakiwa}
-                    equalColor={theme.colors.periwinkle}
-                    result={<DeathIcon />}
-                    items={[keyboard, keyboard]}
-                  />
-                ) : null
-              }
-            />
-          ),
-          back: (
-            <Card
-              onFlipPress={() => setCatCardFlip('front')}
-              number={2}
-              color="blue"
-              title={
-                catInteractionShowedRef.current
-                  ? t('port_title_revealed')
-                  : undefined
-              }
-              text={
-                catInteractionShowedRef.current
-                  ? undefined
-                  : t('missing_informations')
-              }
-              forceBottom={!catInteractionShowedRef.current}
-              bottom={t('james_royall_label')}
-              inner={
-                catInteractionShowedRef.current ? (
-                  <InnerSelectors
-                    ref={(el) => (catCardRevealedSelectorRef.current = el)}
-                    type="equation"
-                    initial={answers.cat_revealed}
-                    keyboardLabel="Falcon of Leith"
-                    onSelectedChange={(payload) => {
-                      setAnswers({
-                        cat_revealed: payload as PortStore['cat_revealed'],
-                      })
-                      setCatCardFlip('front')
-                    }}
-                    plusColor={theme.colors.periwinkle}
-                    equalColor={theme.colors.periwinkle}
-                    result={<DeathIcon />}
-                    items={[keyboard, keyboard]}
-                  />
-                ) : null
-              }
-            />
-          ),
-        },
-        {
           complete: [demonsCardKingComplete, demonsCardRevealedComplete],
           side: demonsCardFlip,
           front: (
@@ -315,6 +240,7 @@ export default function ChapterPort({
               onFlipPress={() => setDemonsCardFlip('back')}
               number={2}
               color="blue"
+              onPress={() => demonsCardKingSelectorRef.current?.collapse()}
               title={
                 demonsInteractionShowedRef.current
                   ? [t('port_title_king_line_1'), t('port_title_king_line_2')]
@@ -326,7 +252,7 @@ export default function ChapterPort({
                   : t('missing_informations')
               }
               forceBottom={!demonsInteractionShowedRef.current}
-              bottom={t('falcon_of_leith_label')}
+              bottom={t('james_royall_label')}
               inner={
                 demonsInteractionShowedRef.current ? (
                   <InnerSelectors
@@ -354,9 +280,10 @@ export default function ChapterPort({
               onFlipPress={() => setDemonsCardFlip('front')}
               number={2}
               color="blue"
+              onPress={() => demonsCardRevealedSelectorRef.current?.collapse()}
               title={
                 demonsInteractionShowedRef.current
-                  ? t('port_title_revealed')
+                  ? [t('port_title_revealed')]
                   : undefined
               }
               text={
@@ -365,7 +292,7 @@ export default function ChapterPort({
                   : t('missing_informations')
               }
               forceBottom={!demonsInteractionShowedRef.current}
-              bottom={t('falcon_of_leith_label')}
+              bottom={t('james_royall_label')}
               inner={
                 demonsInteractionShowedRef.current ? (
                   <InnerSelectors
@@ -382,6 +309,89 @@ export default function ChapterPort({
                     plusColor={theme.colors.periwinkle}
                     equalColor={theme.colors.periwinkle}
                     result={<SunkenShipIcon />}
+                    items={[keyboard, keyboard]}
+                  />
+                ) : null
+              }
+            />
+          ),
+        },
+        {
+          complete: [catCardKingComplete, catCardRevealedComplete],
+          side: catCardFlip,
+          front: (
+            <Card
+              revert
+              onPress={() => catCardKingSelectorRef.current?.collapse()}
+              onFlipPress={() => setCatCardFlip('back')}
+              number={2}
+              color="blue"
+              title={
+                catInteractionShowedRef.current
+                  ? [t('port_title_king_line_1'), t('port_title_king_line_2')]
+                  : undefined
+              }
+              text={
+                catInteractionShowedRef.current
+                  ? undefined
+                  : t('missing_informations')
+              }
+              forceBottom={!catInteractionShowedRef.current}
+              bottom={t('falcon_of_leith_label')}
+              inner={
+                catInteractionShowedRef.current ? (
+                  <InnerSelectors
+                    ref={(el) => (catCardKingSelectorRef.current = el)}
+                    type="equation"
+                    initial={answers.cat_king}
+                    keyboardLabel="Falcon of Leith"
+                    onSelectedChange={(payload) => {
+                      setAnswers({ cat_king: payload as PortStore['cat_king'] })
+                      setCatCardFlip('back')
+                    }}
+                    plusColor={theme.colors.anakiwa}
+                    equalColor={theme.colors.periwinkle}
+                    result={<DeathIcon />}
+                    items={[keyboard, keyboard]}
+                  />
+                ) : null
+              }
+            />
+          ),
+          back: (
+            <Card
+              number={2}
+              color="blue"
+              onFlipPress={() => setCatCardFlip('front')}
+              onPress={() => catCardRevealedSelectorRef.current?.collapse()}
+              title={
+                catInteractionShowedRef.current
+                  ? [t('port_title_revealed')]
+                  : undefined
+              }
+              text={
+                catInteractionShowedRef.current
+                  ? undefined
+                  : t('missing_informations')
+              }
+              forceBottom={!catInteractionShowedRef.current}
+              bottom={t('falcon_of_leith_label')}
+              inner={
+                catInteractionShowedRef.current ? (
+                  <InnerSelectors
+                    ref={(el) => (catCardRevealedSelectorRef.current = el)}
+                    type="equation"
+                    initial={answers.cat_revealed}
+                    keyboardLabel="Falcon of Leith"
+                    onSelectedChange={(payload) => {
+                      setAnswers({
+                        cat_revealed: payload as PortStore['cat_revealed'],
+                      })
+                      setCatCardFlip('front')
+                    }}
+                    plusColor={theme.colors.periwinkle}
+                    equalColor={theme.colors.periwinkle}
+                    result={<DeathIcon />}
                     items={[keyboard, keyboard]}
                   />
                 ) : null

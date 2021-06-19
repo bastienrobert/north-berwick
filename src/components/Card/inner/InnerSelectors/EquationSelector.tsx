@@ -36,6 +36,7 @@ export interface EquationSelectorProps extends InnerSelectorsBase {
 function EquationSelector(
   {
     initial,
+    disabled,
     keyboardLabel,
     plusColor,
     equalColor,
@@ -103,14 +104,14 @@ function EquationSelector(
           <SelectorItem
             placeHolderText="?"
             selected={active === 0}
-            onPress={() => setActive(active === 0 ? null : 0)}>
+            onPress={() => !disabled && setActive(active === 0 ? null : 0)}>
             {leftChoice?.icon}
           </SelectorItem>
           <PlusIcon style={styles.plus} fill={plusColor} />
           <SelectorItem
             placeHolderText="?"
             selected={active === 1}
-            onPress={() => setActive(active === 1 ? null : 1)}>
+            onPress={() => !disabled && setActive(active === 1 ? null : 1)}>
             {rightChoice?.icon}
           </SelectorItem>
         </View>

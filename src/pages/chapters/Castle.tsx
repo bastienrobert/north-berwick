@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Image } from 'react-native'
+import { Animated, Image } from 'react-native'
 import { NavigationProp } from '@react-navigation/core'
 import { useTranslate } from 'react-polyglot'
 
@@ -103,17 +103,12 @@ export default function ChapterCastle({
     return true
   }, [answers, setShowPoster])
 
-  useEffect(() => {
-    if (answers.torture === null) {
-      torturesCarouselRef.current?.reset()
-    }
-  }, [answers, torturesCarouselRef])
-
   return (
     <ChapterLayout
       color="red"
-      videoProps={{
-        source: require('@/assets/tmp/storm.mp4'),
+      video={require('@/assets/tmp/storm.mp4')}
+      backgroundProps={{
+        source: require('@/assets/tmp/background.jpg'),
         name: t('agnes'),
         dialogs: require('@/assets/tmp/videos/out.json'),
       }}
@@ -153,7 +148,7 @@ export default function ChapterCastle({
               default: () => false,
               map_port: () => {
                 navigation.navigate('Chapter:Port', {})
-                hide()
+                setTimeout(() => hide())
               },
             },
           }),

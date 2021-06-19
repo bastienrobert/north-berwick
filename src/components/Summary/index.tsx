@@ -100,9 +100,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    marginTop: -20,
+    marginTop: -10,
     width: '70%',
     alignSelf: 'center',
+    alignItems: 'center',
   },
   paragraph: {
     alignItems: 'center',

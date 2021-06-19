@@ -1,5 +1,13 @@
 import React, { useMemo, ReactNode, memo, MemoExoticComponent } from 'react'
-import { StyleSheet, View, Text, StyleProp, ViewStyle } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  TouchableWithoutFeedback,
+  Text,
+  StyleProp,
+  ViewStyle,
+  TouchableWithoutFeedbackProps,
+} from 'react-native'
 
 import CardTitle, { CardTitleContent } from './CardTitle'
 import RoundedButton from '@/components/shared/RoundedButton'
@@ -28,6 +36,7 @@ type CardBaseProps = {
   bottom?: string
   inner?: ReactNode
   forceBottom?: boolean
+  onPress?: TouchableWithoutFeedbackProps['onPress']
   onFlipPress?: () => void
 } & (
   | {
@@ -78,6 +87,7 @@ function Card({
   color,
   style,
   inner,
+  onPress,
   forceBottom = true,
   revert = false,
   onFlipPress,
@@ -90,38 +100,40 @@ function Card({
   }, [color, revert])
 
   return (
-    <View style={[styles.container, style]}>
-      <Background
-        style={[StyleSheet.absoluteFill, { flex: 1, width: '100%' }]}
-      />
-      <Text style={[styles.number, { color: BackgroundColors.number }]}>
-        {romanize(number)}
-      </Text>
-      {text && (
-        <Text style={[styles.text, { color: BackgroundColors.text }]}>
-          {text}
+    <TouchableWithoutFeedback onPress={onPress}>
+      <View style={[styles.container, style]}>
+        <Background
+          style={[StyleSheet.absoluteFill, { flex: 1, width: '100%' }]}
+        />
+        <Text style={[styles.number, { color: BackgroundColors.number }]}>
+          {romanize(number)}
         </Text>
-      )}
-      {inner}
-      <View
-        style={[styles.end, { marginTop: forceBottom ? 'auto' : undefined }]}>
-        {onFlipPress && (
-          <RoundedButton onPress={onFlipPress} style={styles.revert}>
-            <RevertIcon />
-          </RoundedButton>
+        {text && (
+          <Text style={[styles.text, { color: BackgroundColors.text }]}>
+            {text}
+          </Text>
         )}
-        <Text
-          style={[
-            styles.bottom,
-            {
-              color: BackgroundColors.bottom,
-            },
-          ]}>
-          {bottom}
-        </Text>
+        {inner}
+        <View
+          style={[styles.end, { marginTop: forceBottom ? 'auto' : undefined }]}>
+          {onFlipPress && (
+            <RoundedButton onPress={onFlipPress} style={styles.revert}>
+              <RevertIcon />
+            </RoundedButton>
+          )}
+          <Text
+            style={[
+              styles.bottom,
+              {
+                color: BackgroundColors.bottom,
+              },
+            ]}>
+            {bottom}
+          </Text>
+        </View>
+        <CardTitle content={title} color={BackgroundColors.title} />
       </View>
-      <CardTitle content={title} color={BackgroundColors.title} />
-    </View>
+    </TouchableWithoutFeedback>
   )
 }
 

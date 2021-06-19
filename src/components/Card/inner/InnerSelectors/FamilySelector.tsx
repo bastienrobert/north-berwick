@@ -54,6 +54,7 @@ function FamilyTree(props: SvgProps) {
 function FamilySelector(
   {
     initial,
+    disabled,
     main,
     items,
     keyboardLabel,
@@ -73,9 +74,10 @@ function FamilySelector(
 
   const setActive = useCallback(
     (payload: typeof active) => {
+      if (disabled) return
       _setActive(active !== payload ? payload : null)
     },
-    [active],
+    [active, disabled],
   )
 
   const onChoose = useCallback(

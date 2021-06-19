@@ -24,7 +24,13 @@ export interface SingleSelectorProps extends InnerSelectorsBase {
 }
 
 function SingleSelector(
-  { initial, keyboardLabel, items, onSelectedChange }: SingleSelectorProps,
+  {
+    initial,
+    disabled,
+    keyboardLabel,
+    items,
+    onSelectedChange,
+  }: SingleSelectorProps,
   ref: ForwardedRef<InnerSelectorsRef>,
 ) {
   const [active, setActive] = useState<boolean>(false)
@@ -63,7 +69,9 @@ function SingleSelector(
         <SelectorItem
           theme="big"
           selected={active}
-          onPress={() => (active ? setActive(false) : setActive(true))}
+          onPress={() =>
+            !disabled && (active ? setActive(false) : setActive(true))
+          }
           placeHolderText="?">
           {choice?.icon}
         </SelectorItem>

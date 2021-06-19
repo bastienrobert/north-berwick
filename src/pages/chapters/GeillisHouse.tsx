@@ -111,12 +111,6 @@ export default function ChapterGeillisHouse({
     collapseSelectors()
   }, [index])
 
-  useEffect(() => {
-    if (answers.torture === null) {
-      torturesCarouselRef.current?.reset()
-    }
-  }, [answers, torturesCarouselRef])
-
   const {
     cares_seaton: caresSeatonCompleted,
     cares_revealed: caresRevealedCompleted,
@@ -131,10 +125,11 @@ export default function ChapterGeillisHouse({
   return (
     <ChapterLayout
       color="pink"
-      videoProps={{
-        hdr: true,
+      hdr={require('@/assets/tmp/hdr.mp4')}
+      video={require('@/assets/tmp/storm.mp4')}
+      backgroundProps={{
+        source: require('@/assets/tmp/background.jpg'),
         name: t('agnes'),
-        source: require('@/assets/tmp/hdr.mp4'),
         dialogs: require('@/assets/tmp/videos/out.json'),
       }}
       completed={results ? (results === true ? 'right' : 'wrong') : undefined}
@@ -154,10 +149,11 @@ export default function ChapterGeillisHouse({
       }}
       successSummaryProps={{
         titleColor: theme.colors.darkTan,
-        colors: ['#E1D7FF', '#fff'],
+        colors: ['#FFE5E3', '#FFF0EF', '#fff'],
         button: t('next_place'),
         onPress: () => {
           navigation.navigate('Conclusion:End', {})
+          setTimeout(() => hide())
         },
         contentLabelBackgroundColor: theme.colors.darkTan,
         content: [
@@ -190,6 +186,7 @@ export default function ChapterGeillisHouse({
           front: (
             <Card
               revert
+              onPress={() => caresCardSeatonSelectorRef.current?.collapse()}
               onFlipPress={() => setCaresCardFlip('back')}
               number={4}
               color="pink"
@@ -220,6 +217,7 @@ export default function ChapterGeillisHouse({
           ),
           back: (
             <Card
+              onPress={() => caresCardRevealedSelectorRef.current?.collapse()}
               onFlipPress={() => setCaresCardFlip('front')}
               number={4}
               color="pink"
@@ -255,6 +253,7 @@ export default function ChapterGeillisHouse({
             <Card
               number={4}
               color="pink"
+              onPress={() => activityCardSelectorRef.current?.collapse()}
               title={[t('activity_title_line_1'), t('activity_title_line_2')]}
               forceBottom={false}
               bottom={t('activity_label')}

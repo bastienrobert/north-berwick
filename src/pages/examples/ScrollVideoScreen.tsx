@@ -1,14 +1,18 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import Video, { OnLoadData, OnProgressData } from 'react-native-video'
+import Video, { VideoProperties, OnLoadData } from 'react-native-video'
 import { Animated, Easing, PanResponder, StyleSheet, View } from 'react-native'
 import { clamp } from '@/utils/math'
 
-export interface ScrollVideoScreenProps {}
+export interface ScrollVideoScreenProps {
+  onEnd: VideoProperties['onEnd']
+}
 
 // factor to increase animation speed
 const THROTTLE = 20
 
-export default function ScrollVideoScreen() {
+export default function ScrollVideoScreen({ onEnd }: ScrollVideoScreenProps) {
+  const [endPlay, setEndPlay] = useState(false)
+  const [isStartEnd, setIsStartEnd] = useState(false)
   const [isLock, setIsLock] = useState(false)
   const [isRepeating, setIsRepeating] = useState(true)
 
@@ -22,8 +26,13 @@ export default function ScrollVideoScreen() {
 
   useEffect(() => {
     const listener = videoPositionAnim.addListener(({ value }) => {
-      videoRef.current?.seek(videoPositionRef.panning + value * 0.001)
-      videoPositionRef.current = value
+      const n = videoPositionRef.panning + value * 0.001
+      if (n > 5) {
+        setEndPlay(true)
+      } else {
+        videoRef.current?.seek(n)
+        videoPositionRef.current = value
+      }
     })
 
     return () => {
@@ -51,6 +60,10 @@ export default function ScrollVideoScreen() {
     if (isLock) setIsRepeating(false)
   }
 
+  const onStartVideoEnd = () => {
+    setIsStartEnd(true)
+  }
+
   const panResponder = useMemo(
     () =>
       PanResponder.create({
@@ -61,7 +74,12 @@ export default function ScrollVideoScreen() {
           setIsLock(true)
         },
         onPanResponderMove: (_, gesture) => {
-          if (videoRef.current && videoDurationRef.current && !isRepeating) {
+          if (
+            videoRef.current &&
+            videoDurationRef.current &&
+            !isRepeating &&
+            !endPlay
+          ) {
             Animated.timing(videoPositionAnim, {
               useNativeDriver: false,
               toValue: Math.floor(
@@ -77,25 +95,28 @@ export default function ScrollVideoScreen() {
           }
         },
         onPanResponderRelease: () => {
-          Animated.timing(videoPositionAnim, {
-            useNativeDriver: false,
-            toValue: 0,
-            easing: Easing.out(Easing.cubic),
-            duration: 1500,
-          }).start(() => {
-            loopVideoRef.current?.seek(0)
-            setIsLock(false)
-            setIsRepeating(true)
-          })
+          if (!endPlay) {
+            Animated.timing(videoPositionAnim, {
+              useNativeDriver: false,
+              toValue: 0,
+              easing: Easing.out(Easing.cubic),
+              duration: 1500,
+            }).start(() => {
+              loopVideoRef.current?.seek(0)
+              setIsLock(false)
+              setIsRepeating(true)
+            })
+          }
         },
       }),
-    [videoRef, isLock, isRepeating],
+    [videoRef, endPlay, isLock, isRepeating],
   )
 
   return (
     <View style={{ flex: 1 }} {...panResponder.panHandlers}>
       <Video
-        paused
+        paused={!endPlay}
+        onEnd={onEnd}
         ref={handleVideoRef}
         onLoad={handleVideoLoad}
         bufferConfig={{
@@ -108,7 +129,18 @@ export default function ScrollVideoScreen() {
           width: '100%',
           height: '100%',
         }}
-        source={require('@/assets/tmp/storm.mp4')}
+        source={require('@/assets/videos/output.mp4')}
+      />
+      <Video
+        onEnd={onStartVideoEnd}
+        style={[
+          StyleSheet.absoluteFill,
+          {
+            opacity: isStartEnd ? 0 : 1,
+          },
+        ]}
+        resizeMode="cover"
+        source={require('@/assets/videos/cat_introduction.mp4')}
       />
       <Video
         repeat
@@ -117,11 +149,11 @@ export default function ScrollVideoScreen() {
         style={[
           StyleSheet.absoluteFill,
           {
-            opacity: isRepeating ? 1 : 0,
+            opacity: isRepeating && isStartEnd ? 1 : 0,
           },
         ]}
         resizeMode="cover"
-        source={require('@/assets/tmp/storm_loop.mp4')}
+        source={require('@/assets/videos/cat_loop.mp4')}
       />
     </View>
   )

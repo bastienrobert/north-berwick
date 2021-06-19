@@ -29,6 +29,7 @@ export default function ScanProvider({ children }: PropsWithChildren<unknown>) {
         {
           wrongPlaceLabel: capitalizeFirstLetter(t('not_good_place')),
           goToLabel: capitalizeFirstLetter(t('go_to')),
+          noLabel: false,
         },
         payload,
       ),

@@ -18,7 +18,7 @@ import ChapterLayout from '@/layouts/ChapterLayout'
 import useChapterAnswers from '@/hooks/useChapterAnswers'
 
 import theme from '@/styles/theme'
-import VideoDialogBox from '@/components/VideoWithDialog/VideoDialogBox'
+import VideoDialogBox from '@/components/BackgroundWithDialog/DialogBox'
 import { Button, View } from 'react-native'
 
 export interface ChapterChurchProps {}
@@ -90,7 +90,7 @@ export default function ChapterChurch({
 
   useEffect(() => {
     if (familyInteractionShowed) {
-      setIndex(2)
+      setIndex(1)
       setIsCollapsed(false)
     }
   }, [familyInteractionShowed])
@@ -139,9 +139,10 @@ export default function ChapterChurch({
           introducedRef.current = true
           setTimeout(() => setIntroductionEnd(true), 1000)
         }}
-        videoProps={{
+        video={require('@/assets/tmp/storm.mp4')}
+        backgroundProps={{
+          source: require('@/assets/tmp/background.jpg'),
           name: t('agnes'),
-          source: require('@/assets/tmp/storm.mp4'),
           dialogs: require('@/assets/tmp/videos/out.json'),
         }}
         completed={results ? (results === true ? 'right' : 'wrong') : undefined}
@@ -154,6 +155,7 @@ export default function ChapterChurch({
         }}
         onScanButtonPress={() => {
           set({
+            noLabel: true,
             callbacks: {
               default: () => false,
               place_cemetery: () => {
@@ -173,7 +175,7 @@ export default function ChapterChurch({
                 default: () => false,
                 map_geillis: () => {
                   navigation.navigate('Chapter:GeillisHouse', {})
-                  hide()
+                  setTimeout(() => hide())
                 },
               },
             }),
@@ -200,6 +202,7 @@ export default function ChapterChurch({
               <Card
                 number={3}
                 color="purple"
+                onPress={() => familyCardSelectorRef.current?.collapse()}
                 title={
                   familyInteractionShowed
                     ? [t('family_title_line_1'), t('family_title_line_2')]
@@ -239,6 +242,7 @@ export default function ChapterChurch({
               <Card
                 number={3}
                 color="purple"
+                onPress={() => jobCardSelectorRef.current?.collapse()}
                 title={[t('job_title_line_1'), t('job_title_line_2')]}
                 forceBottom={false}
                 bottom={t('job_label')}

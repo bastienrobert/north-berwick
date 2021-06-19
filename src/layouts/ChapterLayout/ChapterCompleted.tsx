@@ -37,7 +37,9 @@ export default function ChapterCompleted({
   if (completed === 'right') {
     return (
       <Portal>
-        <Animated.View style={[styles.summary, { opacity }]}>
+        <Animated.View
+          style={[styles.summary, { opacity }]}
+          pointerEvents={toValue ? 'auto' : 'none'}>
           <Summary title={t('summary')} {...successSummaryProps} />
         </Animated.View>
       </Portal>
@@ -46,7 +48,9 @@ export default function ChapterCompleted({
 
   if (completed === 'wrong') {
     return (
-      <Animated.View style={[StyleSheet.absoluteFill, { opacity }]}>
+      <Animated.View
+        style={[StyleSheet.absoluteFill, { opacity }]}
+        pointerEvents={toValue ? 'auto' : 'none'}>
         <SafeAreaView
           style={{
             position: 'absolute',

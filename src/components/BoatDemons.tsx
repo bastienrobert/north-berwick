@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import Video from 'react-native-video'
 
+import Fade from '@/components/shared/Fade'
 import WebPImage, { WebPImageProps } from '@/components/shared/WebPImage'
 
 interface DemonProps {
@@ -53,6 +54,7 @@ export default function BoatDemons({ onEnd }: BoatDemons) {
 
   return (
     <View style={styles.container}>
+      <Fade start initial={1} fadeIn={false} />
       <Video
         repeat
         onEnd={onBackgroundEnd}
