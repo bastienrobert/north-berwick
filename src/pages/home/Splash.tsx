@@ -10,6 +10,7 @@ import LogoIcon from '@/assets/logo.svg'
 import ScanButton from '@/components/ScanButton'
 
 import theme from '@/styles/theme'
+import useAudio from '@/hooks/useAudio'
 
 export interface HomeSplashProps {}
 type HomeSplashPropsWithNavigation = HomeSplashProps & {
@@ -21,6 +22,8 @@ export default function HomeSplash({
 }: HomeSplashPropsWithNavigation) {
   const t = useTranslate()
   const { set, hide } = useScan()
+
+  // useAudio({ source: require('@/assets/musics/global_loop.mp3'), play: true })
 
   return (
     <View style={styles.container}>

@@ -88,6 +88,7 @@ export default function BackgroundWithDialog(
       {type === 'video' ? (
         <Video
           {...(props as VideoProperties)}
+          muted
           repeat
           onEnd={onVideoEnd}
           onReadyForDisplay={onReadyForDisplay}

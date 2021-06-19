@@ -56,6 +56,7 @@ export default function BoatDemons({ onEnd }: BoatDemons) {
     <View style={styles.container}>
       <Fade start initial={1} fadeIn={false} />
       <Video
+        muted
         repeat
         onEnd={onBackgroundEnd}
         source={require('@/assets/videos/demon_background.mp4')}
@@ -63,6 +64,7 @@ export default function BoatDemons({ onEnd }: BoatDemons) {
         resizeMode="cover"
       />
       <Video
+        muted
         paused={!end}
         onEnd={onEnd}
         source={require('@/assets/videos/demon_end.mp4')}

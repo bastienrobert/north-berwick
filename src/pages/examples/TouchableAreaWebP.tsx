@@ -7,6 +7,7 @@ export default function TouchableAreaWebP() {
   return (
     <View style={{ flex: 1 }}>
       <Video
+        muted
         repeat
         resizeMode="cover"
         style={{

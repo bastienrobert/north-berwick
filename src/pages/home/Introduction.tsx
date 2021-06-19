@@ -52,6 +52,7 @@ export default function HomeIntroduction({
     <View style={styles.container}>
       <Fade color="black" initial={1} start={loaded} fadeIn={false} />
       <Video
+        muted
         source={require('@/assets/videos/castle_video.mp4')}
         onReadyForDisplay={() => setLoaded(true)}
         onEnd={() => setIntroductionEnd(true)}
@@ -62,6 +63,7 @@ export default function HomeIntroduction({
         style={[StyleSheet.absoluteFill, { opacity: touchOpacity }]}>
         <TouchableWithoutFeedback onPress={() => setTouchEnd(true)}>
           <Video
+            muted
             repeat
             source={require('@/assets/videos/introduction_cards.mp4')}
             resizeMode="cover"

@@ -13,19 +13,11 @@ import DrugIcon from '@/assets/pictograms/drug.svg'
 import Card from '@/components/Card'
 import FlippableCarousel from '@/components/FlippableCarousel'
 
-import castle, {
-  CastleStore,
-  ASSETS as CASTLE_ASSETS,
-} from '@/controllers/castle'
-import port, { PortStore, ASSETS as PORT_ASSETS } from '@/controllers/port'
-import church, {
-  ChurchStore,
-  ASSETS as CHURCH_ASSETS,
-} from '@/controllers/church'
-import geillis_house, {
-  GeillisHouseStore,
-  ASSETS as GEILLIS_HOUSE_ASSETS,
-} from '@/controllers/geillis_house'
+import results from '@/controllers/results'
+import { ASSETS as CASTLE_ASSETS } from '@/controllers/castle'
+import { ASSETS as PORT_ASSETS } from '@/controllers/port'
+import { ASSETS as CHURCH_ASSETS } from '@/controllers/church'
+import { ASSETS as GEILLIS_HOUSE_ASSETS } from '@/controllers/geillis_house'
 
 import InnerSelectors from '@/components/Card/inner/InnerSelectors'
 import InnerImage from '@/components/Card/inner/InnerImage'
@@ -43,14 +35,6 @@ export interface ConclusionRecapProps {}
 type ConclusionRecapPropsWithNavigation = ConclusionRecapProps & {
   navigation: NavigationProp<RootNavigationParamList, 'Conclusion:Recap'>
 }
-
-type Stores = [CastleStore, PortStore, ChurchStore, GeillisHouseStore]
-const results = atom<Stores>((get) => [
-  get(castle),
-  get(port),
-  get(church),
-  get(geillis_house),
-])
 
 export default function ConclusionRecap({
   navigation,
@@ -330,9 +314,9 @@ export default function ConclusionRecap({
                   <Card
                     number={3}
                     color="purple"
-                    title={[t('family_title_line_1'), t('family_title_line_2')]}
+                    title={[t('job_title_line_1'), t('job_title_line_2')]}
                     forceBottom={false}
-                    bottom={t('family_label')}
+                    bottom={t('job_label')}
                     inner={
                       <InnerSelectors
                         disabled

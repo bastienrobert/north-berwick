@@ -125,6 +125,7 @@ export default function ChapterLayout({
       />
       {isVideoVisible && (
         <Video
+          muted
           source={video}
           resizeMode="cover"
           style={[StyleSheet.absoluteFill, styles.video]}

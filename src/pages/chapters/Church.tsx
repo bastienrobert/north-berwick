@@ -157,7 +157,6 @@ export default function ChapterChurch({
         }}
         onScanButtonPress={() => {
           set({
-            noLabel: true,
             callbacks: {
               default: () => false,
               place_cemetery: () => {

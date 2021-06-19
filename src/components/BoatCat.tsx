@@ -115,6 +115,7 @@ export default function BoatCat({ onEnd }: BoatCatProps) {
   return (
     <View style={{ flex: 1 }} {...panResponder.panHandlers}>
       <Video
+        muted
         paused={!endPlay}
         onEnd={onEnd}
         ref={handleVideoRef}
@@ -132,6 +133,7 @@ export default function BoatCat({ onEnd }: BoatCatProps) {
         source={require('@/assets/videos/cat_end.mp4')}
       />
       <Video
+        muted
         onEnd={onStartVideoEnd}
         style={[
           StyleSheet.absoluteFill,
@@ -143,6 +145,7 @@ export default function BoatCat({ onEnd }: BoatCatProps) {
         source={require('@/assets/videos/cat_introduction.mp4')}
       />
       <Video
+        muted
         repeat
         ref={handleLoopVideoRef}
         onEnd={onLoopVideoEnd}

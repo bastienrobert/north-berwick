@@ -1,4 +1,10 @@
-import React, { ReactNode, useCallback, useState } from 'react'
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import {
   Animated,
   SafeAreaView,
@@ -226,6 +232,7 @@ export default function ScanView({ style }: ScanViewProps) {
     name: null,
   })
   const [isWrong, setIsWrong] = useState<string>()
+  const wrongOpacity = useRef(new Animated.Value(0)).current
 
   const setSafeCurrent = useCallback(
     (payload: CurrentScanState) => {
@@ -257,6 +264,13 @@ export default function ScanView({ style }: ScanViewProps) {
     reset()
   }, [hide, reset])
 
+  useEffect(() => {
+    Animated.spring(wrongOpacity, {
+      useNativeDriver: false,
+      toValue: isWrong ? 1 : 0,
+    }).start()
+  }, [isWrong])
+
   if (!params) return null
   return (
     <Animated.View
@@ -268,11 +282,12 @@ export default function ScanView({ style }: ScanViewProps) {
         <RoundedButton style={styles.close} onPress={onClosePress}>
           <CrossIcon />
         </RoundedButton>
-        {isWrong && (
+        <Animated.View
+          style={[styles.notificationWrapper, { opacity: wrongOpacity }]}>
           <NotificationBox style={styles.notification}>
             Mh, je crois que ce n’était pas ce lieu que je voulais voir
           </NotificationBox>
-        )}
+        </Animated.View>
         {current.name && !params.noLabel && !isWrong && (
           <LargeButton
             theme="secondary"
@@ -325,6 +340,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1,
+  },
+  notificationWrapper: {
+    position: 'absolute',
+    width: '100%',
+    top: '50%',
   },
   notification: {
     width: '85%',

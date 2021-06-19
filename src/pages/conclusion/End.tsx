@@ -61,6 +61,7 @@ export default function ConclusionEnd({
     <View style={styles.container}>
       <Fade color="black" initial={1} start={loaded} fadeIn={false} />
       <Video
+        muted
         source={require('@/assets/videos/castle_video.mp4')}
         onReadyForDisplay={() => setLoaded(true)}
         onEnd={() => setIntroductionEnd(true)}
@@ -92,6 +93,7 @@ export default function ConclusionEnd({
         ]}
         pointerEvents="none">
         <Video
+          muted
           paused={!dialogInEnd}
           source={require('@/assets/videos/conclusion_reveal.mp4')}
           onEnd={() => setRevealEnd(true)}
