@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Button, View } from 'react-native'
 import { NavigationProp } from '@react-navigation/core'
 import { useTranslate } from 'react-polyglot'
 
@@ -12,14 +13,15 @@ import InnerSelectors, {
   InnerSelectorsRef,
 } from '@/components/Card/inner/InnerSelectors'
 import { FamilyItems } from '@/components/Card/inner/InnerSelectors/FamilySelector'
+import VideoDialogBox from '@/components/BackgroundWithDialog/DialogBox'
 
 import ChapterLayout from '@/layouts/ChapterLayout'
 
 import useChapterAnswers from '@/hooks/useChapterAnswers'
 
 import theme from '@/styles/theme'
-import VideoDialogBox from '@/components/BackgroundWithDialog/DialogBox'
-import { Button, View } from 'react-native'
+
+import subtitles from '@/assets/videos/subtitles.json'
 
 export interface ChapterChurchProps {}
 type ChapterChurchPropsWithNavigation = ChapterChurchProps & {
@@ -139,11 +141,11 @@ export default function ChapterChurch({
           introducedRef.current = true
           setTimeout(() => setIntroductionEnd(true), 1000)
         }}
-        video={require('@/assets/tmp/storm.mp4')}
+        video={require('@/assets/videos/church_video.mp4')}
         backgroundProps={{
-          source: require('@/assets/tmp/background.jpg'),
+          source: require('@/assets/images/backgrounds/church.jpg'),
           name: t('agnes'),
-          dialogs: require('@/assets/tmp/videos/out.json'),
+          dialogs: subtitles.church,
         }}
         completed={results ? (results === true ? 'right' : 'wrong') : undefined}
         index={index}
@@ -191,9 +193,11 @@ export default function ChapterChurch({
             },
           ],
         }}
-        wrongButtonProps={{
-          children: t('edit_cards'),
-          onPress: () => swapAnswers(),
+        wrongProps={{
+          button: {
+            children: t('edit_cards'),
+            onPress: () => swapAnswers(),
+          },
         }}
         data={[
           {

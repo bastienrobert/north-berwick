@@ -53,9 +53,8 @@ export default function HomeSplash({
                  * should change w/ cover
                  */
                 map_castle: () => {
-                  console.log('HEY')
                   navigation.navigate('Home:Introduction', {})
-                  hide()
+                  setTimeout(() => hide())
                 },
                 map_church: () => {
                   console.log('CHURCH')

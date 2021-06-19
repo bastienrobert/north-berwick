@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { NavigationProp } from '@react-navigation/core'
-import { View, Image } from 'react-native'
+import { View, Image, StyleSheet } from 'react-native'
 import { atom, useAtom } from 'jotai'
 import { useTranslate } from 'react-polyglot'
 
@@ -113,8 +113,8 @@ export default function ConclusionRecap({
   }, [all])
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ width: '90%', flex: 1, alignSelf: 'center' }}>
+    <View style={styles.container}>
+      <View style={styles.wrapper}>
         <FlippableCarousel
           onClosePress={() => navigation.navigate('Home:Splash', {})}
           data={[
@@ -467,3 +467,15 @@ export default function ConclusionRecap({
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.vistaWhite,
+  },
+  wrapper: {
+    width: '90%',
+    flex: 1,
+    alignSelf: 'center',
+  },
+})

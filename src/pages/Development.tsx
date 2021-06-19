@@ -67,6 +67,12 @@ export default function Development({ navigation }: HomePropsWithNavigation) {
         onPress={() => navigation.navigate('Chapter:GeillisHouse', {})}
       />
       <Button
+        title="Goto End"
+        onPress={() => {
+          navigation.navigate('Conclusion:End', {})
+        }}
+      />
+      <Button
         title="Goto Conclusion"
         onPress={() => {
           setPort(PORT_CORRECTS)

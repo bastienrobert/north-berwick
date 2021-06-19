@@ -17,10 +17,13 @@ import InnerImage from '@/components/Card/inner/InnerImage'
 import Poster from '@/components/Poster'
 import WebPImage from '@/components/shared/WebPImage'
 
+import ChapterLayout from '@/layouts/ChapterLayout'
+
 import useChapterAnswers from '@/hooks/useChapterAnswers'
 
-import ChapterLayout from '@/layouts/ChapterLayout'
 import theme from '@/styles/theme'
+
+import subtitles from '@/assets/videos/subtitles.json'
 
 export interface ChapterCastleProps {}
 type ChapterCastlePropsWithNavigation = ChapterCastleProps & {
@@ -106,11 +109,11 @@ export default function ChapterCastle({
   return (
     <ChapterLayout
       color="red"
-      video={require('@/assets/tmp/storm.mp4')}
+      video={require('@/assets/videos/castle_video.mp4')}
       backgroundProps={{
-        source: require('@/assets/tmp/background.jpg'),
+        source: require('@/assets/images/backgrounds/castle.jpg'),
         name: t('agnes'),
-        dialogs: require('@/assets/tmp/videos/out.json'),
+        dialogs: subtitles.castle,
       }}
       completed={results ? (results === true ? 'right' : 'wrong') : undefined}
       index={index}
@@ -172,10 +175,12 @@ export default function ChapterCastle({
           },
         ],
       }}
-      wrongButtonProps={{
-        children: t('edit_cards'),
-        onPress: () => {
-          swapAnswers()
+      wrongProps={{
+        button: {
+          children: t('edit_cards'),
+          onPress: () => {
+            swapAnswers()
+          },
         },
       }}
       data={[

@@ -8,9 +8,13 @@ import SubtitleBox from '@/components/shared/SubtitleBox'
 
 import { Portal } from '@/lib/Portal'
 
+interface ChapterCompletedWrongProps {
+  button: LargeButtonProps
+}
+
 export interface ChapterCompletedParams {
   successSummaryProps: Omit<SummaryProps, 'title'>
-  wrongButtonProps: LargeButtonProps
+  wrongProps: ChapterCompletedWrongProps
   completed?: 'right' | 'wrong'
 }
 
@@ -22,7 +26,7 @@ export default function ChapterCompleted({
   opacity: toValue,
   completed,
   successSummaryProps,
-  wrongButtonProps,
+  wrongProps,
 }: ChapterCompletedProps) {
   const t = useTranslate()
   const opacity = useRef(new Animated.Value(toValue)).current
@@ -62,7 +66,7 @@ export default function ChapterCompleted({
             under={
               <LargeButton
                 style={styles.subtitleButton}
-                {...wrongButtonProps}
+                {...wrongProps.button}
               />
             }
             name={t('agnes')}

@@ -4,7 +4,7 @@ import { SafeAreaView, StyleSheet, View, ViewProps } from 'react-native'
 import RoundedButton from '@/components/shared/RoundedButton'
 import LinearGradient from '@/components/shared/LinearGradient'
 import FullScreenIcon from '@/components/icons/FullScreenIcon'
-import ArrowLeftIcon from '@/components/icons/ArrowLeftIcon'
+import CrossIcon from '@/components/icons/CrossIcon'
 
 import { Portal } from '@/lib/Portal'
 
@@ -50,7 +50,7 @@ export default function InnerPoster({
           />
           <SafeAreaView style={styles.backButton}>
             <RoundedButton large onPress={() => setIsPosterVisible(false)}>
-              <ArrowLeftIcon />
+              <CrossIcon />
             </RoundedButton>
           </SafeAreaView>
           <View style={{ flex: 1 }}>{children}</View>

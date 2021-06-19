@@ -25,6 +25,8 @@ import { FlippableSide } from '@/hooks/useFlippable'
 
 import theme from '@/styles/theme'
 
+import subtitles from '@/assets/videos/subtitles.json'
+
 export interface ChapterPortProps {}
 type ChapterPortPropsWithNavigation = ChapterPortProps & {
   navigation: NavigationProp<RootNavigationParamList, 'Chapter:Port'>
@@ -163,11 +165,11 @@ export default function ChapterPort({
       color="blue"
       introduction={!introducedRef.current}
       onIntroductionEnd={() => (introducedRef.current = true)}
-      video={require('@/assets/tmp/storm.mp4')}
+      video={require('@/assets/videos/port_video.mp4')}
       backgroundProps={{
-        source: require('@/assets/tmp/background.jpg'),
+        source: require('@/assets/images/backgrounds/port.jpg'),
         name: t('agnes'),
-        dialogs: require('@/assets/tmp/videos/out.json'),
+        dialogs: subtitles.port,
       }}
       completed={results ? (results === true ? 'right' : 'wrong') : undefined}
       index={index}
@@ -226,9 +228,11 @@ export default function ChapterPort({
           },
         ],
       }}
-      wrongButtonProps={{
-        children: t('edit_cards'),
-        onPress: () => swapAnswers(),
+      wrongProps={{
+        button: {
+          children: t('edit_cards'),
+          onPress: () => swapAnswers(),
+        },
       }}
       data={[
         {

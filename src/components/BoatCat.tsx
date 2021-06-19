@@ -129,7 +129,7 @@ export default function BoatCat({ onEnd }: BoatCatProps) {
           width: '100%',
           height: '100%',
         }}
-        source={require('@/assets/videos/output.mp4')}
+        source={require('@/assets/videos/cat_end.mp4')}
       />
       <Video
         onEnd={onStartVideoEnd}

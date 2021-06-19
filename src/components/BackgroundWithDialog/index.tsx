@@ -11,7 +11,9 @@ import Video, { VideoProperties } from 'react-native-video'
 
 import DialogBox, { DialogBoxProps } from './DialogBox'
 
-interface Dialog {
+export interface Dialog {
+  start?: string
+  end?: string
   content: string[]
 }
 
@@ -22,6 +24,7 @@ export type BackgroundWithDialogProps = {
   arrow?: boolean
   style?: ViewStyle
   onEnd?: () => void
+  onEndAfterLoop?: () => void
   onReadyForDisplay?: () => void
 } & (
   | ({ type: 'video' } & Omit<VideoProperties, 'style'>)
@@ -39,11 +42,13 @@ export default function BackgroundWithDialog(
     style,
     arrow,
     onEnd,
+    onEndAfterLoop,
     onReadyForDisplay,
     ...props
   } = params
 
   const isStartedRef = useRef(false)
+  const endRef = useRef(false)
   const [dialogIndex, setDialogIndex] = useState(0)
   const opacity = useRef(new Animated.Value(0)).current
   const dialog = dialogs[dialogIndex]
@@ -51,6 +56,7 @@ export default function BackgroundWithDialog(
   useEffect(() => {
     if (!isStartedRef.current && dialog) {
       isStartedRef.current = true
+      endRef.current = false
       Animated.spring(opacity, {
         useNativeDriver: false,
         toValue: 1,
@@ -60,6 +66,7 @@ export default function BackgroundWithDialog(
 
   const onInnerEnd = useCallback(() => {
     isStartedRef.current = false
+    endRef.current = true
     if (hideOnEnd) {
       Animated.spring(opacity, {
         useNativeDriver: false,
@@ -70,12 +77,19 @@ export default function BackgroundWithDialog(
     }
   }, [onEnd])
 
+  const onVideoEnd = useCallback(() => {
+    if (endRef.current) {
+      onEndAfterLoop?.()
+    }
+  }, [onInnerEnd])
+
   return (
     <View style={[styles.container, style]}>
       {type === 'video' ? (
         <Video
           {...(props as VideoProperties)}
           repeat
+          onEnd={onVideoEnd}
           onReadyForDisplay={onReadyForDisplay}
           resizeMode="cover"
           style={styles.background}
@@ -97,6 +111,7 @@ export default function BackgroundWithDialog(
               if (dialogIndex < dialogs.length - 1) {
                 setDialogIndex((i) => i + 1)
               } else {
+                endRef.current = true
                 onInnerEnd()
               }
             }}

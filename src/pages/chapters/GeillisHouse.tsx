@@ -29,6 +29,8 @@ import { FlippableSide } from '@/hooks/useFlippable'
 
 import theme from '@/styles/theme'
 
+import subtitles from '@/assets/videos/subtitles.json'
+
 export interface ChapterGeillisHouseProps {}
 type ChapterGeillisHousePropsWithNavigation = ChapterGeillisHouseProps & {
   navigation: NavigationProp<RootNavigationParamList, 'Chapter:GeillisHouse'>
@@ -125,12 +127,12 @@ export default function ChapterGeillisHouse({
   return (
     <ChapterLayout
       color="pink"
-      hdr={require('@/assets/tmp/hdr.mp4')}
-      video={require('@/assets/tmp/storm.mp4')}
+      hdr={require('@/assets/videos/geillis_hdr.mp4')}
+      video={require('@/assets/videos/church_video.mp4')}
       backgroundProps={{
-        source: require('@/assets/tmp/background.jpg'),
+        source: require('@/assets/images/backgrounds/geillis_house.jpg'),
         name: t('agnes'),
-        dialogs: require('@/assets/tmp/videos/out.json'),
+        dialogs: subtitles.geillis_house,
       }}
       completed={results ? (results === true ? 'right' : 'wrong') : undefined}
       index={index}
@@ -175,9 +177,11 @@ export default function ChapterGeillisHouse({
           },
         ],
       }}
-      wrongButtonProps={{
-        children: t('edit_cards'),
-        onPress: () => swapAnswers(),
+      wrongProps={{
+        button: {
+          children: t('edit_cards'),
+          onPress: () => swapAnswers(),
+        },
       }}
       data={[
         {

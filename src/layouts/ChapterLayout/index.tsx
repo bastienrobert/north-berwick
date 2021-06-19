@@ -53,7 +53,7 @@ export default function ChapterLayout({
   introduction = true,
   onIntroductionEnd,
   successSummaryProps,
-  wrongButtonProps,
+  wrongProps,
 }: ChapterLayoutProps) {
   const isIntroductionEnd = useRef(false)
   const [isVideoVisible, setIsVideoVisible] = useState(introduction)
@@ -153,7 +153,7 @@ export default function ChapterLayout({
         completed={completed}
         opacity={completedOpacity}
         successSummaryProps={successSummaryProps}
-        wrongButtonProps={wrongButtonProps}
+        wrongProps={wrongProps}
       />
       <Animated.View
         style={[StyleSheet.absoluteFill, { opacity: mainOpacity }]}

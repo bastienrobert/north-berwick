@@ -8,7 +8,6 @@ import ARScene from './ARScene'
 import ThreeDScene from './3DScene'
 import FlipCard from './FlipCard'
 import DragZone from './DragZone'
-import ScrollVideoScreen from './ScrollVideoScreen'
 import CarouselDemo from './CarouselDemo'
 import TouchableAreaWebP from './TouchableAreaWebP'
 import MiscScreen from './MiscScreen'
@@ -16,7 +15,6 @@ import MiscScreen from './MiscScreen'
 export type ExampleNavigationParamList = {
   Home: HomeProps
   FlipCard: {}
-  ScrollVideoScreen: {}
   ARScene: {}
   DragZone: {}
   CarouselDemo: {}
@@ -46,10 +44,6 @@ export default function Examples({ navigation }: any) {
         <BasicNav.Screen
           name="TouchableAreaWebP"
           component={TouchableAreaWebP}
-        />
-        <BasicNav.Screen
-          name="ScrollVideoScreen"
-          component={ScrollVideoScreen}
         />
         <BasicNav.Screen name="MiscScreen" component={MiscScreen} />
       </BasicNav.Navigator>
