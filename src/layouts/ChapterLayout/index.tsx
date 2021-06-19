@@ -8,7 +8,6 @@ import BackgroundWithDialog, {
   BackgroundWithDialogProps,
 } from '@/components/BackgroundWithDialog'
 import ScanButton from '@/components/ScanButton'
-import CardCarousel from '@/components/CardCarousel'
 import Video360, { Video360Props } from '@/components/shared/Video360'
 import Fade from '@/components/shared/Fade'
 
@@ -183,7 +182,7 @@ const styles = StyleSheet.create({
   scan: {
     position: 'absolute',
     alignSelf: 'center',
-    bottom: CardCarousel.COLLAPSIBLE_START_OFFSET + 11,
+    bottom: ChapterCarousel.COLLAPSIBLE_START_OFFSET + 11,
   },
   background: {
     flex: 1,

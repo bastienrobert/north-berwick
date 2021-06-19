@@ -4,8 +4,8 @@ import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native'
 import LargeButton from '@/components/shared/LargeButton'
 
 interface InnerImageProps {
-  editLabel: string
   image: ImageSourcePropType
+  editLabel?: string
   onEditClick?: () => void
 }
 
@@ -23,9 +23,11 @@ export default function InnerImage({
           resizeMode="contain"
           height={undefined}
         />
-        <LargeButton style={styles.button} onPress={onEditClick}>
-          {editLabel}
-        </LargeButton>
+        {onEditClick && editLabel && (
+          <LargeButton style={styles.button} onPress={onEditClick}>
+            {editLabel}
+          </LargeButton>
+        )}
       </View>
     </View>
   )

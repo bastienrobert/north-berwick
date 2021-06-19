@@ -207,6 +207,7 @@ export default function ChapterGeillisHouse({
                     })
                     setCaresCardFlip('back')
                   }}
+                  initial={answers.cares_seaton}
                   plusColor={theme.colors.cornflowerLilac}
                   equalColor={theme.colors.peachSchnapps}
                   result={<DrugIcon />}
@@ -238,6 +239,7 @@ export default function ChapterGeillisHouse({
                     })
                     setCaresCardFlip('back')
                   }}
+                  initial={answers.cares_revealed}
                   plusColor={theme.colors.peachSchnapps}
                   equalColor={theme.colors.peachSchnapps}
                   result={<DrugIcon />}
@@ -267,6 +269,7 @@ export default function ChapterGeillisHouse({
                       activity: payload as GeillisHouseStore['activity'],
                     })
                   }}
+                  initial={answers.torture}
                   items={keyboardActivities}
                 />
               }

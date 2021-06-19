@@ -18,20 +18,23 @@ import Card from '@/components/Card'
 import FlipWrapper from '@/components/Card/FlipWrapper'
 import BottomCollapsable from '@/components/shared/BottomCollapsable'
 import Carousel from '@/components/shared/Carousel'
-import RoundedButton from './shared/RoundedButton'
-import CrossIcon from './icons/CrossIcon'
-import ArrowRightIcon from './icons/ArrowRightIcon'
-import ArrowLeftIcon from './icons/ArrowLeftIcon'
-import { clamp } from '@/utils/math'
+import RoundedButton from '@/components/shared/RoundedButton'
+import CrossIcon from '@/components/icons/CrossIcon'
+import ArrowRightIcon from '@/components/icons/ArrowRightIcon'
+import ArrowLeftIcon from '@/components/icons/ArrowLeftIcon'
+
+import { FlippableSide } from '@/hooks/useFlippable'
 
 type FlipCardData =
   | {
       front: ReactNode | (() => ReactNode)
       back?: undefined
+      side?: undefined
     }
   | {
       front: ReactNode | (() => ReactNode)
       back: ReactNode | (() => ReactNode)
+      side: FlippableSide
     }
 
 type FlippableCarouselProps = {
@@ -147,6 +150,7 @@ function FlippableCarousel({
                       ]}
                       front={g.front}
                       back={g.back}
+                      side={g.side}
                     />
                   ) : (
                     <View

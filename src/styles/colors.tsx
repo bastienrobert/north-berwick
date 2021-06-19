@@ -25,4 +25,7 @@ export default {
   // selectors
   cornflowerLilac: '#ffada7',
   anakiwa: '#a2bdff',
+
+  // conclusion
+  vistaWhite: '#F8F2EE',
 }

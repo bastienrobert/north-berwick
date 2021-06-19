@@ -250,6 +250,7 @@ export default function ChapterChurch({
                   <InnerSelectors
                     ref={(el) => (jobCardSelectorRef.current = el)}
                     type="single"
+                    initial={answers.job}
                     keyboardLabel={t('job_label')}
                     onSelectedChange={(payload) => {
                       setAnswers({

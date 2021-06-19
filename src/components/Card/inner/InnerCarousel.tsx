@@ -24,12 +24,13 @@ import ArrowRightIcon from '@/components/icons/ArrowRightIcon'
 import useLayout from '@/hooks/useLayout'
 
 interface InnerCarouselProps {
-  editLabel: string
-  submitLabel: string
   length: number
+  content: ReactNode[]
+  editLabel?: string
+  submitLabel?: string
+  controls?: boolean
   style?: StyleProp<ViewStyle>
   onSelectedChange?: (index: number | null) => void
-  content: ReactNode[]
 }
 
 export interface InnerCarouselRef {
@@ -43,6 +44,7 @@ function InnerCarousel(
     editLabel,
     submitLabel,
     length,
+    controls = true,
     style,
     onSelectedChange,
   }: InnerCarouselProps,
@@ -88,34 +90,36 @@ function InnerCarousel(
           ))}
         </Carousel>
       </View>
-      <View style={styles.controls}>
-        {hasSelectedValue ? (
-          <LargeButton theme="edit" style={styles.button} onPress={onEdit}>
-            {editLabel}
-          </LargeButton>
-        ) : (
-          <>
-            <RoundedButton
-              style={{ opacity: index <= 0 ? 0 : 1 }}
-              disabled={index <= 0}
-              onPress={() => setIndex((i) => i - 1)}>
-              <ArrowLeftIcon />
-            </RoundedButton>
-            <LargeButton
-              theme="secondary"
-              style={styles.button}
-              onPress={onSubmit}>
-              {submitLabel}
+      {controls && (
+        <View style={styles.controls}>
+          {hasSelectedValue ? (
+            <LargeButton theme="edit" style={styles.button} onPress={onEdit}>
+              {editLabel ?? ''}
             </LargeButton>
-            <RoundedButton
-              style={{ opacity: index >= length - 1 ? 0 : 1 }}
-              disabled={index >= length - 1}
-              onPress={() => setIndex((i) => i + 1)}>
-              <ArrowRightIcon />
-            </RoundedButton>
-          </>
-        )}
-      </View>
+          ) : (
+            <>
+              <RoundedButton
+                style={{ opacity: index <= 0 ? 0 : 1 }}
+                disabled={index <= 0}
+                onPress={() => setIndex((i) => i - 1)}>
+                <ArrowLeftIcon />
+              </RoundedButton>
+              <LargeButton
+                theme="secondary"
+                style={styles.button}
+                onPress={onSubmit}>
+                {submitLabel ?? ''}
+              </LargeButton>
+              <RoundedButton
+                style={{ opacity: index >= length - 1 ? 0 : 1 }}
+                disabled={index >= length - 1}
+                onPress={() => setIndex((i) => i + 1)}>
+                <ArrowRightIcon />
+              </RoundedButton>
+            </>
+          )}
+        </View>
+      )}
     </View>
   )
 }

@@ -19,7 +19,7 @@ import SelectorKeyboard, {
 export interface SingleSelectorProps extends InnerSelectorsBase {
   keyboardLabel: string
   items: SelectorKeyboardItems
-  initial?: string
+  initial?: string | null
   onSelectedChange?: (selected: string) => void
 }
 
