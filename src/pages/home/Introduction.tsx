@@ -14,6 +14,7 @@ import BackgroundWithDialog from '@/components/BackgroundWithDialog'
 import Fade from '@/components/shared/Fade'
 
 import subtitles from '@/assets/videos/subtitles.json'
+import { useMainSound } from '@/App/MainSoundProvider'
 
 export interface HomeIntroductionProps {}
 type HomePropsWithNavigation = HomeIntroductionProps & {
@@ -25,6 +26,26 @@ export default function HomeIntroduction({
 }: HomePropsWithNavigation) {
   const touchOpacity = useRef(new Animated.Value(0)).current
   const dialogOpacity = useRef(new Animated.Value(0)).current
+
+  const { setParams: setMainSound } = useMainSound()
+
+  // useEffect(() => {
+  //   setMainSound({
+  //     source: require('@/assets/musics/geillis_house_loop.mp3'),
+  //     options: {
+  //       autoPlay: true,
+  //       fadeIn: 2000,
+  //       fadeOut: 2000,
+  //       loop: true,
+  //     },
+  //   })
+  // }, [])
+
+  // useEffect(() => {
+  //   return () => {
+  //     setMainSoundPlay(false)
+  //   }
+  // }, [setMainSoundPlay])
 
   const [loaded, setLoaded] = useState(false)
   const [introductionEnd, setIntroductionEnd] = useState(false)

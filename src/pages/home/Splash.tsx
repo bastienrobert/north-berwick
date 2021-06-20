@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { NavigationProp } from '@react-navigation/core'
 import { SafeAreaView, StyleSheet, Image, Text, View } from 'react-native'
 import { useTranslate } from 'react-polyglot'
@@ -11,6 +11,7 @@ import ScanButton from '@/components/ScanButton'
 
 import theme from '@/styles/theme'
 import useAudio from '@/hooks/useAudio'
+import { useMainSound } from '@/App/MainSoundProvider'
 
 export interface HomeSplashProps {}
 type HomeSplashPropsWithNavigation = HomeSplashProps & {
@@ -23,7 +24,26 @@ export default function HomeSplash({
   const t = useTranslate()
   const { set, hide } = useScan()
 
-  // useAudio({ source: require('@/assets/musics/global_loop.mp3'), play: true })
+  const { setParams: setMainSound } = useMainSound()
+
+  useEffect(() => {
+    setMainSound({
+      source: require('@/assets/musics/theme_loop.mp3'),
+      options: {
+        autoPlay: true,
+        fadeIn: 2000,
+        fadeOut: 2000,
+        loop: true,
+      },
+    })
+  }, [])
+
+  // useAudio(require('@/assets/musics/theme_loop.mp3'), {
+  //   autoPlay: true,
+  //   fadeIn: true,
+  //   fadeOut: true,
+  //   loop: true,
+  // })
 
   return (
     <View style={styles.container}>

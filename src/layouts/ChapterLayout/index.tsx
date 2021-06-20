@@ -36,6 +36,10 @@ export interface ChapterLayoutProps
   onIntroductionEnd?: () => void
 }
 
+/**
+ * @todo
+ * should add audio in backgroundProps and rename backgroundProps to dialogProps
+ */
 export default function ChapterLayout({
   color,
   completed,
