@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { Animated, Image } from 'react-native'
 import { NavigationProp } from '@react-navigation/core'
 import { useTranslate } from 'react-polyglot'
@@ -110,10 +110,11 @@ export default function ChapterCastle({
     <ChapterLayout
       color="red"
       video={require('@/assets/videos/castle_video.mp4')}
-      backgroundProps={{
+      dialogProps={{
         source: require('@/assets/images/backgrounds/castle.jpg'),
-        name: t('agnes'),
+        name: '???',
         dialogs: subtitles.castle,
+        sound: require('@/assets/audios/castle.mp3'),
       }}
       completed={results ? (results === true ? 'right' : 'wrong') : undefined}
       index={index}
@@ -176,6 +177,7 @@ export default function ChapterCastle({
         ],
       }}
       wrongProps={{
+        audio: require('@/assets/audios/castle_failed.mp3'),
         button: {
           children: t('edit_cards'),
           onPress: () => {
@@ -288,7 +290,6 @@ export default function ChapterCastle({
                     visible={showPoster}
                     onLayout={() => hide()}
                     onBack={() => {
-                      console.log('BACK', isPosterCompletedRef.current)
                       if (isPosterCompletedRef.current) {
                         if (!setAnswers({ poster: true })) {
                           setIsCollapsed(false)
@@ -307,7 +308,6 @@ export default function ChapterCastle({
                     <Poster
                       completed={!!answers.poster}
                       onComplete={() => {
-                        console.log('COMPLETED')
                         isPosterCompletedRef.current = true
                       }}
                     />

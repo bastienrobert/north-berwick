@@ -122,7 +122,7 @@ export default function ChapterChurch({
           title="CLOSE MORTAR"
           onPress={() => {
             setMortarInteraction(false)
-            setIndex(1)
+            setIndex(0)
             setIsCollapsed(false)
           }}
         />
@@ -156,10 +156,11 @@ export default function ChapterChurch({
           setTimeout(() => setIntroductionEnd(true), 1000)
         }}
         video={require('@/assets/videos/church_video.mp4')}
-        backgroundProps={{
+        dialogProps={{
           source: require('@/assets/images/backgrounds/church.jpg'),
           name: t('agnes'),
           dialogs: subtitles.church,
+          sound: require('@/assets/audios/church.mp3'),
         }}
         completed={results ? (results === true ? 'right' : 'wrong') : undefined}
         index={index}
@@ -171,6 +172,7 @@ export default function ChapterChurch({
         }}
         onScanButtonPress={() => {
           set({
+            forceLabel: t('church_scan_label'),
             callbacks: {
               default: () => false,
               place_cemetery: () => {
@@ -207,12 +209,40 @@ export default function ChapterChurch({
           ],
         }}
         wrongProps={{
+          audio: require('@/assets/audios/church_failed.mp3'),
           button: {
             children: t('edit_cards'),
             onPress: () => swapAnswers(),
           },
         }}
         data={[
+          {
+            complete: jobComplete,
+            front: (
+              <Card
+                number={3}
+                color="purple"
+                onPress={() => jobCardSelectorRef.current?.collapse()}
+                title={[t('job_title_line_1'), t('job_title_line_2')]}
+                forceBottom={false}
+                bottom={t('job_label')}
+                inner={
+                  <InnerSelectors
+                    ref={(el) => (jobCardSelectorRef.current = el)}
+                    type="single"
+                    initial={answers.job}
+                    keyboardLabel={t('job_label')}
+                    onSelectedChange={(payload) => {
+                      setAnswers({
+                        job: payload as ChurchStore['job'],
+                      })
+                    }}
+                    items={keyboardJob}
+                  />
+                }
+              />
+            ),
+          },
           {
             complete: familyComplete,
             front: (
@@ -249,33 +279,6 @@ export default function ChapterChurch({
                       items={ASSETS.families as FamilyItems}
                     />
                   ) : null
-                }
-              />
-            ),
-          },
-          {
-            complete: jobComplete,
-            front: (
-              <Card
-                number={3}
-                color="purple"
-                onPress={() => jobCardSelectorRef.current?.collapse()}
-                title={[t('job_title_line_1'), t('job_title_line_2')]}
-                forceBottom={false}
-                bottom={t('job_label')}
-                inner={
-                  <InnerSelectors
-                    ref={(el) => (jobCardSelectorRef.current = el)}
-                    type="single"
-                    initial={answers.job}
-                    keyboardLabel={t('job_label')}
-                    onSelectedChange={(payload) => {
-                      setAnswers({
-                        job: payload as ChurchStore['job'],
-                      })
-                    }}
-                    items={keyboardJob}
-                  />
                 }
               />
             ),

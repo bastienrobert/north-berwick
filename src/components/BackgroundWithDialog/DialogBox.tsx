@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import { GestureResponderEvent, StyleSheet, View } from 'react-native'
 
-import ArrowRightIcon from '@/components/icons/ArrowRightIcon'
+import SmallRightArrowIcon from '@/components/icons/SmallRightArrowIcon'
 import BaseSubtitleBox, {
   BaseSubtitleBoxProps,
 } from '@/components/shared/BaseSubtitleBox'
@@ -61,7 +61,7 @@ export default function DialogBox({
         />
         {arrow && (
           <View style={styles.icon}>
-            <ArrowRightIcon />
+            <SmallRightArrowIcon />
           </View>
         )}
       </View>
@@ -84,8 +84,10 @@ const styles = StyleSheet.create({
     letterSpacing: -0.21,
   },
   icon: {
-    width: 45,
-    height: 45,
+    width: 12,
+    marginLeft: 8,
+    marginRight: 7,
+    height: 35,
     alignSelf: 'center',
   },
 })

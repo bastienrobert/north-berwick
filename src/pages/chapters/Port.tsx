@@ -105,9 +105,11 @@ export default function ChapterPort({
   ])
 
   useEffect(() => {
-    setCatCardFlip('front')
-    setDemonsCardFlip('front')
-  }, [answers])
+    if (!results) {
+      setCatCardFlip('front')
+      setDemonsCardFlip('front')
+    }
+  }, [results])
 
   useEffect(() => {
     collapseSelectors()
@@ -180,10 +182,11 @@ export default function ChapterPort({
       introduction={!introducedRef.current}
       onIntroductionEnd={() => (introducedRef.current = true)}
       video={require('@/assets/videos/port_video.mp4')}
-      backgroundProps={{
+      dialogProps={{
         source: require('@/assets/images/backgrounds/port.jpg'),
         name: t('agnes'),
         dialogs: subtitles.port,
+        sound: require('@/assets/audios/port.mp3'),
       }}
       completed={results ? (results === true ? 'right' : 'wrong') : undefined}
       index={index}
@@ -243,6 +246,7 @@ export default function ChapterPort({
         ],
       }}
       wrongProps={{
+        audio: require('@/assets/audios/port_failed.mp3'),
         button: {
           children: t('edit_cards'),
           onPress: () => swapAnswers(),

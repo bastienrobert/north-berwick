@@ -75,14 +75,14 @@ function FlippableCarousel({
   }, [])
 
   const cardStyle = useMemo<StyleProp<ViewStyle>>(() => {
-    return { width: (width / 100) * 90 }
+    return { width: (width / 100) * 85 }
   }, [width])
   const bottomCollapsableStyle = useMemo<StyleProp<ViewStyle>>(() => {
     return {
       marginLeft: margins.left,
-      width: (width / 100) * 90,
+      width: (width / 100) * 85,
       height:
-        (((width / 100) * 90) / Card.DIMENSIONS.width) * Card.DIMENSIONS.height,
+        (((width / 100) * 85) / Card.DIMENSIONS.width) * Card.DIMENSIONS.height,
     }
   }, [width])
 

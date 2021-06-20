@@ -83,6 +83,7 @@
   "church_summary_1_label": "Veuve avec des Enfants",
   "church_summary_2_text": "En réalité, elle possédait des connaissances en sciences et en médecine car elle exerçait comme",
   "church_summary_2_label": "Guérisseuse et Sage-Femme",
+  "church_scan_label": "Terminer l'observation",
 
   "cares_seaton_title_line_1": "Les guérisons",
   "cares_seaton_title_line_2": "Selon Mr Seaton",
@@ -99,5 +100,6 @@
   "geillis_summary_3_text": "En réalité, Geillis était capable de prodiguer des soins car elle était ",
   "geillis_summary_3_label": "Guérrisseuse",
   "geillis_summary_4_text": "Geillis s'échappait la nuit afin de pratiquer",
-  "geillis_summary_4_label": "La Médecine"
+  "geillis_summary_4_label": "La Médecine",
+  "geillis_summary_summary_success": "Retourner au Palais"
 }

@@ -86,7 +86,7 @@ function EquationSelector(
       // can't be null because of test below
       onSelectedChange?.(selected as any)
     }
-  }, [selected, active])
+  }, [onSelectedChange, selected, active])
 
   useImperativeHandle(ref, () => ({
     reset: () => {

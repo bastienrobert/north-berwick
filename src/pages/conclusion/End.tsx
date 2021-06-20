@@ -10,6 +10,7 @@ import BackgroundWithDialog from '@/components/BackgroundWithDialog'
 import Fade from '@/components/shared/Fade'
 
 import subtitles from '@/assets/videos/subtitles.json'
+import { useMainSound } from '@/App/MainSoundProvider'
 
 export interface ConclusionEndProps {}
 type ConclusionEndPropsWithNavigation = ConclusionEndProps & {
@@ -20,6 +21,7 @@ export default function ConclusionEnd({
   navigation,
 }: ConclusionEndPropsWithNavigation) {
   const t = useTranslate()
+  const { setParams: setMainSound } = useMainSound()
 
   const dialogInOpacity = useRef(new Animated.Value(0)).current
   const revealOpacity = useRef(new Animated.Value(0)).current
@@ -29,6 +31,18 @@ export default function ConclusionEnd({
   const [introductionEnd, setIntroductionEnd] = useState(false)
   const [dialogInEnd, setDialogInEnd] = useState(false)
   const [revealEnd, setRevealEnd] = useState(false)
+
+  useEffect(() => {
+    setMainSound({
+      source: require('@/assets/musics/theme_loop.mp3'),
+      options: {
+        autoPlay: true,
+        fadeIn: true,
+        fadeOut: true,
+        loop: true,
+      },
+    })
+  }, [])
 
   useEffect(() => {
     if (introductionEnd) {
@@ -44,7 +58,17 @@ export default function ConclusionEnd({
       Animated.spring(revealOpacity, {
         useNativeDriver: false,
         toValue: 1,
-      }).start()
+      }).start(() => {
+        setMainSound({
+          source: require('@/assets/musics/conclusion_loop.mp3'),
+          options: {
+            autoPlay: true,
+            fadeIn: true,
+            fadeOut: true,
+            loop: true,
+          },
+        })
+      })
     }
   }, [revealOpacity, dialogInEnd])
 
@@ -77,11 +101,13 @@ export default function ConclusionEnd({
         pointerEvents={introductionEnd ? 'auto' : 'none'}>
         <BackgroundWithDialog
           hideOnEnd
+          play={introductionEnd}
           paused={!introductionEnd}
           name={t('agnes')}
           type="video"
           onEndAfterLoop={() => setDialogInEnd(true)}
           source={require('@/assets/videos/ghost_loop.mp4')}
+          sound={require('@/assets/audios/conclusion_in.mp3')}
           dialogs={subtitles.conclusion_in}
         />
       </Animated.View>
@@ -109,11 +135,13 @@ export default function ConclusionEnd({
         ]}
         pointerEvents={revealEnd ? 'auto' : 'none'}>
         <BackgroundWithDialog
+          play={revealEnd}
           paused={!revealEnd}
           name={t('agnes')}
           type="video"
           onEnd={() => navigation.navigate('Conclusion:Recap', {})}
           source={require('@/assets/videos/conclusion_loop.mp4')}
+          sound={require('@/assets/audios/conclusion_out.mp3')}
           dialogs={subtitles.conclusion_out}
         />
       </Animated.View>

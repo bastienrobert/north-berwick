@@ -171,7 +171,7 @@ export type ScanCallbacks = Partial<Record<TargetsName, () => void>> & {
 export type ScanParams = {
   wrongPlaceLabel?: string
   goToLabel?: string
-  noLabel?: boolean
+  forceLabel?: string
   overlay?: ReactNode
   models?: string[]
   callbacks: ScanCallbacks
@@ -288,14 +288,15 @@ export default function ScanView({ style }: ScanViewProps) {
             Mh, je crois que ce n’était pas ce lieu que je voulais voir
           </NotificationBox>
         </Animated.View>
-        {current.name && !params.noLabel && !isWrong && (
+        {current.name && !isWrong && (
           <LargeButton
             theme="secondary"
             style={styles.button}
             onPress={onSubmit}>
-            {params.goToLabel
-              ? params.goToLabel + ' ' + t(current.name)
-              : capitalizeFirstLetter(t(current.name))}
+            {params.forceLabel ||
+              (params.goToLabel
+                ? params.goToLabel + ' ' + t(current.name)
+                : capitalizeFirstLetter(t(current.name)))}
           </LargeButton>
         )}
         {isWrong && (

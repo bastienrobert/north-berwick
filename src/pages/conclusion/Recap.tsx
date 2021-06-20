@@ -458,7 +458,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.vistaWhite,
   },
   wrapper: {
-    width: '90%',
+    width: '85%',
     flex: 1,
     alignSelf: 'center',
   },

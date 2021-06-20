@@ -21,7 +21,7 @@ export interface Dialog {
   content: string[]
 }
 
-export type BackgroundWithDialogProps = {
+export type BackgroundWithDialogCommonProps = {
   name: DialogBoxProps['name']
   dialogs: Dialog[]
   play?: boolean
@@ -32,10 +32,13 @@ export type BackgroundWithDialogProps = {
   onEnd?: () => void
   onEndAfterLoop?: () => void
   onReadyForDisplay?: () => void
-} & (
-  | ({ type: 'video' } & Omit<VideoProperties, 'style'>)
-  | ({ type: 'image' } & Omit<ImageProps, 'style'>)
-)
+}
+
+export type BackgroundWithDialogProps = BackgroundWithDialogCommonProps &
+  (
+    | ({ type: 'video' } & Omit<VideoProperties, 'style'>)
+    | ({ type: 'image' } & Omit<ImageProps, 'style'>)
+  )
 
 /**
  * @todo

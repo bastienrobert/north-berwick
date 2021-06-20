@@ -115,7 +115,7 @@ export default function BoatCat({ onEnd }: BoatCatProps) {
   return (
     <View style={{ flex: 1 }} {...panResponder.panHandlers}>
       <Video
-        muted
+        volume={0.5}
         paused={!endPlay}
         onEnd={onEnd}
         ref={handleVideoRef}

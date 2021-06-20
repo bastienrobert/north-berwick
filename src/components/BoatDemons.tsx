@@ -20,15 +20,17 @@ interface DemonProps {
 }
 
 function Demon({ style, pressed, onPress, source }: DemonProps) {
+  const [visible, setVisible] = useState(true)
   const opacity = useRef(new Animated.Value(1)).current
 
   useEffect(() => {
     Animated.spring(opacity, {
       useNativeDriver: false,
       toValue: pressed ? 0 : 1,
-    }).start()
+    }).start(() => (pressed ? setVisible(false) : null))
   }, [pressed, opacity])
 
+  if (!visible) return null
   return (
     <TouchableOpacity disabled={pressed} onPress={onPress} style={style}>
       <Animated.View style={[styles.animated, { opacity }]}>
@@ -64,7 +66,7 @@ export default function BoatDemons({ onEnd }: BoatDemons) {
         resizeMode="cover"
       />
       <Video
-        muted
+        volume={0.5}
         paused={!end}
         onEnd={onEnd}
         source={require('@/assets/videos/demon_end.mp4')}

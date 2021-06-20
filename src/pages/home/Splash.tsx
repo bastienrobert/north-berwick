@@ -71,9 +71,6 @@ export default function HomeSplash({
                   navigation.navigate('Home:Introduction', {})
                   setTimeout(() => hide())
                 },
-                map_church: () => {
-                  console.log('CHURCH')
-                },
               },
             })
           }

@@ -8,7 +8,10 @@ import SubtitleBox from '@/components/shared/SubtitleBox'
 
 import { Portal } from '@/lib/Portal'
 
+import useSound from '@/hooks/useSound'
+
 interface ChapterCompletedWrongProps {
+  audio: string
   button: LargeButtonProps
 }
 
@@ -31,12 +34,20 @@ export default function ChapterCompleted({
   const t = useTranslate()
   const opacity = useRef(new Animated.Value(toValue)).current
 
+  const [play, , stop] = useSound(wrongProps.audio || null)
+
   useEffect(() => {
     Animated.spring(opacity, {
       useNativeDriver: false,
       toValue,
     }).start()
   }, [opacity, toValue])
+
+  useEffect(() => {
+    if (completed === 'wrong') {
+      play()
+    }
+  }, [completed])
 
   if (completed === 'right') {
     return (
@@ -66,6 +77,10 @@ export default function ChapterCompleted({
             under={
               <LargeButton
                 style={styles.subtitleButton}
+                onPress={(e) => {
+                  wrongProps.button.onPress?.(e)
+                  stop()
+                }}
                 {...wrongProps.button}
               />
             }

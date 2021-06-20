@@ -66,6 +66,7 @@ export default function HomeIntroduction({
           <Video
             muted
             repeat
+            paused={!introductionEnd}
             source={require('@/assets/videos/introduction_cards.mp4')}
             resizeMode="cover"
             style={[StyleSheet.absoluteFill, styles.video]}
@@ -83,6 +84,7 @@ export default function HomeIntroduction({
           name="???"
           type="video"
           play={touchEnd}
+          paused={!touchEnd}
           sound={require('@/assets/audios/introduction.mp3')}
           onEnd={() => navigation.navigate('Chapter:Castle', {})}
           source={require('@/assets/videos/ghost_loop.mp4')}

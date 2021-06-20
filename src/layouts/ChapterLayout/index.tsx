@@ -8,7 +8,7 @@ import BackgroundWithDialog, {
   BackgroundWithDialogProps,
 } from '@/components/BackgroundWithDialog'
 import ScanButton from '@/components/ScanButton'
-import Video360, { Video360Props } from '@/components/shared/Video360'
+import Image360, { Image360Props } from '@/components/shared/Image360'
 import Fade from '@/components/shared/Fade'
 
 type ChapterCarouselForwardedProps = Pick<
@@ -25,26 +25,23 @@ export interface ChapterLayoutProps
   extends ChapterCompletedParams,
     ChapterCarouselForwardedProps {
   video: VideoProperties['source']
-  backgroundProps: Pick<
+  dialogProps: Pick<
     BackgroundWithDialogProps,
     'source' | 'name' | 'dialogs' | 'sound'
-  >
+  > &
+    Partial<Pick<BackgroundWithDialogProps, 'type'>>
   onScanButtonPress: () => void
   reveal?: boolean
-  hdr?: Video360Props['source']
+  hdr?: Image360Props['source']
   introduction?: boolean
   onIntroductionEnd?: () => void
 }
 
-/**
- * @todo
- * should add audio in backgroundProps and rename backgroundProps to dialogProps
- */
 export default function ChapterLayout({
   color,
   completed,
   video,
-  backgroundProps,
+  dialogProps,
   data,
   index,
   hdr,
@@ -139,21 +136,17 @@ export default function ChapterLayout({
       )}
       <Animated.View style={[styles.wrapper, { opacity: backgroundOpacity }]}>
         <BackgroundWithDialog
+          {...dialogProps}
           hideOnEnd
+          type={(dialogProps.type || 'image') as any}
           resizeMode="cover"
-          sound={backgroundProps.sound}
           style={styles.background}
           onEnd={() => setIsDialogsOver(true)}
-          type="image"
-          name={backgroundProps.name}
-          source={backgroundProps.source}
-          dialogs={
-            !isVideoVisible && introduction ? backgroundProps.dialogs : []
-          }
+          play={!isVideoVisible && introduction}
         />
       </Animated.View>
       {hdr && (
-        <Video360 source={hdr} style={[StyleSheet.absoluteFill, styles.hdr]} />
+        <Image360 source={hdr} style={[StyleSheet.absoluteFill, styles.hdr]} />
       )}
       <ChapterCompleted
         completed={completed}

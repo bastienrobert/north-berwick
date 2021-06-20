@@ -141,12 +141,13 @@ export default function ChapterGeillisHouse({
   return (
     <ChapterLayout
       color="pink"
-      hdr={require('@/assets/videos/geillis_hdr.mp4')}
-      video={require('@/assets/videos/church_video.mp4')}
-      backgroundProps={{
+      hdr={require('@/assets/images/hdr.jpg')}
+      video={require('@/assets/videos/geillis_house_video.mp4')}
+      dialogProps={{
         source: require('@/assets/images/backgrounds/geillis_house.jpg'),
         name: t('agnes'),
         dialogs: subtitles.geillis_house,
+        sound: require('@/assets/audios/geillis_house.mp3'),
       }}
       completed={results ? (results === true ? 'right' : 'wrong') : undefined}
       index={index}
@@ -166,7 +167,7 @@ export default function ChapterGeillisHouse({
       successSummaryProps={{
         titleColor: theme.colors.darkTan,
         colors: ['#FFE5E3', '#FFF0EF', '#fff'],
-        button: t('next_place'),
+        button: t('geillis_summary_summary_success'),
         onPress: () => {
           navigation.navigate('Conclusion:End', {})
           setTimeout(() => hide())
@@ -192,6 +193,7 @@ export default function ChapterGeillisHouse({
         ],
       }}
       wrongProps={{
+        audio: require('@/assets/audios/geillis_house_failed.mp3'),
         button: {
           children: t('edit_cards'),
           onPress: () => swapAnswers(),
@@ -255,7 +257,7 @@ export default function ChapterGeillisHouse({
                     setAnswers({
                       cares_revealed: payload as GeillisHouseStore['cares_revealed'],
                     })
-                    setCaresCardFlip('back')
+                    setCaresCardFlip('front')
                   }}
                   initial={answers.cares_revealed}
                   plusColor={theme.colors.peachSchnapps}
