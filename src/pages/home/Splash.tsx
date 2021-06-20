@@ -5,12 +5,12 @@ import { useTranslate } from 'react-polyglot'
 
 import { RootNavigationParamList } from '@/App/Router'
 import { useScan } from '@/App/Scan/ScanProvider'
+import { useMainSound } from '@/App/MainSoundProvider'
 
 import LogoIcon from '@/assets/logo.svg'
 import ScanButton from '@/components/ScanButton'
 
 import theme from '@/styles/theme'
-import { useMainSound } from '@/App/MainSoundProvider'
 
 export interface HomeSplashProps {}
 type HomeSplashPropsWithNavigation = HomeSplashProps & {
@@ -30,8 +30,8 @@ export default function HomeSplash({
       source: require('@/assets/musics/theme_loop.mp3'),
       options: {
         autoPlay: true,
-        fadeIn: 2000,
-        fadeOut: 2000,
+        fadeIn: true,
+        fadeOut: true,
         loop: true,
       },
     })

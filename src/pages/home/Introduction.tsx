@@ -82,6 +82,8 @@ export default function HomeIntroduction({
         <BackgroundWithDialog
           name="???"
           type="video"
+          play={touchEnd}
+          sound={require('@/assets/audios/introduction.mp3')}
           onEnd={() => navigation.navigate('Chapter:Castle', {})}
           source={require('@/assets/videos/ghost_loop.mp4')}
           dialogs={subtitles.introduction}

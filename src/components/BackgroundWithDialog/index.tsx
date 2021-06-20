@@ -11,15 +11,21 @@ import Video, { VideoProperties } from 'react-native-video'
 
 import DialogBox, { DialogBoxProps } from './DialogBox'
 
+import useSound from '@/hooks/useSound'
+
+import { srtToSeconds } from '@/utils/srt'
+
 export interface Dialog {
-  start?: string
-  end?: string
+  start: string
+  end: string
   content: string[]
 }
 
 export type BackgroundWithDialogProps = {
   name: DialogBoxProps['name']
   dialogs: Dialog[]
+  play?: boolean
+  sound: string
   hideOnEnd?: boolean
   arrow?: boolean
   style?: ViewStyle
@@ -41,6 +47,8 @@ export default function BackgroundWithDialog(
   const {
     name,
     type,
+    play = true,
+    sound,
     hideOnEnd = false,
     dialogs,
     style,
@@ -55,10 +63,25 @@ export default function BackgroundWithDialog(
   const endRef = useRef(false)
   const [dialogIndex, setDialogIndex] = useState(0)
   const opacity = useRef(new Animated.Value(0)).current
-  const dialog = dialogs[dialogIndex]
+
+  const dialog = play ? dialogs[dialogIndex] : undefined
+
+  const [soundPlay, soundPause, soundStop, { seek }] = useSound(sound, {
+    onCurrentTime: (s) => {
+      if (dialog && s > srtToSeconds(dialog.end)) {
+        soundPause()
+      }
+    },
+  })
 
   useEffect(() => {
-    if (!isStartedRef.current && dialog) {
+    if (play) {
+      soundPlay()
+    }
+  }, [play])
+
+  useEffect(() => {
+    if (!isStartedRef.current && dialog && play) {
       isStartedRef.current = true
       endRef.current = false
       Animated.spring(opacity, {
@@ -66,7 +89,16 @@ export default function BackgroundWithDialog(
         toValue: 1,
       }).start()
     }
-  }, [dialog])
+    if (dialog && play && !endRef.current) {
+      seek(srtToSeconds(dialog.start))
+      soundPlay()
+    }
+  }, [dialogIndex, play])
+
+  const onInnerEndCallback = useCallback(() => {
+    soundStop()
+    onEnd?.()
+  }, [onEnd, soundStop])
 
   const onInnerEnd = useCallback(() => {
     isStartedRef.current = false
@@ -75,11 +107,11 @@ export default function BackgroundWithDialog(
       Animated.spring(opacity, {
         useNativeDriver: false,
         toValue: 0,
-      }).start(onEnd)
+      }).start(onInnerEndCallback)
     } else {
-      onEnd?.()
+      onInnerEndCallback()
     }
-  }, [onEnd])
+  }, [onInnerEndCallback])
 
   const onVideoEnd = useCallback(() => {
     if (endRef.current) {
@@ -114,7 +146,7 @@ export default function BackgroundWithDialog(
             arrow={arrow}
             onPress={() => {
               if (dialogIndex < dialogs.length - 1) {
-                setDialogIndex((i) => i + 1)
+                setDialogIndex(dialogIndex + 1)
               } else {
                 endRef.current = true
                 onInnerEnd()

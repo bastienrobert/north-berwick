@@ -1,57 +1,57 @@
 {
   "introduction": [
     {
-      "start": "00:00:00:000",
-      "end": "00:00:06:103",
+      "start": "00:00:00,000",
+      "end": "00:00:06,103",
       "content": [
         "Bienvenue, j’aimerais pouvoir me présenter à toi, malheureusement je ne connais plus mon nom ni mon histoire."
       ]
     },
     {
-      "start": "00:00:06:103",
-      "end": "00:00:17:701",
+      "start": "00:00:06,103",
+      "end": "00:00:17,701",
       "content": [
         "Je suis maudite et condamnée à errer dans ce palais. Je sais que je ne pourrai reposer en paix que le jour où mon histoire me sera restituée. Elle est contenue dans ce paquet de cartes, mais elles sont très incomplètes."
       ]
     },
     {
-      "start": "00:00:17:701",
-      "end": "00:00::24:285",
+      "start": "00:00:17,701",
+      "end": "00:00:24,285",
       "content": [
         "Tout ce dont je me souviens, c'est que j'ai été tuée dans d'affreuses circonstances… C’est sans doute pour cela que j’ai été rasée…"
       ]
     },
     {
-      "start": "00:00::24:285",
-      "end": "00:00:37:079",
+      "start": "00:00:24,285",
+      "end": "00:00:37,079",
       "content": [
-        "Ah ! Je vois que tu as trouvé un grimoire ! Ça me rappelle bien quelque chose. Une de mes descendantes avait commencé à rassembler des documents sur les circonstances de ma mort. Malheureusement, elle n'a jamais pu finir ses recherches…"
+        "Ah ! Je vois que tu as trouvé un grimoire ! Ça me rappelle bien quelque chose. Une de mes descendantes avait commencé à rassembler des documents sur les circonstances de ma mort. Malheureusement, elle n'a jamais pu finir,ses recherches…"
       ]
     },
     {
-      "start": "00:00:37:079",
-      "end": "00:00:44:114",
+      "start": "00:00:37,079",
+      "end": "00:00:44,114",
       "content": [
         "Tu pourras t'aider de ce grimoire pour mener ton enquête. Mais attention, les écrits sont représentatifs des dires de l'époque…"
       ]
     },
     {
-      "start": "00:00:44:114",
-      "end": "00:00:53:464",
+      "start": "00:00:44,114",
+      "end": "00:00:53,464",
       "content": [
         "Fais attention à bien lire les documents dans l'ordre. Les feuilles volantes peuvent être utilisées à tout moment. Tu peux aussi relire les pages précédentes si tu le souhaites."
       ]
     },
     {
-      "start": "00:00:53:464",
-      "end": "00:1:00:546",
+      "start": "00:00:53,464",
+      "end": "00:01:00,546",
       "content": [
-        "Tout au long de ton enquête tu récolteras des indices : ils te permettront de compléter les cartes pour mieux comprendre mon histoire."
+        "Tout au long de ton enquête tu récolteras des indices : ils te permettront de compléter les cartes pour mieux comprendre mon,histoire."
       ]
     },
     {
-      "start": "00:1:00:546",
-      "end": "00:01:04:835",
+      "start": "00:01:00,546",
+      "end": "00:01:04,835",
       "content": [
         "Peut-être pourrais-tu commencer par m'aider à retrouver mon identité ?"
       ]
@@ -60,8 +60,8 @@
 
   "castle": [
     {
-      "start": "00:00:00:000",
-      "end": "00:00:04:388",
+      "start": "00:00:00,000",
+      "end": "00:00:04,388",
       "content": [
         "Tu devrais peut-être jeter un coup d'œil aux documents que tu viens de récupérer !"
       ]
@@ -70,8 +70,8 @@
 
   "castle_failed": [
     {
-      "start": "00:00:00:000",
-      "end": "00:00:04:832",
+      "start": "00:00:00,000",
+      "end": "00:00:04,832",
       "content": [
         "Hm… Je ne suis pas sûre que les infos soient bonnes, ça ne me rappelle rien…"
       ]
@@ -80,8 +80,8 @@
 
   "port": [
     {
-      "start": "00:00:00:000",
-      "end": "00:00:05:015",
+      "start": "00:00:00,000",
+      "end": "00:00:05,015",
       "content": [
         "Te voici sur le port d'Edimbourg. Il me semble bien qu'il se soit passé quelque chose ici…"
       ]
@@ -90,8 +90,8 @@
 
   "port_failed": [
     {
-      "start": "00:00:00:000",
-      "end": "00:00:04:257",
+      "start": "00:00:00,000",
+      "end": "00:00:04,257",
       "content": [
         "Hm, il me semble qu'une partie des informations est incorrecte…"
       ]
@@ -100,15 +100,15 @@
 
   "church": [
     {
-      "start": "00:00:00:000",
-      "end": "00:00:05:515",
+      "start": "00:00:00,000",
+      "end": "00:00:05,515",
       "content": [
         "Ah oui c'est bien elle, l'Église de notre coven ! Tu y trouveras sûrement de nouveaux indices."
       ]
     },
     {
-      "start": "00:00:05:515",
-      "end": "00:00:13:348",
+      "start": "00:00:05,515",
+      "end": "00:00:13,348",
       "content": [
         "Hm, il reste une sorte de poudre au fond de ce bol. Si tu trouves ce que c'est, ça pourra sûrement t’indiquer ce que je faisais dans cette église…"
       ]
@@ -117,8 +117,8 @@
 
   "church_failed": [
     {
-      "start": "00:00:00:000",
-      "end": "00:00:04:101",
+      "start": "00:00:00,000",
+      "end": "00:00:04,101",
       "content": [
         "Merci ! Mais j’ai l’impression qu’une partie de ces informations est erronée…"
       ]
@@ -127,25 +127,25 @@
 
   "geillis_house": [
     {
-      "start": "00:00:00:000",
-      "end": "00:00:06:358",
+      "start": "00:00:00,000",
+      "end": "00:00:06,358",
       "content": [
         "C’est bien la chambre de mon amie Geillis ! C’est étrange, elle est sans dessus-dessous, ce n’était pas dans ses habitudes…"
       ]
     },
     {
-      "start": "00:00:06:358",
-      "end": "00:00:10:187",
+      "start": "00:00:06,358",
+      "end": "00:00:10,187",
       "content": [
-        "Si tu explorais cette pièce, tu comprendrais sûrement mieux ce qui nous reliait."
+        "Si tu explorais cette pièce, tu comprendrais sûrement mieux ce qui nous,reliait."
       ]
     }
   ],
 
   "geillis_house_failed": [
     {
-      "start": "00:00:00:000",
-      "end": "00:00:04:257",
+      "start": "00:00:00,000",
+      "end": "00:00:04,257",
       "content": [
         "Merci ! Mais j’ai l’impression qu’une partie de ces informations est erronée…"
       ]
@@ -154,8 +154,8 @@
 
   "conclusion_in": [
     {
-      "start": "00:00:00:000",
-      "end": "00:00:06:331",
+      "start": "00:00:00,000",
+      "end": "00:00:06,331",
       "content": [
         "Ah, te revoilà. As-tu réussi à réunir les différents éléments qui composent mon histoire et mon identité ?"
       ]
@@ -164,46 +164,46 @@
 
   "conclusion_out": [
     {
-      "start": "00:00:06:331",
-      "end": "00:00:09:265",
+      "start": "00:00:06,331",
+      "end": "00:00:09,265",
       "content": ["Ca y est je me souviens, tout est limpide maintenant !"]
     },
     {
-      "start": "00:00:09:265",
-      "end": "00:00:20:823",
+      "start": "00:00:09,265",
+      "end": "00:00:20,823",
       "content": [
         "Comme tu l’as surement compris lors de ton enquête, tout à commencé avec l’employeur de Geillis qui n’a pas supporté ne plus avoir le contrôle total sur la vie de son employée, qui s’échappait la nuit pour aller soigner des personnes."
       ]
     },
     {
-      "start": "00:00:20:823",
-      "end": "00:00:27:892",
+      "start": "00:00:20,823",
+      "end": "00:00:27,892",
       "content": [
         "J’ai été accusée avec elle parce que je pratiquais la médecine et la gynécologie, et on estimait que ce n’était pas la place d’une femme."
       ]
     },
     {
-      "start": "00:00:27:892",
-      "end": "00:00:36:677",
+      "start": "00:00:27,892",
+      "end": "00:00:36,677",
       "content": [
         "Alors j’ai été accusée d’actes de sorcellerie concernant les deux navires ayant eu des incidents, tout ça parce que des marins ayant mal fait leur travail ne l’assumaient pas."
       ]
     },
     {
-      "start": "00:00:36:677",
-      "end": "00:00:42:765",
+      "start": "00:00:36,677",
+      "end": "00:00:42,765",
       "content": [
         "Je n’ai pas été la seule condamnée suite à ce procès. Nous avons été 70 sorcières à être exécutées."
       ]
     },
     {
-      "start": "00:00:42:765",
-      "end": "00:00:44:872",
+      "start": "00:00:42,765",
+      "end": "00:00:44,872",
       "content": ["…Ou plutôt 70 femmes."]
     },
     {
-      "start": "00:00:44:872",
-      "end": "00:00:54:230",
+      "start": "00:00:44,872",
+      "end": "00:00:54,230",
       "content": [
         "Merci d’avoir pu retracer mon histoire et de l’avoir ainsi replacée dans l’Histoire. Malheureusement, il y a tant d’autres femmes qui ont disparu des livres…"
       ]

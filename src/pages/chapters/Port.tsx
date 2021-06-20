@@ -5,6 +5,7 @@ import { useTranslate } from 'react-polyglot'
 
 import { RootNavigationParamList } from '@/App/Router'
 import { useScan } from '@/App/Scan/ScanProvider'
+import { useMainSound } from '@/App/MainSoundProvider'
 
 import store, { ASSETS, PortStore, CORRECTS } from '@/controllers/port'
 
@@ -37,6 +38,7 @@ export default function ChapterPort({
 }: ChapterPortPropsWithNavigation) {
   const t = useTranslate()
   const { set, hide } = useScan()
+  const { setParams: setMainSound } = useMainSound()
 
   const introducedRef = useRef(false)
   const demonsInteractionShowedRef = useRef(false)
@@ -131,6 +133,18 @@ export default function ChapterPort({
   } = useMemo(() => {
     return isCompleted(answers)
   }, [answers])
+
+  useEffect(() => {
+    setMainSound({
+      source: require('@/assets/musics/port_loop.mp3'),
+      options: {
+        autoPlay: true,
+        fadeIn: 2000,
+        fadeOut: 2000,
+        loop: true,
+      },
+    })
+  }, [])
 
   if (catInteraction) {
     return (

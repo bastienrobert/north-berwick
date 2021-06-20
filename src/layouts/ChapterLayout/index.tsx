@@ -27,7 +27,7 @@ export interface ChapterLayoutProps
   video: VideoProperties['source']
   backgroundProps: Pick<
     BackgroundWithDialogProps,
-    'source' | 'name' | 'dialogs'
+    'source' | 'name' | 'dialogs' | 'sound'
   >
   onScanButtonPress: () => void
   reveal?: boolean
@@ -141,6 +141,7 @@ export default function ChapterLayout({
         <BackgroundWithDialog
           hideOnEnd
           resizeMode="cover"
+          sound={backgroundProps.sound}
           style={styles.background}
           onEnd={() => setIsDialogsOver(true)}
           type="image"

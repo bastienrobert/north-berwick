@@ -15,6 +15,7 @@ export interface SoundHookOptions {
   delay?: number
   fadeIn?: boolean | number
   fadeOut?: boolean | number
+  onCurrentTime?: (sec: number) => void
 }
 
 export type PlayFunction = () => void
@@ -41,6 +42,7 @@ export default function useSound(
     fadeIn,
     fadeOut,
     delay = 200,
+    onCurrentTime,
   }: SoundHookOptions = {},
 ): [PlayFunction, PauseFunction, StopFunction, SoundData] {
   // prettier-ignore
@@ -69,6 +71,7 @@ export default function useSound(
     if (url) {
       const _sound = new Sound(url, () => {
         if (isMounted.current) {
+          _sound.setVolume(isFadingIn ? 0 : volume)
           handleSetSound(_sound)
         }
       })
@@ -82,7 +85,7 @@ export default function useSound(
       Animated.timing(animatedVolume, {
         useNativeDriver: false,
         duration: fadeInDuration,
-        toValue: 1,
+        toValue: volume,
         delay,
       }).start(() => {
         isFadingIn.current = false
@@ -114,17 +117,22 @@ export default function useSound(
   const play: PlayFunction = useCallback(() => {
     fadeInVolume()
     sound?.play(() => {
+      if (!isMounted.current) return
       setIsPlaying(false)
     })
     setIsPlaying(true)
   }, [sound, fadeInVolume])
 
-  const stop = useCallback(() => {
-    sound?.stop(() => setIsPlaying(false))
+  const stop: StopFunction = useCallback(() => {
+    sound?.stop(() => {
+      if (!isMounted.current) return
+      setIsPlaying(false)
+    })
   }, [sound])
 
-  const pause = useCallback(() => {
+  const pause: PauseFunction = useCallback(() => {
     sound?.pause(() => {
+      if (!isMounted.current) return
       setIsPlaying(false)
     })
   }, [sound])
@@ -139,6 +147,7 @@ export default function useSound(
   useInterval(() => {
     if (sound?.isPlaying()) {
       sound.getCurrentTime((sec) => {
+        onCurrentTime?.(sec)
         if (!durationRef.current || loop) return
         if (
           !isFadingOut &&

@@ -6,6 +6,7 @@ interface RevealAnimatedTextProps {
   style?: ViewStyle
   textStyle?: TextStyle
   reveal?: boolean
+  force?: number
   duration?: number
   onFinish?: (isRevealed: boolean) => void
 }
@@ -14,6 +15,7 @@ export default function RevealAnimatedText({
   style,
   textStyle,
   reveal,
+  force,
   content = '',
   duration = 600,
   onFinish,
@@ -50,6 +52,13 @@ export default function RevealAnimatedText({
   useEffect(() => {
     reveal ? animate(1) : animate(0)
   }, [reveal, text, animate])
+
+  useEffect(() => {
+    if (force) {
+      animations.current.forEach((a) => a.stop())
+      animatedValues.current.forEach((a) => a.setValue(force))
+    }
+  }, [force])
 
   return (
     <View style={[style, styles.textWrapper]}>

@@ -5,6 +5,7 @@ import { useTranslate } from 'react-polyglot'
 
 import { RootNavigationParamList } from '@/App/Router'
 import { useScan } from '@/App/Scan/ScanProvider'
+import { useMainSound } from '@/App/MainSoundProvider'
 
 import store, { ASSETS, ChurchStore, CORRECTS } from '@/controllers/church'
 
@@ -33,6 +34,7 @@ export default function ChapterChurch({
 }: ChapterChurchPropsWithNavigation) {
   const t = useTranslate()
   const { set, hide } = useScan()
+  const { setParams: setMainSound } = useMainSound()
 
   const introducedRef = useRef(false)
   const mortarInteractionShowedRef = useRef(false)
@@ -74,6 +76,18 @@ export default function ChapterChurch({
     name,
     icon: <C />,
   }))
+
+  useEffect(() => {
+    setMainSound({
+      source: require('@/assets/musics/church_loop.mp3'),
+      options: {
+        autoPlay: true,
+        fadeIn: 2000,
+        fadeOut: 2000,
+        loop: true,
+      },
+    })
+  }, [])
 
   const collapseSelectors = useCallback(() => {
     familyCardSelectorRef.current?.collapse()

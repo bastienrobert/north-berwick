@@ -4,6 +4,7 @@ import { useTranslate } from 'react-polyglot'
 
 import { RootNavigationParamList } from '@/App/Router'
 import { useScan } from '@/App/Scan/ScanProvider'
+import { useMainSound } from '@/App/MainSoundProvider'
 
 import store, {
   ASSETS,
@@ -41,6 +42,7 @@ export default function ChapterGeillisHouse({
 }: ChapterGeillisHousePropsWithNavigation) {
   const t = useTranslate()
   const { set, hide } = useScan()
+  const { setParams: setMainSound } = useMainSound()
 
   const caresCardSeatonSelectorRef = useRef<InnerSelectorsRef | null>()
   const caresCardRevealedSelectorRef = useRef<InnerSelectorsRef | null>()
@@ -87,6 +89,18 @@ export default function ChapterGeillisHouse({
   const [isCollapsed, setIsCollapsed] = useState(true)
   const [index, setIndex] = useState(0)
   const [caresCardFlip, setCaresCardFlip] = useState<FlippableSide>('front')
+
+  useEffect(() => {
+    setMainSound({
+      source: require('@/assets/musics/geillis_house_loop.mp3'),
+      options: {
+        autoPlay: true,
+        fadeIn: 2000,
+        fadeOut: 2000,
+        loop: true,
+      },
+    })
+  }, [])
 
   const keyboardCares = ASSETS.cares.map(({ name, component: C }) => ({
     name,
