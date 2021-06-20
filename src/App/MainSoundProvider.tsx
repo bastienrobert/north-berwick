@@ -4,21 +4,23 @@ import React, {
   useState,
   PropsWithChildren,
 } from 'react'
-import Sound from 'react-native-sound'
 
-import useAudio, { UseAudioOptions } from '@/hooks/useAudio'
-import useSound from '@/hooks/useSound'
+import useSound, {
+  PlayFunction,
+  SoundData,
+  StopFunction,
+} from '@/hooks/useSound'
 
 interface SetMainSoundContext {
-  source: Parameters<typeof useAudio>[0]
+  source: Parameters<typeof useSound>[0]
   options?: any
 }
 
-type UseAudioReturnType = ReturnType<typeof useAudio>
 interface MainSoundContext {
   setParams: (params: SetMainSoundContext) => void
-  // setPlay: UseAudioReturnType[0]
-  // sound: UseAudioReturnType[2]
+  play: PlayFunction
+  stop: StopFunction
+  data: SoundData
 }
 const Context = createContext<MainSoundContext>({} as MainSoundContext)
 
@@ -27,15 +29,15 @@ export default function MainSoundProvider({
 }: PropsWithChildren<unknown>) {
   const [params, setParams] = useState<SetMainSoundContext>()
 
-  // const [setPlay, , sound] = useAudio(params?.source || null, params?.options)
-  useSound(params?.source || null, params?.options)
+  const [play, , stop, data] = useSound(params?.source || null, params?.options)
 
   return (
     <Context.Provider
       children={children}
       value={{
-        // sound,
-        // setPlay,
+        play,
+        stop,
+        data,
         setParams,
       }}
     />

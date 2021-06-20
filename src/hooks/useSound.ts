@@ -7,7 +7,7 @@ import useIsMounted from './useIsMounted'
 
 Sound.setCategory('Playback')
 
-export interface HookOptions {
+export interface SoundHookOptions {
   volume?: number
   timeRate?: number
   loop?: boolean
@@ -21,7 +21,7 @@ export type PlayFunction = () => void
 export type PauseFunction = () => void
 export type StopFunction = () => void
 
-export interface Data {
+export interface SoundData {
   sound: Sound | null
   seek: (seconds: number) => void
   isPlaying: boolean
@@ -41,8 +41,8 @@ export default function useSound(
     fadeIn,
     fadeOut,
     delay = 200,
-  }: HookOptions = {},
-): [PlayFunction, PauseFunction, StopFunction, Data] {
+  }: SoundHookOptions = {},
+): [PlayFunction, PauseFunction, StopFunction, SoundData] {
   // prettier-ignore
   const fadeInDuration = fadeIn === true ? FADE_IN_DEFAULT : fadeIn ? fadeIn : 0
   // prettier-ignore

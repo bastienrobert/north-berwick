@@ -10,7 +10,6 @@ import LogoIcon from '@/assets/logo.svg'
 import ScanButton from '@/components/ScanButton'
 
 import theme from '@/styles/theme'
-import useAudio from '@/hooks/useAudio'
 import { useMainSound } from '@/App/MainSoundProvider'
 
 export interface HomeSplashProps {}
@@ -37,13 +36,6 @@ export default function HomeSplash({
       },
     })
   }, [])
-
-  // useAudio(require('@/assets/musics/theme_loop.mp3'), {
-  //   autoPlay: true,
-  //   fadeIn: true,
-  //   fadeOut: true,
-  //   loop: true,
-  // })
 
   return (
     <View style={styles.container}>

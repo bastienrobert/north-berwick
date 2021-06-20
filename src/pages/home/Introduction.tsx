@@ -27,26 +27,6 @@ export default function HomeIntroduction({
   const touchOpacity = useRef(new Animated.Value(0)).current
   const dialogOpacity = useRef(new Animated.Value(0)).current
 
-  const { setParams: setMainSound } = useMainSound()
-
-  // useEffect(() => {
-  //   setMainSound({
-  //     source: require('@/assets/musics/geillis_house_loop.mp3'),
-  //     options: {
-  //       autoPlay: true,
-  //       fadeIn: 2000,
-  //       fadeOut: 2000,
-  //       loop: true,
-  //     },
-  //   })
-  // }, [])
-
-  // useEffect(() => {
-  //   return () => {
-  //     setMainSoundPlay(false)
-  //   }
-  // }, [setMainSoundPlay])
-
   const [loaded, setLoaded] = useState(false)
   const [introductionEnd, setIntroductionEnd] = useState(false)
   const [touchEnd, setTouchEnd] = useState(false)
