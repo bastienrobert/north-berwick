@@ -38,6 +38,10 @@ function getResults<T extends Record<string, any>>({
   )
 }
 
+export function defaultIsComplete<R>(answers: R) {
+  return Object.values(answers).every((a) => a)
+}
+
 interface UseChapterAnswersParams<R> {
   store: WritableAtom<R, any>
   corrects: R
@@ -49,7 +53,7 @@ export default function useChapterAnswers<R>({
   store,
   corrects,
   reset,
-  isComplete = (answers) => Object.values(answers).every((a) => a),
+  isComplete = defaultIsComplete,
 }: UseChapterAnswersParams<R>) {
   const [answers, _setAnswers] = useAtom(store)
   const [results, setResults] = useState<R | true>()

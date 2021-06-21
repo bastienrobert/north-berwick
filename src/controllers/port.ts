@@ -68,6 +68,20 @@ export interface PortStore {
   demons_revealed: Nullable<PortCorrects['demons_revealed']>
 }
 
+export function isCompleted({
+  cat_revealed,
+  cat_king,
+  demons_revealed,
+  demons_king,
+}: PortStore) {
+  return {
+    cat_revealed: cat_revealed[0] !== null && cat_revealed[1] !== null,
+    cat_king: cat_king[0] !== null && cat_king[1] !== null,
+    demons_revealed: demons_revealed[0] !== null && demons_revealed[1] !== null,
+    demons_king: demons_king[0] !== null && demons_king[1] !== null,
+  }
+}
+
 export default atom<PortStore>({
   cat_king: [null, null],
   cat_revealed: [null, null],

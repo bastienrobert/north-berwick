@@ -77,6 +77,13 @@ export interface ChurchStore
   children: Nullable<ChurchCorrects['children']>
 }
 
+export function isCompleted({ job, parent, children }: ChurchStore) {
+  return {
+    job: job !== null,
+    family: !!(parent && children[0] && children[1] && children[2]),
+  }
+}
+
 export default atom<ChurchStore>({
   job: null,
   parent: null,

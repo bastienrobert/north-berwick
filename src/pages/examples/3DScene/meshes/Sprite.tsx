@@ -12,7 +12,7 @@ export default function Sprite({ src, size = [1, 1] }: any) {
 
   useEffect(() => {
     loader.current.load(src, (t: any) => {
-      animator.current = new Animated3DSprite(t, 4, 4, 10, 10)
+      animator.current = new Animated3DSprite(t, 3, 3, 5, 5)
       setTexture(animator.current.init())
     })
   }, [src])

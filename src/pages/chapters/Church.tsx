@@ -7,14 +7,19 @@ import { RootNavigationParamList } from '@/App/Router'
 import { useScan } from '@/App/Scan/ScanProvider'
 import { useMainSound } from '@/App/MainSoundProvider'
 
-import store, { ASSETS, ChurchStore, CORRECTS } from '@/controllers/church'
+import store, {
+  isCompleted,
+  ASSETS,
+  ChurchStore,
+  CORRECTS,
+} from '@/controllers/church'
 
 import Card from '@/components/Card'
 import InnerSelectors, {
   InnerSelectorsRef,
 } from '@/components/Card/inner/InnerSelectors'
 import { FamilyItems } from '@/components/Card/inner/InnerSelectors/FamilySelector'
-import VideoDialogBox from '@/components/BackgroundWithDialog/DialogBox'
+// import VideoDialogBox from '@/components/BackgroundWithDialog/DialogBox'
 
 import ChapterLayout from '@/layouts/ChapterLayout'
 
@@ -40,13 +45,6 @@ export default function ChapterChurch({
   const mortarInteractionShowedRef = useRef(false)
   const familyCardSelectorRef = useRef<InnerSelectorsRef | null>()
   const jobCardSelectorRef = useRef<InnerSelectorsRef | null>()
-
-  const isCompleted = useCallback(({ job, parent, children }: ChurchStore) => {
-    return {
-      job: job !== null,
-      family: !!(parent && children[0] && children[1] && children[2]),
-    }
-  }, [])
 
   const {
     answers,
@@ -82,8 +80,9 @@ export default function ChapterChurch({
       source: require('@/assets/musics/church_loop.mp3'),
       options: {
         autoPlay: true,
-        fadeIn: 2000,
-        fadeOut: 2000,
+        fadeIn: 1000,
+        delay: 200,
+        fadeOut: 500,
         loop: true,
       },
     })
@@ -115,24 +114,26 @@ export default function ChapterChurch({
     return isCompleted(answers)
   }, [answers])
 
-  if (mortarInteraction) {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Button
-          title="CLOSE MORTAR"
-          onPress={() => {
-            setMortarInteraction(false)
-            setIndex(0)
-            setIsCollapsed(false)
-          }}
-        />
-      </View>
-    )
-  }
+  const showDialog = introductionEnd && !mortarInteractionShowedRef.current
+
+  // if (mortarInteraction) {
+  //   return (
+  //     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+  //       <Button
+  //         title="CLOSE MORTAR"
+  //         onPress={() => {
+  //           setMortarInteraction(false)
+  //           setIndex(0)
+  //           setIsCollapsed(false)
+  //         }}
+  //       />
+  //     </View>
+  //   )
+  // }
 
   return (
     <View style={{ flex: 1 }}>
-      {introductionEnd && !mortarInteractionShowedRef.current && (
+      {/* {showDialog && (
         <VideoDialogBox
           name={t('agnes')}
           activeOpacity={0.9}
@@ -146,10 +147,11 @@ export default function ChapterChurch({
           content="OPEN MORTAR"
           onPress={() => setMortarInteraction(true)}
         />
-      )}
+      )} */}
       <ChapterLayout
         color="purple"
-        reveal={mortarInteractionShowedRef.current}
+        pointerEvents={showDialog ? 'none' : 'auto'}
+        // reveal={mortarInteractionShowedRef.current}
         introduction={!introducedRef.current}
         onIntroductionEnd={() => {
           introducedRef.current = true

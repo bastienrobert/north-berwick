@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Animated, Image, StyleSheet, View } from 'react-native'
+import { Animated, Image, StyleSheet, View, ViewProps } from 'react-native'
 import Video, { VideoProperties } from 'react-native-video'
 
 import ChapterCarousel, { ChapterCarouselProps } from './ChapterCarousel'
@@ -10,6 +10,7 @@ import BackgroundWithDialog, {
 import ScanButton from '@/components/ScanButton'
 import Image360, { Image360Props } from '@/components/shared/Image360'
 import Fade from '@/components/shared/Fade'
+import theme from '@/styles/theme'
 
 type ChapterCarouselForwardedProps = Pick<
   ChapterCarouselProps,
@@ -31,6 +32,7 @@ export interface ChapterLayoutProps
   > &
     Partial<Pick<BackgroundWithDialogProps, 'type'>>
   onScanButtonPress: () => void
+  pointerEvents?: ViewProps['pointerEvents']
   reveal?: boolean
   hdr?: Image360Props['source']
   introduction?: boolean
@@ -45,6 +47,7 @@ export default function ChapterLayout({
   data,
   index,
   hdr,
+  pointerEvents = 'auto',
   collapsed,
   onIndexChange,
   onCollapse,
@@ -77,14 +80,16 @@ export default function ChapterLayout({
     }
   }, [isDialogsOver, reveal, completed, mainOpacity])
 
+  // this has been changed recently, was in the useEffect before w/ isIntroductionOver in deps
+  const isBackgroundVisible = isIntroductionOver || (isDialogsOver && !hdr)
   useEffect(() => {
-    if (isIntroductionOver || (isDialogsOver && !hdr)) {
+    if (isBackgroundVisible) {
       Animated.spring(backgroundOpacity, {
         useNativeDriver: false,
         toValue: 1,
       }).start(() => setIsVideoVisible(false))
     }
-  }, [isIntroductionOver])
+  }, [isBackgroundVisible])
 
   useEffect(() => {
     if (isDialogsOver) {
@@ -116,7 +121,7 @@ export default function ChapterLayout({
   }, [introduction])
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} pointerEvents={pointerEvents}>
       <Fade
         position="inherit"
         color="black"
@@ -138,6 +143,7 @@ export default function ChapterLayout({
         <BackgroundWithDialog
           {...dialogProps}
           hideOnEnd
+          paused={!isBackgroundVisible}
           type={(dialogProps.type || 'image') as any}
           resizeMode="cover"
           style={styles.background}
@@ -177,6 +183,7 @@ export default function ChapterLayout({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: theme.colors.black,
   },
   scan: {
     position: 'absolute',

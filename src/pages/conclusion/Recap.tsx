@@ -14,10 +14,20 @@ import Card from '@/components/Card'
 import FlippableCarousel from '@/components/FlippableCarousel'
 
 import results from '@/controllers/results'
+
 import { ASSETS as CASTLE_ASSETS } from '@/controllers/castle'
-import { ASSETS as PORT_ASSETS } from '@/controllers/port'
-import { ASSETS as CHURCH_ASSETS } from '@/controllers/church'
-import { ASSETS as GEILLIS_HOUSE_ASSETS } from '@/controllers/geillis_house'
+import {
+  isCompleted as isPortCompleted,
+  ASSETS as PORT_ASSETS,
+} from '@/controllers/port'
+import {
+  isCompleted as isChurchCompleted,
+  ASSETS as CHURCH_ASSETS,
+} from '@/controllers/church'
+import {
+  isCompleted as isGeillisHouseCompleted,
+  ASSETS as GEILLIS_HOUSE_ASSETS,
+} from '@/controllers/geillis_house'
 
 import InnerSelectors from '@/components/Card/inner/InnerSelectors'
 import InnerImage from '@/components/Card/inner/InnerImage'
@@ -30,6 +40,7 @@ import Poster from '@/components/Poster'
 import theme from '@/styles/theme'
 
 import { FlippableSide } from '@/hooks/useFlippable'
+import { defaultIsComplete } from '@/hooks/useChapterAnswers'
 
 export interface ConclusionRecapProps {}
 type ConclusionRecapPropsWithNavigation = ConclusionRecapProps & {
@@ -45,6 +56,15 @@ export default function ConclusionRecap({
   const [demonsCardFlip, setDemonsCardFlip] = useState<FlippableSide>('front')
   const [catCardFlip, setCatCardFlip] = useState<FlippableSide>('front')
   const [caresCardFlip, setCaresCardFlip] = useState<FlippableSide>('front')
+
+  const finish = useMemo(() => {
+    return [
+      defaultIsComplete(all[0]),
+      Object.values(isPortCompleted(all[1])).every((s) => s === true),
+      Object.values(isChurchCompleted(all[2])).every((s) => s === true),
+      Object.values(isGeillisHouseCompleted(all[3])).every((s) => s === true),
+    ]
+  }, [all])
 
   const data = useMemo(() => {
     return [
@@ -96,355 +116,372 @@ export default function ConclusionRecap({
     ]
   }, [all])
 
+  if (finish.every((f) => f === false)) return null
+
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <FlippableCarousel
           onClosePress={() => navigation.navigate('Home:Splash', {})}
           data={[
-            [
-              {
-                front: (
-                  <Card
-                    number={1}
-                    color="red"
-                    title={[t('job_title_line_1'), t('job_title_line_2')]}
-                    forceBottom={false}
-                    bottom={t('job_label')}
-                    inner={
-                      data[0].portrait ? (
-                        <InnerImage image={data![0].portrait.image} />
-                      ) : null
-                    }
-                  />
-                ),
-              },
-              {
-                front: (
-                  <Card
-                    number={1}
-                    color="red"
-                    forceBottom={false}
-                    title={
-                      data[0]['torture']
-                        ? data[0]['torture'].multiline
-                          ? [
-                              t(data[0]['torture'].name + '_line_1'),
-                              t(data[0]['torture'].name + '_line_2', { _: '' }),
-                            ]
-                          : [t(data[0]['torture'].name)]
-                        : undefined
-                    }
-                    bottom={t('torture_label')}
-                    inner={
-                      <InnerCarousel
-                        length={1}
-                        controls={false}
-                        content={[
-                          <WebPImage
-                            source={data[0]['torture']?.image}
-                            style={{
-                              marginTop: 20,
-                              width: '90%',
-                              aspectRatio: 1,
-                            }}
-                          />,
-                        ]}
+            finish[0]
+              ? [
+                  {
+                    front: (
+                      <Card
+                        number={1}
+                        color="red"
+                        title={[t('job_title_line_1'), t('job_title_line_2')]}
+                        forceBottom={false}
+                        bottom={t('job_label')}
+                        inner={
+                          data[0].portrait ? (
+                            <InnerImage image={data![0].portrait.image} />
+                          ) : null
+                        }
                       />
-                    }
-                  />
-                ),
-              },
-              {
-                front: (
-                  <Card
-                    number={1}
-                    color="red"
-                    title={[t('conviction')]}
-                    forceBottom={false}
-                    bottom={t('punishment')}
-                    inner={
-                      <InnerPoster
-                        width="60%"
-                        aspectRatio={0.68}
-                        placeholder={
-                          <Image
-                            source={require('@/assets/images/poster/completed_large.jpg')}
-                            resizeMode="cover"
-                            style={{ width: '100%', flex: 1 }}
+                    ),
+                  },
+                  {
+                    front: (
+                      <Card
+                        number={1}
+                        color="red"
+                        forceBottom={false}
+                        title={
+                          data[0]['torture']
+                            ? data[0]['torture'].multiline
+                              ? [
+                                  t(data[0]['torture'].name + '_line_1'),
+                                  t(data[0]['torture'].name + '_line_2', {
+                                    _: '',
+                                  }),
+                                ]
+                              : [t(data[0]['torture'].name)]
+                            : undefined
+                        }
+                        bottom={t('torture_label')}
+                        inner={
+                          <InnerCarousel
+                            length={1}
+                            controls={false}
+                            content={[
+                              <WebPImage
+                                source={data[0]['torture']?.image}
+                                style={{
+                                  marginTop: 20,
+                                  width: '90%',
+                                  aspectRatio: 1,
+                                }}
+                              />,
+                            ]}
                           />
-                        }>
-                        <Poster completed />
-                      </InnerPoster>
-                    }
-                  />
-                ),
-              },
-            ],
-            [
-              {
-                side: demonsCardFlip,
-                front: (
-                  <Card
-                    revert
-                    onFlipPress={() => setDemonsCardFlip('back')}
-                    number={2}
-                    color="blue"
-                    title={[
-                      t('port_title_king_line_1'),
-                      t('port_title_king_line_2'),
-                    ]}
-                    forceBottom={false}
-                    bottom={t('james_royall_label')}
-                    inner={
-                      <InnerSelectors
-                        disabled
-                        type="equation"
-                        initial={data[1].demons_king}
-                        keyboardLabel="Falcon of Leith"
-                        plusColor={theme.colors.anakiwa}
-                        equalColor={theme.colors.periwinkle}
-                        result={<SunkenShipIcon />}
-                        items={[data[1].icons, data[1].icons] as any}
+                        }
                       />
-                    }
-                  />
-                ),
-                back: (
-                  <Card
-                    revert
-                    onFlipPress={() => setDemonsCardFlip('front')}
-                    number={2}
-                    color="blue"
-                    title={[t('port_title_revealed')]}
-                    forceBottom={false}
-                    bottom={t('james_royall_label')}
-                    inner={
-                      <InnerSelectors
-                        disabled
-                        type="equation"
-                        initial={data[1].demons_revealed}
-                        keyboardLabel="Falcon of Leith"
-                        plusColor={theme.colors.anakiwa}
-                        equalColor={theme.colors.periwinkle}
-                        result={<SunkenShipIcon />}
-                        items={[data[1].icons, data[1].icons] as any}
+                    ),
+                  },
+                  {
+                    front: (
+                      <Card
+                        number={1}
+                        color="red"
+                        title={[t('conviction')]}
+                        forceBottom={false}
+                        bottom={t('punishment')}
+                        inner={
+                          <InnerPoster
+                            width="60%"
+                            aspectRatio={0.68}
+                            placeholder={
+                              <Image
+                                source={require('@/assets/images/poster/completed_large.jpg')}
+                                resizeMode="cover"
+                                style={{ width: '100%', flex: 1 }}
+                              />
+                            }>
+                            <Poster completed />
+                          </InnerPoster>
+                        }
                       />
-                    }
-                  />
-                ),
-              },
-              {
-                side: catCardFlip,
-                front: (
-                  <Card
-                    revert
-                    onFlipPress={() => setCatCardFlip('back')}
-                    number={2}
-                    color="blue"
-                    title={[
-                      t('port_title_king_line_1'),
-                      t('port_title_king_line_2'),
-                    ]}
-                    forceBottom={false}
-                    bottom={t('falcon_of_leith_label')}
-                    inner={
-                      <InnerSelectors
-                        disabled
-                        type="equation"
-                        initial={data[1].cat_king}
-                        keyboardLabel="Falcon of Leith"
-                        plusColor={theme.colors.anakiwa}
-                        equalColor={theme.colors.periwinkle}
-                        result={<DeathIcon />}
-                        items={[data[1].icons, data[1].icons] as any}
-                      />
-                    }
-                  />
-                ),
-                back: (
-                  <Card
-                    revert
-                    onFlipPress={() => setCatCardFlip('front')}
-                    number={2}
-                    color="blue"
-                    title={[t('port_title_revealed')]}
-                    forceBottom={false}
-                    bottom={t('falcon_of_leith_label')}
-                    inner={
-                      <InnerSelectors
-                        disabled
-                        type="equation"
-                        initial={data[1].cat_revealed}
-                        keyboardLabel="Falcon of Leith"
-                        plusColor={theme.colors.anakiwa}
-                        equalColor={theme.colors.periwinkle}
-                        result={<DeathIcon />}
-                        items={[data[1].icons, data[1].icons] as any}
-                      />
-                    }
-                  />
-                ),
-              },
-            ],
-            [
-              {
-                front: (
-                  <Card
-                    number={3}
-                    color="purple"
-                    title={[t('family_title_line_1'), t('family_title_line_2')]}
-                    forceBottom={false}
-                    bottom={t('family_label')}
-                    inner={
-                      <InnerSelectors
-                        disabled
-                        type="family"
-                        main={t('agnes')}
-                        initial={data[2] as any}
-                        keyboardLabel={t('family_label')}
-                        items={CHURCH_ASSETS.families as FamilyItems}
-                      />
-                    }
-                  />
-                ),
-              },
-              {
-                front: (
-                  <Card
-                    number={3}
-                    color="purple"
-                    title={[t('job_title_line_1'), t('job_title_line_2')]}
-                    forceBottom={false}
-                    bottom={t('job_label')}
-                    inner={
-                      <InnerSelectors
-                        disabled
-                        type="single"
-                        keyboardLabel={t('job_label')}
-                        initial={data[2].job}
-                        items={data[2].icons as any}
-                      />
-                    }
-                  />
-                ),
-              },
-            ],
-            [
-              {
-                side: caresCardFlip,
-                front: (
-                  <Card
-                    revert
-                    onFlipPress={() => setCaresCardFlip('back')}
-                    number={4}
-                    color="pink"
-                    title={[
-                      t('cares_seaton_title_line_1'),
-                      t('cares_seaton_title_line_2'),
-                    ]}
-                    forceBottom={false}
-                    bottom={t('cares_label')}
-                    inner={
-                      <InnerSelectors
-                        disabled
-                        type="equation"
-                        keyboardLabel={t('cares_label')}
-                        plusColor={theme.colors.cornflowerLilac}
-                        equalColor={theme.colors.peachSchnapps}
-                        result={<DrugIcon />}
-                        initial={data[3].cares_seaton}
-                        items={[data[3].cares, data[3].cares] as any}
-                      />
-                    }
-                  />
-                ),
-                back: (
-                  <Card
-                    onFlipPress={() => setCaresCardFlip('front')}
-                    number={4}
-                    color="pink"
-                    title={[
-                      t('cares_revealed_title_line_1'),
-                      t('cares_revealed_title_line_2'),
-                    ]}
-                    forceBottom={false}
-                    bottom={t('cares_label')}
-                    inner={
-                      <InnerSelectors
-                        disabled
-                        type="equation"
-                        keyboardLabel={t('cares_label')}
-                        plusColor={theme.colors.peachSchnapps}
-                        equalColor={theme.colors.peachSchnapps}
-                        result={<DrugIcon />}
-                        initial={data[3].cares_revealed}
-                        items={[data[3].cares, data[3].cares] as any}
-                      />
-                    }
-                  />
-                ),
-              },
-              {
-                front: (
-                  <Card
-                    number={4}
-                    color="pink"
-                    title={[
-                      t('activity_title_line_1'),
-                      t('activity_title_line_2'),
-                    ]}
-                    forceBottom={false}
-                    bottom={t('activity_label')}
-                    inner={
-                      <InnerSelectors
-                        disabled
-                        type="single"
-                        keyboardLabel={t('activity_label')}
-                        initial={data[3].activity}
-                        items={data[3].activities as any}
-                      />
-                    }
-                  />
-                ),
-              },
-              {
-                front: (
-                  <Card
-                    number={4}
-                    color="pink"
-                    title={
-                      data[3]['torture']
-                        ? data[3]['torture'].multiline
-                          ? [
-                              t(data[3]['torture'].name + '_line_1'),
-                              t(data[3]['torture'].name + '_line_2', { _: '' }),
-                            ]
-                          : [t(data[3]['torture'].name)]
-                        : undefined
-                    }
-                    forceBottom={false}
-                    bottom={t('torture_label')}
-                    inner={
-                      <InnerCarousel
-                        length={1}
-                        controls={false}
-                        content={[
-                          <WebPImage
-                            source={data[3]['torture']?.image}
-                            style={{
-                              marginTop: 20,
-                              width: '90%',
-                              aspectRatio: 1,
-                            }}
-                          />,
+                    ),
+                  },
+                ]
+              : null,
+            finish[1]
+              ? [
+                  {
+                    side: demonsCardFlip,
+                    front: (
+                      <Card
+                        revert
+                        onFlipPress={() => setDemonsCardFlip('back')}
+                        number={2}
+                        color="blue"
+                        title={[
+                          t('port_title_king_line_1'),
+                          t('port_title_king_line_2'),
                         ]}
+                        forceBottom={false}
+                        bottom={t('james_royall_label')}
+                        inner={
+                          <InnerSelectors
+                            disabled
+                            type="equation"
+                            initial={data[1].demons_king}
+                            keyboardLabel="Falcon of Leith"
+                            plusColor={theme.colors.anakiwa}
+                            equalColor={theme.colors.periwinkle}
+                            result={<SunkenShipIcon />}
+                            items={[data[1].icons, data[1].icons] as any}
+                          />
+                        }
                       />
-                    }
-                  />
-                ),
-              },
-            ],
+                    ),
+                    back: (
+                      <Card
+                        revert
+                        onFlipPress={() => setDemonsCardFlip('front')}
+                        number={2}
+                        color="blue"
+                        title={[t('port_title_revealed')]}
+                        forceBottom={false}
+                        bottom={t('james_royall_label')}
+                        inner={
+                          <InnerSelectors
+                            disabled
+                            type="equation"
+                            initial={data[1].demons_revealed}
+                            keyboardLabel="Falcon of Leith"
+                            plusColor={theme.colors.anakiwa}
+                            equalColor={theme.colors.periwinkle}
+                            result={<SunkenShipIcon />}
+                            items={[data[1].icons, data[1].icons] as any}
+                          />
+                        }
+                      />
+                    ),
+                  },
+                  {
+                    side: catCardFlip,
+                    front: (
+                      <Card
+                        revert
+                        onFlipPress={() => setCatCardFlip('back')}
+                        number={2}
+                        color="blue"
+                        title={[
+                          t('port_title_king_line_1'),
+                          t('port_title_king_line_2'),
+                        ]}
+                        forceBottom={false}
+                        bottom={t('falcon_of_leith_label')}
+                        inner={
+                          <InnerSelectors
+                            disabled
+                            type="equation"
+                            initial={data[1].cat_king}
+                            keyboardLabel="Falcon of Leith"
+                            plusColor={theme.colors.anakiwa}
+                            equalColor={theme.colors.periwinkle}
+                            result={<DeathIcon />}
+                            items={[data[1].icons, data[1].icons] as any}
+                          />
+                        }
+                      />
+                    ),
+                    back: (
+                      <Card
+                        revert
+                        onFlipPress={() => setCatCardFlip('front')}
+                        number={2}
+                        color="blue"
+                        title={[t('port_title_revealed')]}
+                        forceBottom={false}
+                        bottom={t('falcon_of_leith_label')}
+                        inner={
+                          <InnerSelectors
+                            disabled
+                            type="equation"
+                            initial={data[1].cat_revealed}
+                            keyboardLabel="Falcon of Leith"
+                            plusColor={theme.colors.anakiwa}
+                            equalColor={theme.colors.periwinkle}
+                            result={<DeathIcon />}
+                            items={[data[1].icons, data[1].icons] as any}
+                          />
+                        }
+                      />
+                    ),
+                  },
+                ]
+              : null,
+            finish[2]
+              ? [
+                  {
+                    front: (
+                      <Card
+                        number={3}
+                        color="purple"
+                        title={[
+                          t('family_title_line_1'),
+                          t('family_title_line_2'),
+                        ]}
+                        forceBottom={false}
+                        bottom={t('family_label')}
+                        inner={
+                          <InnerSelectors
+                            disabled
+                            type="family"
+                            main={t('agnes')}
+                            initial={data[2] as any}
+                            keyboardLabel={t('family_label')}
+                            items={CHURCH_ASSETS.families as FamilyItems}
+                          />
+                        }
+                      />
+                    ),
+                  },
+                  {
+                    front: (
+                      <Card
+                        number={3}
+                        color="purple"
+                        title={[t('job_title_line_1'), t('job_title_line_2')]}
+                        forceBottom={false}
+                        bottom={t('job_label')}
+                        inner={
+                          <InnerSelectors
+                            disabled
+                            type="single"
+                            keyboardLabel={t('job_label')}
+                            initial={data[2].job}
+                            items={data[2].icons as any}
+                          />
+                        }
+                      />
+                    ),
+                  },
+                ]
+              : null,
+            finish[3]
+              ? [
+                  {
+                    side: caresCardFlip,
+                    front: (
+                      <Card
+                        revert
+                        onFlipPress={() => setCaresCardFlip('back')}
+                        number={4}
+                        color="pink"
+                        title={[
+                          t('cares_seaton_title_line_1'),
+                          t('cares_seaton_title_line_2'),
+                        ]}
+                        forceBottom={false}
+                        bottom={t('cares_label')}
+                        inner={
+                          <InnerSelectors
+                            disabled
+                            type="equation"
+                            keyboardLabel={t('cares_label')}
+                            plusColor={theme.colors.cornflowerLilac}
+                            equalColor={theme.colors.peachSchnapps}
+                            result={<DrugIcon />}
+                            initial={data[3].cares_seaton}
+                            items={[data[3].cares, data[3].cares] as any}
+                          />
+                        }
+                      />
+                    ),
+                    back: (
+                      <Card
+                        onFlipPress={() => setCaresCardFlip('front')}
+                        number={4}
+                        color="pink"
+                        title={[
+                          t('cares_revealed_title_line_1'),
+                          t('cares_revealed_title_line_2'),
+                        ]}
+                        forceBottom={false}
+                        bottom={t('cares_label')}
+                        inner={
+                          <InnerSelectors
+                            disabled
+                            type="equation"
+                            keyboardLabel={t('cares_label')}
+                            plusColor={theme.colors.peachSchnapps}
+                            equalColor={theme.colors.peachSchnapps}
+                            result={<DrugIcon />}
+                            initial={data[3].cares_revealed}
+                            items={[data[3].cares, data[3].cares] as any}
+                          />
+                        }
+                      />
+                    ),
+                  },
+                  {
+                    front: (
+                      <Card
+                        number={4}
+                        color="pink"
+                        title={[
+                          t('activity_title_line_1'),
+                          t('activity_title_line_2'),
+                        ]}
+                        forceBottom={false}
+                        bottom={t('activity_label')}
+                        inner={
+                          <InnerSelectors
+                            disabled
+                            type="single"
+                            keyboardLabel={t('activity_label')}
+                            initial={data[3].activity}
+                            items={data[3].activities as any}
+                          />
+                        }
+                      />
+                    ),
+                  },
+                  {
+                    front: (
+                      <Card
+                        number={4}
+                        color="pink"
+                        title={
+                          data[3]['torture']
+                            ? data[3]['torture'].multiline
+                              ? [
+                                  t(data[3]['torture'].name + '_line_1'),
+                                  t(data[3]['torture'].name + '_line_2', {
+                                    _: '',
+                                  }),
+                                ]
+                              : [t(data[3]['torture'].name)]
+                            : undefined
+                        }
+                        forceBottom={false}
+                        bottom={t('torture_label')}
+                        inner={
+                          <InnerCarousel
+                            length={1}
+                            controls={false}
+                            content={[
+                              <WebPImage
+                                source={data[3]['torture']?.image}
+                                style={{
+                                  marginTop: 20,
+                                  width: '90%',
+                                  aspectRatio: 1,
+                                }}
+                              />,
+                            ]}
+                          />
+                        }
+                      />
+                    ),
+                  },
+                ]
+              : null,
           ]}
         />
       </View>
@@ -458,7 +495,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.vistaWhite,
   },
   wrapper: {
-    width: '85%',
+    width: '80%',
     flex: 1,
     alignSelf: 'center',
   },

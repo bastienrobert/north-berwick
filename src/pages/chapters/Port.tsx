@@ -7,7 +7,12 @@ import { RootNavigationParamList } from '@/App/Router'
 import { useScan } from '@/App/Scan/ScanProvider'
 import { useMainSound } from '@/App/MainSoundProvider'
 
-import store, { ASSETS, PortStore, CORRECTS } from '@/controllers/port'
+import store, {
+  isCompleted,
+  ASSETS,
+  PortStore,
+  CORRECTS,
+} from '@/controllers/port'
 
 import SunkenShipIcon from '@/assets/pictograms/sunken_ship.svg'
 import DeathIcon from '@/assets/pictograms/death.svg'
@@ -47,19 +52,6 @@ export default function ChapterPort({
   const catCardRevealedSelectorRef = useRef<InnerSelectorsRef | null>()
   const demonsCardKingSelectorRef = useRef<InnerSelectorsRef | null>()
   const demonsCardRevealedSelectorRef = useRef<InnerSelectorsRef | null>()
-
-  const isCompleted = useCallback(
-    ({ cat_revealed, cat_king, demons_revealed, demons_king }: PortStore) => {
-      return {
-        cat_revealed: cat_revealed[0] !== null && cat_revealed[1] !== null,
-        cat_king: cat_king[0] !== null && cat_king[1] !== null,
-        demons_revealed:
-          demons_revealed[0] !== null && demons_revealed[1] !== null,
-        demons_king: demons_king[0] !== null && demons_king[1] !== null,
-      }
-    },
-    [],
-  )
 
   const {
     answers,
@@ -141,8 +133,9 @@ export default function ChapterPort({
       source: require('@/assets/musics/port_loop.mp3'),
       options: {
         autoPlay: true,
-        fadeIn: 2000,
-        fadeOut: 2000,
+        fadeIn: 1000,
+        delay: 200,
+        fadeOut: 500,
         loop: true,
       },
     })
@@ -193,9 +186,7 @@ export default function ChapterPort({
       collapsed={isCollapsed}
       onIndexChange={setIndex}
       onCollapse={setIsCollapsed}
-      onCollapseStart={() => {
-        collapseSelectors()
-      }}
+      onCollapseStart={() => collapseSelectors()}
       onScanButtonPress={() => {
         set({
           callbacks: {

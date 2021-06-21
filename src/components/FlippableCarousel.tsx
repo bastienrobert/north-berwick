@@ -37,8 +37,10 @@ type FlipCardData =
       side: FlippableSide
     }
 
+type FlipCardGroupData = FlipCardData[] | null
+
 type FlippableCarouselProps = {
-  data: FlipCardData[][]
+  data: FlipCardGroupData[]
   onClosePress: () => void
   style?: StyleProp<ViewStyle>
 }
@@ -75,16 +77,20 @@ function FlippableCarousel({
   }, [])
 
   const cardStyle = useMemo<StyleProp<ViewStyle>>(() => {
-    return { width: (width / 100) * 85 }
+    return { width: (width / 100) * 80 }
   }, [width])
   const bottomCollapsableStyle = useMemo<StyleProp<ViewStyle>>(() => {
     return {
       marginLeft: margins.left,
-      width: (width / 100) * 85,
+      width: (width / 100) * 80,
       height:
-        (((width / 100) * 85) / Card.DIMENSIONS.width) * Card.DIMENSIONS.height,
+        (((width / 100) * 80) / Card.DIMENSIONS.width) * Card.DIMENSIONS.height,
     }
   }, [width])
+
+  const filtered = useMemo(() => {
+    return data.filter((d) => d !== null)
+  }, [data])
 
   return (
     <View style={[styles.container, style]}>
@@ -104,23 +110,24 @@ function FlippableCarousel({
             onPress={() => setIndex((i) => i + 1)}
             style={[
               styles.leftRightButtons,
-              { opacity: index >= data.length - 1 ? 0 : 1 },
+              { opacity: index >= filtered.length - 1 ? 0 : 1 },
             ]}
-            disabled={index >= data.length - 1}>
+            disabled={index >= filtered.length - 1}>
             <ArrowRightIcon />
           </RoundedButton>
         </View>
       </SafeAreaView>
       <Carousel
-        disabled={axis === 'y'}
+        disabled={filtered.length === 1 || axis === 'y'}
         onResponderStart={onCarouselResponderStart}
         onResponderRelease={onCarouselResponderRelease}
         targetIndex={index}
         onSlideIndexChange={setIndex}
         axis="x"
-        length={data.length}
+        length={filtered.length}
         margins={margins}>
-        {data.map((group, i) => {
+        {filtered.map((group, i) => {
+          if (!group) return
           const rotations = ROTATION_PATTERNS[i]
 
           return (

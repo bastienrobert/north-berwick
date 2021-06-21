@@ -49,17 +49,17 @@ const styles = StyleSheet.create({
     letterSpacing: 1.06,
   },
   primary: {
-    shadowColor: theme.colors.romantic,
+    shadowColor: theme.colors.mineShaft,
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
-    elevation: 12,
+    shadowOpacity: 0.17,
+    shadowRadius: 6,
+    elevation: 8,
   },
   primaryPressed: {
-    shadowColor: theme.colors.romantic,
+    shadowColor: theme.colors.mineShaft,
     shadowOffset: {
       width: 0,
       height: 2,

@@ -1,5 +1,5 @@
 import theme from '@/styles/theme'
-import React, { PropsWithChildren, useState } from 'react'
+import React, { PropsWithChildren } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import TouchableOpacityOrView, {
@@ -35,14 +35,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 50,
     backgroundColor: theme.colors.white,
-    shadowColor: theme.colors.romantic,
+    shadowColor: theme.colors.mineShaft,
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
-    elevation: 12,
+    shadowOpacity: 0.17,
+    shadowRadius: 6,
+    elevation: 8,
   },
   large: {
     width: 59,
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     height: 29,
   },
   pressed: {
-    shadowColor: theme.colors.romantic,
+    shadowColor: theme.colors.mineShaft,
     shadowOffset: {
       width: 0,
       height: 2,

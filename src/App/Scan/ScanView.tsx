@@ -277,11 +277,11 @@ export default function ScanView({ style }: ScanViewProps) {
       collapsable={false}
       pointerEvents="box-none"
       style={[StyleSheet.absoluteFill, styles.container, style]}>
-      <View style={[StyleSheet.absoluteFill, styles.placeholder]} />
       <SafeAreaView style={[StyleSheet.absoluteFill, styles.safeView]}>
         <RoundedButton style={styles.close} onPress={onClosePress}>
           <CrossIcon />
         </RoundedButton>
+        <View />
         <Animated.View
           style={[styles.notificationWrapper, { opacity: wrongOpacity }]}>
           <NotificationBox style={styles.notification}>
@@ -327,11 +327,9 @@ export default function ScanView({ style }: ScanViewProps) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     width: '100%',
     height: '100%',
-  },
-  placeholder: {
-    backgroundColor: theme.colors.black,
   },
   safeView: {
     zIndex: 2,
@@ -353,8 +351,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   close: {
-    marginTop: 15,
-    marginLeft: 15,
+    position: 'absolute',
+    top: 50,
+    left: 15,
   },
   button: {
     marginBottom: 27,

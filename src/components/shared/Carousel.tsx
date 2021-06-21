@@ -164,10 +164,19 @@ export default function Carousel({
       )
       if (currentSlideIndex !== slideIndex.current) {
         slideIndex.current = currentSlideIndex
-        if (onSlideIndexChange) onSlideIndexChange(currentSlideIndex)
+        if (onSlideIndexChange && containerDimensions && wrapperDimensions) {
+          onSlideIndexChange(currentSlideIndex)
+        }
       }
     },
-    [axis, margins, wrapperDimensions, length, onSlideIndexChange],
+    [
+      axis,
+      margins,
+      wrapperDimensions,
+      containerDimensions,
+      length,
+      onSlideIndexChange,
+    ],
   )
 
   useEffect(() => {

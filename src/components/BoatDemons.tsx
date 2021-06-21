@@ -11,6 +11,7 @@ import Video from 'react-native-video'
 
 import Fade from '@/components/shared/Fade'
 import WebPImage, { WebPImageProps } from '@/components/shared/WebPImage'
+import theme from '@/styles/theme'
 
 interface DemonProps {
   style: StyleProp<ViewStyle>
@@ -113,9 +114,11 @@ export default function BoatDemons({ onEnd }: BoatDemons) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: theme.colors.black,
   },
   background: {
     flex: 1,
+    backgroundColor: theme.colors.black,
   },
   animated: {
     flex: 1,

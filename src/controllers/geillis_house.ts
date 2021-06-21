@@ -106,6 +106,20 @@ export interface GeillisHouseStore
   cares_revealed: Nullable<GeillisHouseCorrects['cares_revealed']>
 }
 
+export function isCompleted({
+  cares_seaton,
+  cares_revealed,
+  activity,
+  torture,
+}: GeillisHouseStore) {
+  return {
+    cares_seaton: cares_seaton[0] !== null && cares_seaton[1] !== null,
+    cares_revealed: cares_revealed[0] !== null && cares_revealed[1] !== null,
+    activity: activity !== null,
+    torture: torture !== null,
+  }
+}
+
 export default atom<GeillisHouseStore>({
   cares_seaton: [null, null],
   cares_revealed: [null, null],

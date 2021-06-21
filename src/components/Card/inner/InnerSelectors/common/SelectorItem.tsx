@@ -72,14 +72,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   touchable: {
-    shadowColor: theme.colors.romantic,
+    shadowColor: theme.colors.mineShaft,
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
-    elevation: 12,
+    shadowOpacity: 0.17,
+    shadowRadius: 6,
+    elevation: 8,
   },
   placeHolderText: {
     fontSize: 17,

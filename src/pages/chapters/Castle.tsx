@@ -40,7 +40,7 @@ function PortraitOverlay() {
         maxWidth: 420,
       }}
       resizeMode="contain"
-      source={require('@/assets/images/portraits/agnes_sampson.png')}
+      source={require('@/assets/images/portraits/agnes_sampson_overlay.png')}
     />
   )
 }
@@ -111,6 +111,8 @@ export default function ChapterCastle({
       color="red"
       video={require('@/assets/videos/castle_video.mp4')}
       dialogProps={{
+        // type: 'video',
+        // source: require('@/assets/videos/castle_loop.mp4'),
         source: require('@/assets/images/backgrounds/castle.jpg'),
         name: '???',
         dialogs: subtitles.castle,
@@ -169,10 +171,6 @@ export default function ChapterCastle({
           {
             text: t('castle_summary_3_text'),
             label: t('castle_summary_3_label'),
-          },
-          {
-            text: t('castle_summary_4_text'),
-            label: t('castle_summary_4_label'),
           },
         ],
       }}

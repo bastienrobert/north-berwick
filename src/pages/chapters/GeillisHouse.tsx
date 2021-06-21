@@ -7,6 +7,7 @@ import { useScan } from '@/App/Scan/ScanProvider'
 import { useMainSound } from '@/App/MainSoundProvider'
 
 import store, {
+  isCompleted,
   ASSETS,
   GeillisHouseStore,
   CORRECTS,
@@ -49,24 +50,6 @@ export default function ChapterGeillisHouse({
   const activityCardSelectorRef = useRef<InnerSelectorsRef | null>()
   const torturesCarouselRef = useRef<InnerCarouselRef | null>()
 
-  const isCompleted = useCallback(
-    ({
-      cares_seaton,
-      cares_revealed,
-      activity,
-      torture,
-    }: GeillisHouseStore) => {
-      return {
-        cares_seaton: cares_seaton[0] !== null && cares_seaton[1] !== null,
-        cares_revealed:
-          cares_revealed[0] !== null && cares_revealed[1] !== null,
-        activity: activity !== null,
-        torture: torture !== null,
-      }
-    },
-    [],
-  )
-
   const {
     answers,
     results,
@@ -95,8 +78,9 @@ export default function ChapterGeillisHouse({
       source: require('@/assets/musics/geillis_house_loop.mp3'),
       options: {
         autoPlay: true,
-        fadeIn: 2000,
-        fadeOut: 2000,
+        fadeIn: 1000,
+        delay: 200,
+        fadeOut: 500,
         loop: true,
       },
     })
@@ -141,7 +125,7 @@ export default function ChapterGeillisHouse({
   return (
     <ChapterLayout
       color="pink"
-      hdr={require('@/assets/images/hdr.jpg')}
+      hdr={require('@/assets/images/hdr-4k.png')}
       video={require('@/assets/videos/geillis_house_video.mp4')}
       dialogProps={{
         source: require('@/assets/images/backgrounds/geillis_house.jpg'),

@@ -75,8 +75,8 @@ export default function Development({ navigation }: HomePropsWithNavigation) {
       <Button
         title="Goto Conclusion"
         onPress={() => {
-          setPort(PORT_CORRECTS)
           setCastle(CASTLE_CORRECTS)
+          setPort(PORT_CORRECTS)
           setChurch(CHURCH_CORRECTS)
           setGeillisHouse(GEILLIS_HOUSE_CORRECTS)
 
