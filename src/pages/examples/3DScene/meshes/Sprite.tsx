@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Texture } from 'three'
-import { useFrame } from 'react-three-fiber'
 
 import Animated3DSprite from '@/lib/Animated3DSprite'
 import ExpoLoader from '@/lib/ExpoThreeLoader'

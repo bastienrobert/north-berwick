@@ -29,6 +29,7 @@ export default function HomeSplash({
     setMainSound({
       source: require('@/assets/musics/theme_loop.mp3'),
       options: {
+        volume: 0.2,
         autoPlay: true,
         fadeIn: true,
         fadeOut: true,
@@ -60,14 +61,10 @@ export default function HomeSplash({
           style={styles.button}
           onPress={() =>
             set({
-              wrongPlaceLabel: t('not_good_place'),
+              goToLabel: '',
               callbacks: {
                 default: () => false,
-                /**
-                 * @todo
-                 * should change w/ cover
-                 */
-                map_castle: () => {
+                cover: () => {
                   navigation.navigate('Home:Introduction', {})
                   setTimeout(() => hide())
                 },

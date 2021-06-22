@@ -25,7 +25,7 @@ type ChapterCarouselForwardedProps = Pick<
 export interface ChapterLayoutProps
   extends ChapterCompletedParams,
     ChapterCarouselForwardedProps {
-  video: VideoProperties['source']
+  video?: VideoProperties['source']
   dialogProps: Pick<
     BackgroundWithDialogProps,
     'source' | 'name' | 'dialogs' | 'sound'
@@ -120,6 +120,13 @@ export default function ChapterLayout({
     }
   }, [introduction])
 
+  useEffect(() => {
+    if (!video) {
+      setIsVideoLoaded(true)
+      setIsIntroductionOver(true)
+    }
+  }, [video])
+
   return (
     <View style={styles.container} pointerEvents={pointerEvents}>
       <Fade
@@ -129,7 +136,7 @@ export default function ChapterLayout({
         initial={1}
         fadeIn={false}
       />
-      {isVideoVisible && (
+      {video && isVideoVisible && (
         <Video
           muted
           source={video}

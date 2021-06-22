@@ -132,6 +132,7 @@ export default function ChapterPort({
     setMainSound({
       source: require('@/assets/musics/port_loop.mp3'),
       options: {
+        volume: 0.2,
         autoPlay: true,
         fadeIn: 1000,
         delay: 200,
@@ -176,7 +177,8 @@ export default function ChapterPort({
       onIntroductionEnd={() => (introducedRef.current = true)}
       video={require('@/assets/videos/port_video.mp4')}
       dialogProps={{
-        source: require('@/assets/images/backgrounds/port.jpg'),
+        type: 'video',
+        source: require('@/assets/videos/port_loop.mp4'),
         name: t('agnes'),
         dialogs: subtitles.port,
         sound: require('@/assets/audios/port.mp3'),

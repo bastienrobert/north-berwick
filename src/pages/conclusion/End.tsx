@@ -36,6 +36,7 @@ export default function ConclusionEnd({
     setMainSound({
       source: require('@/assets/musics/theme_loop.mp3'),
       options: {
+        volume: 0.2,
         autoPlay: true,
         fadeIn: true,
         fadeOut: true,

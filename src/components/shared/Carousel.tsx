@@ -141,6 +141,7 @@ export default function Carousel({
     (e) => {
       containerDimensions.width = e.nativeEvent.layout.width
       containerDimensions.height = e.nativeEvent.layout.height
+      slideIndex.current = targetIndex
       computeIndex(targetIndex)
     },
     [computeIndex],
@@ -150,6 +151,7 @@ export default function Carousel({
     (e) => {
       wrapperDimensions.width = e.nativeEvent.layout.width
       wrapperDimensions.height = e.nativeEvent.layout.height
+      slideIndex.current = targetIndex
       computeIndex(targetIndex)
     },
     [computeIndex],

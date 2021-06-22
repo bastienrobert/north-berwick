@@ -40,10 +40,6 @@ export type BackgroundWithDialogProps = BackgroundWithDialogCommonProps &
     | ({ type: 'image' } & Omit<ImageProps, 'style'>)
   )
 
-/**
- * @todo
- * should add audio track here
- */
 export default function BackgroundWithDialog(
   params: BackgroundWithDialogProps,
 ) {

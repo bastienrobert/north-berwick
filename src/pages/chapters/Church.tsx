@@ -79,6 +79,7 @@ export default function ChapterChurch({
     setMainSound({
       source: require('@/assets/musics/church_loop.mp3'),
       options: {
+        volume: 0.2,
         autoPlay: true,
         fadeIn: 1000,
         delay: 200,
@@ -150,7 +151,7 @@ export default function ChapterChurch({
       )} */}
       <ChapterLayout
         color="purple"
-        pointerEvents={showDialog ? 'none' : 'auto'}
+        // pointerEvents={showDialog ? 'none' : 'auto'}
         // reveal={mortarInteractionShowedRef.current}
         introduction={!introducedRef.current}
         onIntroductionEnd={() => {

@@ -77,6 +77,7 @@ export default function ChapterGeillisHouse({
     setMainSound({
       source: require('@/assets/musics/geillis_house_loop.mp3'),
       options: {
+        volume: 1,
         autoPlay: true,
         fadeIn: 1000,
         delay: 200,

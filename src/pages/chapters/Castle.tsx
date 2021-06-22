@@ -109,11 +109,10 @@ export default function ChapterCastle({
   return (
     <ChapterLayout
       color="red"
-      video={require('@/assets/videos/castle_video.mp4')}
       dialogProps={{
-        // type: 'video',
-        // source: require('@/assets/videos/castle_loop.mp4'),
-        source: require('@/assets/images/backgrounds/castle.jpg'),
+        type: 'video',
+        source: require('@/assets/videos/ghost_loop.mp4'),
+        // source: require('@/assets/images/backgrounds/castle.jpg'),
         name: '???',
         dialogs: subtitles.castle,
         sound: require('@/assets/audios/castle.mp3'),
