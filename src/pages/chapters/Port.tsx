@@ -177,8 +177,7 @@ export default function ChapterPort({
       onIntroductionEnd={() => (introducedRef.current = true)}
       video={require('@/assets/videos/port_video.mp4')}
       dialogProps={{
-        type: 'video',
-        source: require('@/assets/videos/port_loop.mp4'),
+        source: require('@/assets/images/backgrounds/port.jpg'),
         name: t('agnes'),
         dialogs: subtitles.port,
         sound: require('@/assets/audios/port.mp3'),
